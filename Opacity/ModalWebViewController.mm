@@ -220,7 +220,6 @@
     decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
                     decisionHandler:
                         (void (^)(WKNavigationActionPolicy))decisionHandler {
-  NSURL *url = navigationAction.request.URL;
 
   NSURLRequest *request = navigationAction.request;
   NSURLSession *session =

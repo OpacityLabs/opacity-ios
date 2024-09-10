@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.name             = 'OpacityCore'
   s.version          = '3.0.0'
   s.summary          = 'Core of Opacity'
-  s.description      = 'Core of Opacity'
+  s.description      = 'Core library of Opacity Network for iOS'
   s.homepage         = 'https://github.com/OpacityLabs/opacity-ios'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'ospfranco' => 'ospfranco@gmail.com' }
