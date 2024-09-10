@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+namespace opacity {
+#endif
+
 extern "C" {
 
 void ios_prepare_request(const char *url);
@@ -8,3 +12,7 @@ void ios_present_webview();
 
 void ios_close_webview();
 }
+
+#ifdef __cplusplus
+} // namespace opacity
+#endif
