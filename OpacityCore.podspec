@@ -4,10 +4,10 @@ Pod::Spec.new do |s|
   s.version          = '3.0.0'
   s.summary          = 'Core of Opacity'
   s.description      = 'Core of Opacity'
-  s.homepage         = 'https://github.com/OpacityLabs/opacity-core'
+  s.homepage         = 'https://github.com/OpacityLabs/opacity-ios'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'ospfranco' => 'ospfranco@gmail.com' }
-  s.source           = { :git => 'https://github.com/OpacityLabs/opacity-core.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/OpacityLabs/opacity-ios.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '14.0'
   s.xcconfig = {
