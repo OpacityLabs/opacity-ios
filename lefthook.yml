@@ -1,0 +1,4 @@
+pre-commit:
+  commands:
+    check_xcframework_size:
+      run: ./scripts/check-xcframework-size.sh

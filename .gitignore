@@ -1,0 +1,5 @@
+generated
+target
+Example/Pods/
+.DS_Store
+.build
