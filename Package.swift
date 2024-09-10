@@ -15,12 +15,12 @@ let package = Package(
   targets: [
     .binaryTarget(
       name: "opacity",
-      path: "cocoapod/opacity.xcframework"
+      path: "opacity.xcframework"
     ),
     .target(
       name: "OpacityCore",
       dependencies: ["opacity"],
-      path: "cocoapod/Opacity",
+      path: "Opacity",
       publicHeadersPath: ".",
       linkerSettings: [
         .linkedFramework("CoreTelephony"),
