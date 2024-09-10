@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "summary": "Core of Opacity",
   "description": "Core of Opacity",
-  "homepage": "https://github.com/OpacityLabs/opacity-core",
+  "homepage": "https://github.com/OpacityLabs/opacity-ios",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,7 +12,7 @@
     "ospfranco": "ospfranco@gmail.com"
   },
   "source": {
-    "git": "https://github.com/OpacityLabs/opacity-core.git",
+    "git": "https://github.com/OpacityLabs/opacity-ios.git",
     "tag": "3.0.0"
   },
   "platforms": {

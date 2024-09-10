@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C7478E7D65760BB101B2CB7225FCA07 /* OpacityIOSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = CE5D52EDD957E2CC328EFEE118D4072C /* OpacityIOSHelper.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		2D2ADCDFD270A7BFED51A9B971331F43 /* OpacityIOSHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FDE40E33A63DB412630BAEFE39668036 /* OpacityIOSHelper.mm */; };
+		2C7478E7D65760BB101B2CB7225FCA07 /* OpacityIOSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F0C3F9274ECFD619EC2501034CCA52FC /* OpacityIOSHelper.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		2D2ADCDFD270A7BFED51A9B971331F43 /* OpacityIOSHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 039182A6681A4F5F8860B9FD8C35CCBA /* OpacityIOSHelper.mm */; };
 		6BF812DA5C8233254DED10D0470AE75A /* Pods-Opacity_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C15EBC6BCAA9D868EBFF4537418E0E0 /* Pods-Opacity_Example-dummy.m */; };
-		8D82BBC2E5E315CE0DA3BD0998AEEF47 /* ModalWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C847C6FB1369101B07584129F49E40E9 /* ModalWebViewController.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		9B10B3424A8F2A4DBB8F1D7EA7ADD982 /* ModalWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 790F8B271F24A01197F21DF07046CAF2 /* ModalWebViewController.mm */; };
-		B82E4D7EBDA87E37611812DB9149FA11 /* OpacityCore-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C60DCB0EE7CA4A7825464CC5AB93FD4 /* OpacityCore-dummy.m */; };
-		BB10EDD37A30C7013C4B324A00EA5316 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CFC246D9D40E400AF652A082299DBAC8 /* Reachability.m */; };
-		C463FA48984D4D117792F3D9393D5458 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 9616D26CFDDDF66D41A88F6E559C65F0 /* Reachability.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		8D82BBC2E5E315CE0DA3BD0998AEEF47 /* ModalWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = CC5180629F38ACF0983B9430C92E7E11 /* ModalWebViewController.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		9B10B3424A8F2A4DBB8F1D7EA7ADD982 /* ModalWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8903D9410B4549D0798F090906DA9D25 /* ModalWebViewController.mm */; };
+		B82E4D7EBDA87E37611812DB9149FA11 /* OpacityCore-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0986A55C974E4070F793BB5EA8AB5B2A /* OpacityCore-dummy.m */; };
+		BB10EDD37A30C7013C4B324A00EA5316 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 7549A7030223ED2CCB7E3C276402810D /* Reachability.m */; };
+		C463FA48984D4D117792F3D9393D5458 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 797B86ABE1207044167BCC2A2114A156 /* Reachability.h */; settings = {ATTRIBUTES = (Project, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,29 +28,29 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		039182A6681A4F5F8860B9FD8C35CCBA /* OpacityIOSHelper.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = OpacityIOSHelper.mm; path = Opacity/OpacityIOSHelper.mm; sourceTree = "<group>"; };
+		0986A55C974E4070F793BB5EA8AB5B2A /* OpacityCore-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "OpacityCore-dummy.m"; sourceTree = "<group>"; };
+		0C1D5134B326F5D8B9720B988117120E /* opacity.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = opacity.xcframework; sourceTree = "<group>"; };
+		1D0AA97BDAF6470A72EE592C59BA08B6 /* OpacityCore-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "OpacityCore-prefix.pch"; sourceTree = "<group>"; };
+		217B63694C3B21A6745AD6FA6C6079C8 /* OpacityCore-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "OpacityCore-xcframeworks.sh"; sourceTree = "<group>"; };
 		23FFB19E356089994BA9BA27225C10DA /* OpacityCore */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = OpacityCore; path = libOpacityCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		4163419B12DF9604CA1B6FE60933E33F /* OpacityCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = OpacityCore.debug.xcconfig; sourceTree = "<group>"; };
-		4A38109BF038874C5552AA19F40D6C11 /* opacity.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = opacity.xcframework; sourceTree = "<group>"; };
+		3FCA2AD8E37FCED8B30EF6499453DD27 /* OpacityCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = OpacityCore.release.xcconfig; sourceTree = "<group>"; };
 		4C15EBC6BCAA9D868EBFF4537418E0E0 /* Pods-Opacity_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Opacity_Example-dummy.m"; sourceTree = "<group>"; };
-		66ED73734ECC081EE7EF116393BA4113 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		6AD1FCECD31BDA983A5D0EA4DFB9FC00 /* OpacityCore-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "OpacityCore-xcframeworks.sh"; sourceTree = "<group>"; };
-		790F8B271F24A01197F21DF07046CAF2 /* ModalWebViewController.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = ModalWebViewController.mm; path = Opacity/ModalWebViewController.mm; sourceTree = "<group>"; };
+		572371E35CB4EBD554E1F64E899C1A27 /* OpacityCore.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = OpacityCore.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		6C32C54FDE155FC471EC5468B5DABDE5 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		7549A7030223ED2CCB7E3C276402810D /* Reachability.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = Opacity/Reachability.m; sourceTree = "<group>"; };
+		797B86ABE1207044167BCC2A2114A156 /* Reachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = Opacity/Reachability.h; sourceTree = "<group>"; };
 		7D5065BE925AD1AE70038981E983DAD8 /* Pods-Opacity_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Opacity_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		8903D9410B4549D0798F090906DA9D25 /* ModalWebViewController.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = ModalWebViewController.mm; path = Opacity/ModalWebViewController.mm; sourceTree = "<group>"; };
 		8E8574BCC4FD8285ED2A178BF7AD5AF8 /* Pods-Opacity_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Opacity_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		8EE14FA402E91022A151C1936E9D8881 /* OpacityCore-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "OpacityCore-prefix.pch"; sourceTree = "<group>"; };
-		9616D26CFDDDF66D41A88F6E559C65F0 /* Reachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = Opacity/Reachability.h; sourceTree = "<group>"; };
 		999D7F1E8C04C8684C23AA2AF98FE1F0 /* Pods-Opacity_Example */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-Opacity_Example"; path = "libPods-Opacity_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C60DCB0EE7CA4A7825464CC5AB93FD4 /* OpacityCore-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "OpacityCore-dummy.m"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A33C590875F6D36FE5D94B960277462B /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		BE0C2B9DB643B2AE7EC8DC6DE3795696 /* Pods-Opacity_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Opacity_Example.release.xcconfig"; sourceTree = "<group>"; };
-		C18509A65DBAE459D5AB58D8876889F1 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		C43E0F3585DC612205E3A656DD83FA05 /* OpacityCore.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = OpacityCore.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		C4FC0C085D2020E9CD33A7234ABAE69C /* Pods-Opacity_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Opacity_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		C847C6FB1369101B07584129F49E40E9 /* ModalWebViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ModalWebViewController.h; path = Opacity/ModalWebViewController.h; sourceTree = "<group>"; };
-		CE5D52EDD957E2CC328EFEE118D4072C /* OpacityIOSHelper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OpacityIOSHelper.h; path = Opacity/OpacityIOSHelper.h; sourceTree = "<group>"; };
-		CFC246D9D40E400AF652A082299DBAC8 /* Reachability.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = Opacity/Reachability.m; sourceTree = "<group>"; };
-		F2A047E83601F2EE6974A9CA49C651B0 /* OpacityCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = OpacityCore.release.xcconfig; sourceTree = "<group>"; };
-		FDE40E33A63DB412630BAEFE39668036 /* OpacityIOSHelper.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = OpacityIOSHelper.mm; path = Opacity/OpacityIOSHelper.mm; sourceTree = "<group>"; };
+		CC5180629F38ACF0983B9430C92E7E11 /* ModalWebViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ModalWebViewController.h; path = Opacity/ModalWebViewController.h; sourceTree = "<group>"; };
+		DC72CDACE37F64808C281548343F5C39 /* OpacityCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = OpacityCore.debug.xcconfig; sourceTree = "<group>"; };
+		F0C3F9274ECFD619EC2501034CCA52FC /* OpacityIOSHelper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OpacityIOSHelper.h; path = Opacity/OpacityIOSHelper.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,33 +71,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0D1B8B0DFB393A59CC67F95B533AB108 /* Support Files */ = {
+		0703985DE178F916663B11A49783BCF5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9C60DCB0EE7CA4A7825464CC5AB93FD4 /* OpacityCore-dummy.m */,
-				8EE14FA402E91022A151C1936E9D8881 /* OpacityCore-prefix.pch */,
-				6AD1FCECD31BDA983A5D0EA4DFB9FC00 /* OpacityCore-xcframeworks.sh */,
-				4163419B12DF9604CA1B6FE60933E33F /* OpacityCore.debug.xcconfig */,
-				F2A047E83601F2EE6974A9CA49C651B0 /* OpacityCore.release.xcconfig */,
+				0C1D5134B326F5D8B9720B988117120E /* opacity.xcframework */,
 			);
-			name = "Support Files";
-			path = "Example/Pods/Target Support Files/OpacityCore";
-			sourceTree = "<group>";
-		};
-		159D7287CE04C57FCE3804F73091CC25 /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				C18509A65DBAE459D5AB58D8876889F1 /* LICENSE */,
-				C43E0F3585DC612205E3A656DD83FA05 /* OpacityCore.podspec */,
-				66ED73734ECC081EE7EF116393BA4113 /* README.md */,
-			);
-			name = Pod;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		25185FCE88630307200323E21FC359A3 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F8CBCDD750896D80E99863C78467EF9B /* OpacityCore */,
+				7A80638D28A055EDBBBAB263145CEAD2 /* OpacityCore */,
 			);
 			name = "Development Pods";
 			sourceTree = "<group>";
@@ -109,6 +94,16 @@
 				999D7F1E8C04C8684C23AA2AF98FE1F0 /* Pods-Opacity_Example */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		2F9D55E13374B172EFA95C12ECC2CCC0 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				A33C590875F6D36FE5D94B960277462B /* LICENSE */,
+				572371E35CB4EBD554E1F64E899C1A27 /* OpacityCore.podspec */,
+				6C32C54FDE155FC471EC5468B5DABDE5 /* README.md */,
+			);
+			name = Pod;
 			sourceTree = "<group>";
 		};
 		353EC64A16ABA73256F3074128A8B579 /* Targets Support Files */ = {
@@ -132,12 +127,34 @@
 			path = "Target Support Files/Pods-Opacity_Example";
 			sourceTree = "<group>";
 		};
-		AC8FD03863A310C6E645A301EC36B62F /* Frameworks */ = {
+		7A80638D28A055EDBBBAB263145CEAD2 /* OpacityCore */ = {
 			isa = PBXGroup;
 			children = (
-				4A38109BF038874C5552AA19F40D6C11 /* opacity.xcframework */,
+				CC5180629F38ACF0983B9430C92E7E11 /* ModalWebViewController.h */,
+				8903D9410B4549D0798F090906DA9D25 /* ModalWebViewController.mm */,
+				F0C3F9274ECFD619EC2501034CCA52FC /* OpacityIOSHelper.h */,
+				039182A6681A4F5F8860B9FD8C35CCBA /* OpacityIOSHelper.mm */,
+				797B86ABE1207044167BCC2A2114A156 /* Reachability.h */,
+				7549A7030223ED2CCB7E3C276402810D /* Reachability.m */,
+				0703985DE178F916663B11A49783BCF5 /* Frameworks */,
+				2F9D55E13374B172EFA95C12ECC2CCC0 /* Pod */,
+				A81FE394C984B492810BAC4BE5D448D6 /* Support Files */,
 			);
-			name = Frameworks;
+			name = OpacityCore;
+			path = ../..;
+			sourceTree = "<group>";
+		};
+		A81FE394C984B492810BAC4BE5D448D6 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				0986A55C974E4070F793BB5EA8AB5B2A /* OpacityCore-dummy.m */,
+				1D0AA97BDAF6470A72EE592C59BA08B6 /* OpacityCore-prefix.pch */,
+				217B63694C3B21A6745AD6FA6C6079C8 /* OpacityCore-xcframeworks.sh */,
+				DC72CDACE37F64808C281548343F5C39 /* OpacityCore.debug.xcconfig */,
+				3FCA2AD8E37FCED8B30EF6499453DD27 /* OpacityCore.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "pod_example/Pods/Target Support Files/OpacityCore";
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -156,23 +173,6 @@
 			children = (
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		F8CBCDD750896D80E99863C78467EF9B /* OpacityCore */ = {
-			isa = PBXGroup;
-			children = (
-				C847C6FB1369101B07584129F49E40E9 /* ModalWebViewController.h */,
-				790F8B271F24A01197F21DF07046CAF2 /* ModalWebViewController.mm */,
-				CE5D52EDD957E2CC328EFEE118D4072C /* OpacityIOSHelper.h */,
-				FDE40E33A63DB412630BAEFE39668036 /* OpacityIOSHelper.mm */,
-				9616D26CFDDDF66D41A88F6E559C65F0 /* Reachability.h */,
-				CFC246D9D40E400AF652A082299DBAC8 /* Reachability.m */,
-				AC8FD03863A310C6E645A301EC36B62F /* Frameworks */,
-				159D7287CE04C57FCE3804F73091CC25 /* Pod */,
-				0D1B8B0DFB393A59CC67F95B533AB108 /* Support Files */,
-			);
-			name = OpacityCore;
-			path = ../..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -405,7 +405,7 @@
 		};
 		5E2AB8CB17DCE039A4A114F04476CA32 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4163419B12DF9604CA1B6FE60933E33F /* OpacityCore.debug.xcconfig */;
+			baseConfigurationReference = DC72CDACE37F64808C281548343F5C39 /* OpacityCore.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -492,7 +492,7 @@
 		};
 		B19D7EB6F7DFF5B267B54FE824066F02 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F2A047E83601F2EE6974A9CA49C651B0 /* OpacityCore.release.xcconfig */;
+			baseConfigurationReference = 3FCA2AD8E37FCED8B30EF6499453DD27 /* OpacityCore.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
