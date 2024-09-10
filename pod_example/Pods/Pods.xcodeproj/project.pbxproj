@@ -1,0 +1,575 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2C7478E7D65760BB101B2CB7225FCA07 /* OpacityIOSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = CE5D52EDD957E2CC328EFEE118D4072C /* OpacityIOSHelper.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		2D2ADCDFD270A7BFED51A9B971331F43 /* OpacityIOSHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FDE40E33A63DB412630BAEFE39668036 /* OpacityIOSHelper.mm */; };
+		6BF812DA5C8233254DED10D0470AE75A /* Pods-Opacity_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C15EBC6BCAA9D868EBFF4537418E0E0 /* Pods-Opacity_Example-dummy.m */; };
+		8D82BBC2E5E315CE0DA3BD0998AEEF47 /* ModalWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C847C6FB1369101B07584129F49E40E9 /* ModalWebViewController.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		9B10B3424A8F2A4DBB8F1D7EA7ADD982 /* ModalWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 790F8B271F24A01197F21DF07046CAF2 /* ModalWebViewController.mm */; };
+		B82E4D7EBDA87E37611812DB9149FA11 /* OpacityCore-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C60DCB0EE7CA4A7825464CC5AB93FD4 /* OpacityCore-dummy.m */; };
+		BB10EDD37A30C7013C4B324A00EA5316 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CFC246D9D40E400AF652A082299DBAC8 /* Reachability.m */; };
+		C463FA48984D4D117792F3D9393D5458 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 9616D26CFDDDF66D41A88F6E559C65F0 /* Reachability.h */; settings = {ATTRIBUTES = (Project, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5B53B0456518C9CA13062659D95F9290 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F74BFF7013B91E2943D73F3CAC3843C;
+			remoteInfo = OpacityCore;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		23FFB19E356089994BA9BA27225C10DA /* OpacityCore */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = OpacityCore; path = libOpacityCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4163419B12DF9604CA1B6FE60933E33F /* OpacityCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = OpacityCore.debug.xcconfig; sourceTree = "<group>"; };
+		4A38109BF038874C5552AA19F40D6C11 /* opacity.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = opacity.xcframework; sourceTree = "<group>"; };
+		4C15EBC6BCAA9D868EBFF4537418E0E0 /* Pods-Opacity_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Opacity_Example-dummy.m"; sourceTree = "<group>"; };
+		66ED73734ECC081EE7EF116393BA4113 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		6AD1FCECD31BDA983A5D0EA4DFB9FC00 /* OpacityCore-xcframeworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "OpacityCore-xcframeworks.sh"; sourceTree = "<group>"; };
+		790F8B271F24A01197F21DF07046CAF2 /* ModalWebViewController.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = ModalWebViewController.mm; path = Opacity/ModalWebViewController.mm; sourceTree = "<group>"; };
+		7D5065BE925AD1AE70038981E983DAD8 /* Pods-Opacity_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Opacity_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		8E8574BCC4FD8285ED2A178BF7AD5AF8 /* Pods-Opacity_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Opacity_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		8EE14FA402E91022A151C1936E9D8881 /* OpacityCore-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "OpacityCore-prefix.pch"; sourceTree = "<group>"; };
+		9616D26CFDDDF66D41A88F6E559C65F0 /* Reachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = Opacity/Reachability.h; sourceTree = "<group>"; };
+		999D7F1E8C04C8684C23AA2AF98FE1F0 /* Pods-Opacity_Example */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-Opacity_Example"; path = "libPods-Opacity_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C60DCB0EE7CA4A7825464CC5AB93FD4 /* OpacityCore-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "OpacityCore-dummy.m"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		BE0C2B9DB643B2AE7EC8DC6DE3795696 /* Pods-Opacity_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Opacity_Example.release.xcconfig"; sourceTree = "<group>"; };
+		C18509A65DBAE459D5AB58D8876889F1 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		C43E0F3585DC612205E3A656DD83FA05 /* OpacityCore.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = OpacityCore.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		C4FC0C085D2020E9CD33A7234ABAE69C /* Pods-Opacity_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Opacity_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		C847C6FB1369101B07584129F49E40E9 /* ModalWebViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ModalWebViewController.h; path = Opacity/ModalWebViewController.h; sourceTree = "<group>"; };
+		CE5D52EDD957E2CC328EFEE118D4072C /* OpacityIOSHelper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OpacityIOSHelper.h; path = Opacity/OpacityIOSHelper.h; sourceTree = "<group>"; };
+		CFC246D9D40E400AF652A082299DBAC8 /* Reachability.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = Opacity/Reachability.m; sourceTree = "<group>"; };
+		F2A047E83601F2EE6974A9CA49C651B0 /* OpacityCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = OpacityCore.release.xcconfig; sourceTree = "<group>"; };
+		FDE40E33A63DB412630BAEFE39668036 /* OpacityIOSHelper.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = OpacityIOSHelper.mm; path = Opacity/OpacityIOSHelper.mm; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6BD94B11551B9DD50BEA735835B6D503 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCE9C8964BAF88904834944D39FC9ECD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0D1B8B0DFB393A59CC67F95B533AB108 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				9C60DCB0EE7CA4A7825464CC5AB93FD4 /* OpacityCore-dummy.m */,
+				8EE14FA402E91022A151C1936E9D8881 /* OpacityCore-prefix.pch */,
+				6AD1FCECD31BDA983A5D0EA4DFB9FC00 /* OpacityCore-xcframeworks.sh */,
+				4163419B12DF9604CA1B6FE60933E33F /* OpacityCore.debug.xcconfig */,
+				F2A047E83601F2EE6974A9CA49C651B0 /* OpacityCore.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/OpacityCore";
+			sourceTree = "<group>";
+		};
+		159D7287CE04C57FCE3804F73091CC25 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				C18509A65DBAE459D5AB58D8876889F1 /* LICENSE */,
+				C43E0F3585DC612205E3A656DD83FA05 /* OpacityCore.podspec */,
+				66ED73734ECC081EE7EF116393BA4113 /* README.md */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
+		25185FCE88630307200323E21FC359A3 /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F8CBCDD750896D80E99863C78467EF9B /* OpacityCore */,
+			);
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+		2F0198F90AC58ACB107A7AE2887B0375 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				23FFB19E356089994BA9BA27225C10DA /* OpacityCore */,
+				999D7F1E8C04C8684C23AA2AF98FE1F0 /* Pods-Opacity_Example */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		353EC64A16ABA73256F3074128A8B579 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				48272BD0AD82575C6C1876AE771E6028 /* Pods-Opacity_Example */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		48272BD0AD82575C6C1876AE771E6028 /* Pods-Opacity_Example */ = {
+			isa = PBXGroup;
+			children = (
+				7D5065BE925AD1AE70038981E983DAD8 /* Pods-Opacity_Example-acknowledgements.markdown */,
+				C4FC0C085D2020E9CD33A7234ABAE69C /* Pods-Opacity_Example-acknowledgements.plist */,
+				4C15EBC6BCAA9D868EBFF4537418E0E0 /* Pods-Opacity_Example-dummy.m */,
+				8E8574BCC4FD8285ED2A178BF7AD5AF8 /* Pods-Opacity_Example.debug.xcconfig */,
+				BE0C2B9DB643B2AE7EC8DC6DE3795696 /* Pods-Opacity_Example.release.xcconfig */,
+			);
+			name = "Pods-Opacity_Example";
+			path = "Target Support Files/Pods-Opacity_Example";
+			sourceTree = "<group>";
+		};
+		AC8FD03863A310C6E645A301EC36B62F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4A38109BF038874C5552AA19F40D6C11 /* opacity.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				25185FCE88630307200323E21FC359A3 /* Development Pods */,
+				D89477F20FB1DE18A04690586D7808C4 /* Frameworks */,
+				2F0198F90AC58ACB107A7AE2887B0375 /* Products */,
+				353EC64A16ABA73256F3074128A8B579 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		D89477F20FB1DE18A04690586D7808C4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F8CBCDD750896D80E99863C78467EF9B /* OpacityCore */ = {
+			isa = PBXGroup;
+			children = (
+				C847C6FB1369101B07584129F49E40E9 /* ModalWebViewController.h */,
+				790F8B271F24A01197F21DF07046CAF2 /* ModalWebViewController.mm */,
+				CE5D52EDD957E2CC328EFEE118D4072C /* OpacityIOSHelper.h */,
+				FDE40E33A63DB412630BAEFE39668036 /* OpacityIOSHelper.mm */,
+				9616D26CFDDDF66D41A88F6E559C65F0 /* Reachability.h */,
+				CFC246D9D40E400AF652A082299DBAC8 /* Reachability.m */,
+				AC8FD03863A310C6E645A301EC36B62F /* Frameworks */,
+				159D7287CE04C57FCE3804F73091CC25 /* Pod */,
+				0D1B8B0DFB393A59CC67F95B533AB108 /* Support Files */,
+			);
+			name = OpacityCore;
+			path = ../..;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		1C810B8A4361978C708C8CDB1D4D577C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D82BBC2E5E315CE0DA3BD0998AEEF47 /* ModalWebViewController.h in Headers */,
+				2C7478E7D65760BB101B2CB7225FCA07 /* OpacityIOSHelper.h in Headers */,
+				C463FA48984D4D117792F3D9393D5458 /* Reachability.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A66F979D19F368215CDF45D1327D6BC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		1F74BFF7013B91E2943D73F3CAC3843C /* OpacityCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7179C4F6F2C6BE19EA67FB5DC558F9A9 /* Build configuration list for PBXNativeTarget "OpacityCore" */;
+			buildPhases = (
+				1C810B8A4361978C708C8CDB1D4D577C /* Headers */,
+				03ADED258652E0362AE9B5E0F99CB5DC /* [CP] Copy XCFrameworks */,
+				D1DAD4BFF7561F2AF61B9D19FB7A10C4 /* Sources */,
+				BCE9C8964BAF88904834944D39FC9ECD /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OpacityCore;
+			productName = OpacityCore;
+			productReference = 23FFB19E356089994BA9BA27225C10DA /* OpacityCore */;
+			productType = "com.apple.product-type.library.static";
+		};
+		677FB34AD705982F80098C0B60DE782F /* Pods-Opacity_Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F2531B0D7F5C920294EA6231F51798DB /* Build configuration list for PBXNativeTarget "Pods-Opacity_Example" */;
+			buildPhases = (
+				4A66F979D19F368215CDF45D1327D6BC /* Headers */,
+				5C8409EA0F1388E275340445A5776597 /* Sources */,
+				6BD94B11551B9DD50BEA735835B6D503 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DCA32001F3AAF78DF740684C0A5F10DA /* PBXTargetDependency */,
+			);
+			name = "Pods-Opacity_Example";
+			productName = "Pods-Opacity_Example";
+			productReference = 999D7F1E8C04C8684C23AA2AF98FE1F0 /* Pods-Opacity_Example */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 2F0198F90AC58ACB107A7AE2887B0375 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1F74BFF7013B91E2943D73F3CAC3843C /* OpacityCore */,
+				677FB34AD705982F80098C0B60DE782F /* Pods-Opacity_Example */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		03ADED258652E0362AE9B5E0F99CB5DC /* [CP] Copy XCFrameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/OpacityCore/OpacityCore-xcframeworks.sh",
+				"${PODS_ROOT}/../../opacity.xcframework",
+			);
+			name = "[CP] Copy XCFrameworks";
+			outputPaths = (
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpacityCore/opacity.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/OpacityCore/OpacityCore-xcframeworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5C8409EA0F1388E275340445A5776597 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BF812DA5C8233254DED10D0470AE75A /* Pods-Opacity_Example-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1DAD4BFF7561F2AF61B9D19FB7A10C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B10B3424A8F2A4DBB8F1D7EA7ADD982 /* ModalWebViewController.mm in Sources */,
+				B82E4D7EBDA87E37611812DB9149FA11 /* OpacityCore-dummy.m in Sources */,
+				2D2ADCDFD270A7BFED51A9B971331F43 /* OpacityIOSHelper.mm in Sources */,
+				BB10EDD37A30C7013C4B324A00EA5316 /* Reachability.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DCA32001F3AAF78DF740684C0A5F10DA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OpacityCore;
+			target = 1F74BFF7013B91E2943D73F3CAC3843C /* OpacityCore */;
+			targetProxy = 5B53B0456518C9CA13062659D95F9290 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4BC7450F9457737EE3E637BA155B56F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		56A0656ECEBE63A9B7F06E01C39E9819 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8E8574BCC4FD8285ED2A178BF7AD5AF8 /* Pods-Opacity_Example.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5E2AB8CB17DCE039A4A114F04476CA32 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4163419B12DF9604CA1B6FE60933E33F /* OpacityCore.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/OpacityCore/OpacityCore-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = OpacityCore;
+				PRODUCT_NAME = OpacityCore;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8B5A46FF8D3C1289CDEE3BAFACABCD2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		B19D7EB6F7DFF5B267B54FE824066F02 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2A047E83601F2EE6974A9CA49C651B0 /* OpacityCore.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/OpacityCore/OpacityCore-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = OpacityCore;
+				PRODUCT_NAME = OpacityCore;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BE0063CE22A096C6E3AEA7C93298633E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE0C2B9DB643B2AE7EC8DC6DE3795696 /* Pods-Opacity_Example.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BC7450F9457737EE3E637BA155B56F7 /* Debug */,
+				8B5A46FF8D3C1289CDEE3BAFACABCD2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7179C4F6F2C6BE19EA67FB5DC558F9A9 /* Build configuration list for PBXNativeTarget "OpacityCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5E2AB8CB17DCE039A4A114F04476CA32 /* Debug */,
+				B19D7EB6F7DFF5B267B54FE824066F02 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F2531B0D7F5C920294EA6231F51798DB /* Build configuration list for PBXNativeTarget "Pods-Opacity_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56A0656ECEBE63A9B7F06E01C39E9819 /* Debug */,
+				BE0063CE22A096C6E3AEA7C93298633E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}
