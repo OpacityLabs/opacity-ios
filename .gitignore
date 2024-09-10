@@ -1,5 +1,6 @@
 generated
 target
 pod_example/Pods/
+pod_example/Opacity.xcworkspace/
 .DS_Store
 .build
