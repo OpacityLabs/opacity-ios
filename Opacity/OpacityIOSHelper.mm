@@ -8,8 +8,6 @@
 #import <ifaddrs.h>
 #import <string>
 
-namespace notary {
-
 ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
 UINavigationController *navController;
@@ -241,5 +239,3 @@ bool is_wifi_connected() {
 bool is_rooted() { return false; }
 
 } // extern "C"
-
-} // namespace notary
