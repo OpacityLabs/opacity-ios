@@ -1,5 +1,5 @@
 generated
 target
-Example/Pods/
+pod_example/Pods/
 .DS_Store
 .build
