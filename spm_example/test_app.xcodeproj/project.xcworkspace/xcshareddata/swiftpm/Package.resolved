@@ -1,0 +1,15 @@
+{
+  "originHash" : "d85eaabc584a140428171e29b2212f0de1a63fe75b454c9caea0d3056eeb237f",
+  "pins" : [
+    {
+      "identity" : "opacity-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/OpacityLabs/opacity-core",
+      "state" : {
+        "branch" : "main",
+        "revision" : "8f12bee1b485e5212e03ce90baca8d06fbf9b85a"
+      }
+    }
+  ],
+  "version" : 3
+}

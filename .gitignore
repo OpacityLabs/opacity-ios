@@ -1,0 +1,7 @@
+generated
+target
+pod_example/Pods/
+pod_example/Opacity.xcworkspace/
+pod_example/Opacity/.env
+.DS_Store
+.build
