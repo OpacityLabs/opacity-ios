@@ -49,7 +49,7 @@
         char *proof;
         char *err;
 
-        int status = opacity_core::get_rider_profile(&json, &proof, &err);
+        int status = opacity_core::get_uber_rider_profile(&json, &proof, &err);
 
         if (status != opacity_core::OPACITY_OK) {
           NSString *errorMessage = [NSString stringWithUTF8String:err];
@@ -70,7 +70,7 @@
         char *err;
 
         const char status =
-            opacity_core::get_rider_trip_history(20, 0, &json, &proof, &err);
+            opacity_core::get_uber_rider_trip_history(20, 0, &json, &proof, &err);
         if (status != opacity_core::OPACITY_OK) {
           NSString *errorMessage = [NSString stringWithUTF8String:err];
           NSLog(@"Error: %@", errorMessage);
@@ -89,7 +89,7 @@
         char *proof;
         char *err;
 
-        const char status = opacity_core::get_rider_trip(
+        const char status = opacity_core::get_uber_rider_trip(
             "c7427573-0ea5-46a9-a9c5-e286efc31ff5", &json, &proof, &err);
         if (status != opacity_core::OPACITY_OK) {
           NSString *errorMessage = [NSString stringWithUTF8String:err];
@@ -110,7 +110,7 @@
         char *err;
 
         const char status =
-            opacity_core::get_driver_profile(&json, &proof, &err);
+            opacity_core::get_uber_driver_profile(&json, &proof, &err);
         if (status != opacity_core::OPACITY_OK) {
           NSString *errorMessage = [NSString stringWithUTF8String:err];
           NSLog(@"Error: %@", errorMessage);
@@ -129,7 +129,7 @@
         char *proof;
         char *err;
 
-        const char status = opacity_core::get_driver_trips(
+        const char status = opacity_core::get_uber_driver_trips(
             "2024-01-01", "2024-07-31", "", &json, &proof, &err);
         if (status != opacity_core::OPACITY_OK) {
           NSString *errorMessage = [NSString stringWithUTF8String:err];
@@ -170,7 +170,7 @@
         char *err;
 
         const char status =
-            opacity_core::zabka_get_account(&json, &proof, &err);
+            opacity_core::get_zabka_account(&json, &proof, &err);
         if (status != opacity_core::OPACITY_OK) {
           NSString *errorMessage = [NSString stringWithUTF8String:err];
           NSLog(@"Error: %@", errorMessage);
@@ -188,7 +188,12 @@
   NSDictionary *env = [self loadEnvFile];
   NSString *api_key = env[@"OPACITY_API_KEY"];
 
-  opacity_core::init([api_key UTF8String], false);
+  auto status = opacity_core::init([api_key UTF8String], false);
+
+  if (status != opacity_core::OPACITY_OK) {
+    NSLog(@"Error initializing Opacity SDK");
+    return;
+  }
 
   // Request location permissions
   CLLocationManager *locationManager = [[CLLocationManager alloc] init];
