@@ -34,24 +34,27 @@ bool is_key_stored(const char *key);
 
 const char *start(const char *request);
 
-int32_t get_rider_profile(char **json_ptr, char **proof_ptr, char **err_ptr);
+int32_t get_uber_rider_profile(char **json_ptr, char **proof_ptr, char **err_ptr);
 
-int32_t get_rider_trip_history(int32_t limit,
-                               int32_t offset,
-                               char **json_ptr,
-                               char **proof_ptr,
-                               char **err_ptr);
+int32_t get_uber_rider_trip_history(int32_t limit,
+                                    int32_t offset,
+                                    char **json_ptr,
+                                    char **proof_ptr,
+                                    char **err_ptr);
 
-int32_t get_rider_trip(const char *trip_uuid, char **json_ptr, char **proof_ptr, char **err_ptr);
+int32_t get_uber_rider_trip(const char *trip_uuid,
+                            char **json_ptr,
+                            char **proof_ptr,
+                            char **err_ptr);
 
-int32_t get_driver_profile(char **json_ptr, char **proof_ptr, char **err_ptr);
+int32_t get_uber_driver_profile(char **json_ptr, char **proof_ptr, char **err_ptr);
 
-int32_t get_driver_trips(const char *start_date,
-                         const char *end_date,
-                         const char *cursor,
-                         char **json_ptr,
-                         char **proof_ptr,
-                         char **err_ptr);
+int32_t get_uber_driver_trips(const char *start_date,
+                              const char *end_date,
+                              const char *cursor,
+                              char **json_ptr,
+                              char **proof_ptr,
+                              char **err_ptr);
 
 int32_t get_reddit_account(char **json_ptr, char **proof_ptr, char **err_ptr);
 
@@ -61,9 +64,9 @@ int32_t get_reddit_comments(char **json_ptr, char **proof_ptr, char **err_ptr);
 
 int32_t get_reddit_posts(char **json_ptr, char **proof_ptr, char **err_ptr);
 
-int32_t zabka_get_account(char **json_ptr, char **proof_ptr, char **err_ptr);
+int32_t get_zabka_account(char **json_ptr, char **proof_ptr, char **err_ptr);
 
-int32_t zabka_get_points(char **json_ptr, char **proof_ptr, char **err_ptr);
+int32_t get_zabka_points(char **json_ptr, char **proof_ptr, char **err_ptr);
 
 extern double get_battery_level(void);
 
@@ -109,6 +112,8 @@ extern void secure_set(const char *key, const char *value);
 
 extern const char *secure_get(const char *key);
 
+const char *verify(const char *proof);
+
 extern void ios_prepare_request(const char *url);
 
 extern void ios_set_request_header(const char *key, const char *value);
@@ -116,8 +121,6 @@ extern void ios_set_request_header(const char *key, const char *value);
 extern void ios_present_webview(void);
 
 extern void ios_close_webview(void);
-
-const char *verify(const char *proof);
 
 #ifdef __cplusplus
 }  // extern "C"
