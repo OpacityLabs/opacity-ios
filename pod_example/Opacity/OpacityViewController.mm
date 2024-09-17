@@ -69,8 +69,8 @@
         char *proof;
         char *err;
 
-        const char status =
-            opacity_core::get_uber_rider_trip_history(20, 0, &json, &proof, &err);
+        const char status = opacity_core::get_uber_rider_trip_history(
+            20, 0, &json, &proof, &err);
         if (status != opacity_core::OPACITY_OK) {
           NSString *errorMessage = [NSString stringWithUTF8String:err];
           NSLog(@"Error: %@", errorMessage);
@@ -182,6 +182,32 @@
       });
 }
 
+- (void)testRedirect {
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                 ^{
+                   std::string json = R"({
+          "version": "1.0.0",
+          "name": "authWebDriver",
+          "context_generator": {},
+          "steps": [
+            {
+            "name": "webview",
+            "url": "http://localhost:8666/uber_redirect",
+            "is_browser_step": true,
+            "await_events": [
+              {
+              "event": "navigation",
+              "base_url_ios": "uberlogin://auth3.uber.com/applogin"
+              }
+            ]
+            }
+          ]
+          })";
+
+                   opacity_core::execute_workflow(json.c_str());
+                 });
+}
+
 - (void)viewDidLoad {
   [super viewDidLoad];
 
@@ -263,6 +289,14 @@
                    forControlEvents:UIControlEventTouchUpInside];
   getRedditAccountButton.frame = CGRectMake(100, 600, 200, 50);
   [self.view addSubview:getRedditAccountButton];
+
+  UIButton *testRedirect = [UIButton buttonWithType:UIButtonTypeSystem];
+  [testRedirect setTitle:@"test redirect" forState:UIControlStateNormal];
+  [testRedirect addTarget:self
+                   action:@selector(testRedirect)
+         forControlEvents:UIControlEventTouchUpInside];
+  testRedirect.frame = CGRectMake(100, 650, 200, 50);
+  [self.view addSubview:testRedirect];
 }
 
 @end

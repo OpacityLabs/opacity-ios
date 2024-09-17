@@ -87,18 +87,12 @@
                                             encoding:NSUTF8StringEncoding];
 
   opacity_core::emit_webview_event([payload UTF8String]);
-  //
-  //  [self dismissViewControllerAnimated:YES completion:nil];
-  //  [self.webView stopLoading];
-  //  self.webView.navigationDelegate = nil;
-  //  self.webView.UIDelegate = nil;
-  //  [self.webView removeFromSuperview];
-  //  self.webView = nil;
+
 }
 
 #pragma mark - WKNavigationDelegate Methods
-//
-//// Called when the web view starts to load a page
+
+// Called when the web view starts to load a page
 //- (void)webView:(WKWebView *)webView
 //    didStartProvisionalNavigation:(WKNavigation *)navigation {
 //  NSLog(@"Started loading: %@", webView.URL.absoluteString);
@@ -178,14 +172,36 @@
 //     }
 // }
 
-//// Called if an error occurs during navigation
-//- (void)webView:(WKWebView *)webView
-//    didFailProvisionalNavigation:(WKNavigation *)navigation
-//                       withError:(NSError *)error {
-//  NSLog(@"Failed to load: %@, Error: %@", webView.URL.absoluteString,
-//        error.localizedDescription);
-//}
-//
+// Called if an error occurs during navigation
+- (void)webView:(WKWebView *)webView
+    didFailProvisionalNavigation:(WKNavigation *)navigation
+                       withError:(NSError *)error {
+    NSString* url = error.userInfo[NSURLErrorFailingURLStringErrorKey];
+    if(url) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        [dict setObject:url forKey:@"url"];
+        [dict setObject:@"navigation" forKey:@"event"];
+        [dict
+            setObject:[NSString stringWithFormat:@"%f", [[NSDate date]
+                                                            timeIntervalSince1970]]
+               forKey:@"id"];
+
+        [dict setObject:self.cookies forKey:@"cookies"];
+
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                           options:0
+                                                             error:&error];
+        NSString *payload = [[NSString alloc] initWithData:jsonData
+                                                  encoding:NSUTF8StringEncoding];
+
+        opacity_core::emit_webview_event([payload UTF8String]);
+    }
+    
+    NSLog(@"Failed to load: %@, Error: %@", error.userInfo[NSURLErrorFailingURLStringErrorKey],
+        error.localizedDescription);
+}
+
 //// Called if an error occurs after the navigation has started
 //- (void)webView:(WKWebView *)webView
 //    didFailNavigation:(WKNavigation *)navigation
@@ -227,30 +243,31 @@
                                                  defaultSessionConfiguration]
                                     delegate:self
                                delegateQueue:nil];
-  NSURLSessionDataTask *task = [session
-      dataTaskWithRequest:request
-        completionHandler:^(NSData *data, NSURLResponse *response,
-                            NSError *error) {
-          if (error) {
-            NSLog(@"Error occurred on WebView: %@", error.localizedDescription);
-          }
+  NSURLSessionDataTask *task =
+      [session dataTaskWithRequest:request
+                 completionHandler:^(NSData *data, NSURLResponse *response,
+                                     NSError *error) {
+                   if (error) {
+                     NSLog(@"Could not extract cookies from url: %@, with error: %@",
+                           request.URL, error.localizedDescription);
+                   }
 
-          if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            NSHTTPURLResponse *resp = (NSHTTPURLResponse *)response;
+                   if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                     NSHTTPURLResponse *resp = (NSHTTPURLResponse *)response;
 
-            NSDictionary *diction = [resp allHeaderFields];
+                     NSDictionary *diction = [resp allHeaderFields];
 
-            NSArray *cookies =
-                [NSHTTPCookie cookiesWithResponseHeaderFields:diction
-                                                       forURL:[resp URL]];
+                     NSArray *cookies = [NSHTTPCookie
+                         cookiesWithResponseHeaderFields:diction
+                                                  forURL:[resp URL]];
 
-            for (NSHTTPCookie *cookie in cookies) {
-              [self.cookies setObject:cookie.value forKey:cookie.name];
-            }
-          }
+                     for (NSHTTPCookie *cookie in cookies) {
+                       [self.cookies setObject:cookie.value forKey:cookie.name];
+                     }
+                   }
 
-          decisionHandler(WKNavigationActionPolicyAllow);
-        }];
+                   decisionHandler(WKNavigationActionPolicyAllow);
+                 }];
   [task resume];
 }
 
