@@ -1,13 +1,13 @@
 {
-  "originHash" : "d85eaabc584a140428171e29b2212f0de1a63fe75b454c9caea0d3056eeb237f",
+  "originHash" : "d4ebd53e067077dd801f053d0e53ff41d142e4c5de7938abc62e7bd7073a759a",
   "pins" : [
     {
-      "identity" : "opacity-core",
+      "identity" : "opacity-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/OpacityLabs/opacity-core",
+      "location" : "git@github.com:OpacityLabs/opacity-ios.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "8f12bee1b485e5212e03ce90baca8d06fbf9b85a"
+        "revision" : "e0a7aecfb99bbbf1f2386ce394cff66a794b24a2",
+        "version" : "3.5.1"
       }
     }
   ],

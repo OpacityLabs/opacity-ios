@@ -14,7 +14,8 @@
 		7022283F2C74DF6D00C5DC56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7022283E2C74DF6D00C5DC56 /* Assets.xcassets */; };
 		702228422C74DF6D00C5DC56 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 702228412C74DF6D00C5DC56 /* Base */; };
 		702228452C74DF6D00C5DC56 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 702228442C74DF6D00C5DC56 /* main.m */; };
-		7022284D2C74E2DE00C5DC56 /* OpacityCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7022284C2C74E2DE00C5DC56 /* OpacityCore */; };
+		703D249B2C9A29B400EEE75E /* OpacityCore in Frameworks */ = {isa = PBXBuildFile; productRef = 703D249A2C9A29B400EEE75E /* OpacityCore */; };
+		703D249D2C9A2A6800EEE75E /* .env in Resources */ = {isa = PBXBuildFile; fileRef = 703D249C2C9A2A6800EEE75E /* .env */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		702228412C74DF6D00C5DC56 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		702228432C74DF6D00C5DC56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		702228442C74DF6D00C5DC56 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		703D249C2C9A2A6800EEE75E /* .env */ = {isa = PBXFileReference; lastKnownFileType = text; path = .env; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,7 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7022284D2C74E2DE00C5DC56 /* OpacityCore in Frameworks */,
+				703D249B2C9A29B400EEE75E /* OpacityCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +70,7 @@
 				702228352C74DF6C00C5DC56 /* SceneDelegate.h */,
 				702228362C74DF6C00C5DC56 /* SceneDelegate.m */,
 				702228382C74DF6C00C5DC56 /* ViewController.h */,
+				703D249C2C9A2A6800EEE75E /* .env */,
 				702228392C74DF6C00C5DC56 /* ViewController.mm */,
 				7022283B2C74DF6C00C5DC56 /* Main.storyboard */,
 				7022283E2C74DF6D00C5DC56 /* Assets.xcassets */,
@@ -95,7 +98,7 @@
 			);
 			name = test_app;
 			packageProductDependencies = (
-				7022284C2C74E2DE00C5DC56 /* OpacityCore */,
+				703D249A2C9A29B400EEE75E /* OpacityCore */,
 			);
 			productName = test_app;
 			productReference = 7022282F2C74DF6C00C5DC56 /* test_app.app */;
@@ -125,7 +128,7 @@
 			);
 			mainGroup = 702228262C74DF6C00C5DC56;
 			packageReferences = (
-				7022284B2C74E2DE00C5DC56 /* XCRemoteSwiftPackageReference "opacity-core" */,
+				703D24992C9A29B400EEE75E /* XCRemoteSwiftPackageReference "opacity-ios" */,
 			);
 			productRefGroup = 702228302C74DF6C00C5DC56 /* Products */;
 			projectDirPath = "";
@@ -144,6 +147,7 @@
 				7022283F2C74DF6D00C5DC56 /* Assets.xcassets in Resources */,
 				702228422C74DF6D00C5DC56 /* Base in Resources */,
 				7022283D2C74DF6C00C5DC56 /* Base in Resources */,
+				703D249D2C9A2A6800EEE75E /* .env in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,20 +381,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7022284B2C74E2DE00C5DC56 /* XCRemoteSwiftPackageReference "opacity-core" */ = {
+		703D24992C9A29B400EEE75E /* XCRemoteSwiftPackageReference "opacity-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/OpacityLabs/opacity-core";
+			repositoryURL = "git@github.com:OpacityLabs/opacity-ios.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.5.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7022284C2C74E2DE00C5DC56 /* OpacityCore */ = {
+		703D249A2C9A29B400EEE75E /* OpacityCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7022284B2C74E2DE00C5DC56 /* XCRemoteSwiftPackageReference "opacity-core" */;
+			package = 703D24992C9A29B400EEE75E /* XCRemoteSwiftPackageReference "opacity-ios" */;
 			productName = OpacityCore;
 		};
 /* End XCSwiftPackageProductDependency section */

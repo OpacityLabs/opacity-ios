@@ -3,5 +3,6 @@ target
 pod_example/Pods/
 pod_example/Opacity.xcworkspace/
 pod_example/Opacity/.env
+spm_example/test_app/.env
 .DS_Store
 .build
