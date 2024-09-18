@@ -6,3 +6,4 @@ pod_example/Opacity/.env
 spm_example/test_app/.env
 .DS_Store
 .build
+**/*.xcuserdatad
