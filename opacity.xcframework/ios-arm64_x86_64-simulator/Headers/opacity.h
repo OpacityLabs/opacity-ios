@@ -114,6 +114,14 @@ extern const char *secure_get(const char *key);
 
 const char *verify(const char *proof);
 
+extern void android_prepare_request(const char *_url);
+
+extern void android_set_request_header(const char *_key, const char *_value);
+
+extern void android_present_webview(void);
+
+extern void android_close_webview(void);
+
 extern void ios_prepare_request(const char *url);
 
 extern void ios_set_request_header(const char *key, const char *value);
