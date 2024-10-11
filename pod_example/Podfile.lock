@@ -1,5 +1,5 @@
 PODS:
-  - OpacityCore (3.11.33)
+  - OpacityCore (3.11.34)
 
 DEPENDENCIES:
   - OpacityCore (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  OpacityCore: ea9ad63bad04a2323b681f72480b87368deb363d
+  OpacityCore: ef0dd47557984e91309e4e4669036eae5f4dcc27
 
 PODFILE CHECKSUM: ff9e9e9c364e565f76bc9c596fb67e52b43e0be9
 
