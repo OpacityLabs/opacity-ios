@@ -9,6 +9,7 @@ Pod::Spec.new do |s|
   s.author           = { 'ospfranco' => 'ospfranco@gmail.com' }
   s.source           = { :git => 'https://github.com/OpacityLabs/opacity-ios.git', :tag => s.version.to_s }
 
+  s.swift_version = '5.9'
   s.ios.deployment_target = '14.0'
   s.xcconfig = {
     'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17'
