@@ -11,8 +11,7 @@
 
 + (void)getUberRiderProfile:(void (^)(NSString *json, NSString *proof,
                                       NSError *error))completion;
-+ (void)getUberRiderTripHistory:(NSInteger)limit
-                      andOffset:(NSInteger)offset
++ (void)getUberRiderTripHistory:(NSString *)cursor
                   andCompletion:(void (^)(NSString *json, NSString *proof,
                                           NSError *error))completion;
 + (void)getUberRiderTrip:(NSString *)uuid

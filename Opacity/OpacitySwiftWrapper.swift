@@ -11,11 +11,11 @@ public class OpacitySwiftWrapper {
     }
   }
 
-  public static func getUberRiderTripHistory(limit: Int, offset: Int) async throws -> (
+  public static func getUberRiderTripHistory(cursor: String) async throws -> (
     json: String, proof: String
   ) {
     return try await withCheckedThrowingContinuation { continuation in
-      OpacityObjCWrapper.getUberRiderTripHistory(limit, andOffset: offset) { (json, proof, error) in
+      OpacityObjCWrapper.getUberRiderTripHistory(cursor) { (json, proof, error) in
         if let error {
           continuation.resume(throwing: error)
         } else if let json, let proof {

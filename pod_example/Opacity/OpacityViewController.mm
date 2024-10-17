@@ -70,7 +70,7 @@
         char *err;
 
         const char status = opacity_core::get_uber_rider_trip_history(
-            20, 0, &json, &proof, &err);
+            nil, &json, &proof, &err);
         if (status != opacity_core::OPACITY_OK) {
           NSString *errorMessage = [NSString stringWithUTF8String:err];
           NSLog(@"Error: %@", errorMessage);

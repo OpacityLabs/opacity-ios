@@ -3,7 +3,7 @@ import OpacityCore
 func testOpacity() async {
     do {
         let (json, proof) = try await OpacitySwiftWrapper.getUberRiderProfile()
-        let (json2, proof2) = try await OpacitySwiftWrapper.getUberRiderTripHistory(limit: 2, offset: 10)
+    
     } catch {
         
     }

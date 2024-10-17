@@ -39,19 +39,17 @@
       });
 }
 
-+ (void)getUberRiderTripHistory:(NSInteger)limit
-                      andOffset:(NSInteger)offset
++ (void)getUberRiderTripHistory:(NSString *)cursor
                   andCompletion:
                       (void (^)(NSString *, NSString *, NSError *))completion {
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                  ^{
                    char *json, *proof, *err;
 
-                   int c_limit = static_cast<int>(limit);
-                   int c_offset = static_cast<int>(offset);
+                   const char *c_cursor = [cursor UTF8String];
 
                    int status = opacity_core::get_uber_rider_trip_history(
-                       c_limit, c_offset, &json, &proof, &err);
+                       c_cursor, &json, &proof, &err);
 
                    [self handleStatus:status
                                  json:json
@@ -64,12 +62,11 @@
 + (void)getUberRiderTrip:(NSString *)uuid
            andCompletion:
                (void (^)(NSString *, NSString *, NSError *))completion {
-  char *json, *proof, *err;
 
-  const char *c_uuid = [uuid UTF8String];
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         char *json, *proof, *err;
+        const char *c_uuid = [uuid UTF8String];
 
         int status =
             opacity_core::get_uber_rider_trip(c_uuid, &json, &proof, &err);
