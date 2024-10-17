@@ -3,262 +3,261 @@
 
 @implementation OpacityObjCWrapper
 
-+ (NSDictionary *)getUberRiderProfile {
-  char *json;
-  char *proof;
-  char *err;
-
-  int status = opacity_core::get_uber_rider_profile(&json, &proof, &err);
-
++ (void)handleStatus:(int)status
+                json:(char *)json
+               proof:(char *)proof
+                 err:(char *)err
+          completion:(void (^)(NSString *json, NSString *proof,
+                               NSError *error))completion {
   if (status != opacity_core::OPACITY_OK) {
     NSString *errorMessage = [NSString stringWithUTF8String:err];
-    NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-    return errorDict;
+    NSError *error =
+        [NSError errorWithDomain:@"com.opacity"
+                            code:status
+                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    completion(nil, nil, error);
+  } else {
+    NSString *jsonString = [NSString stringWithUTF8String:json];
+    NSString *proofString = [NSString stringWithUTF8String:proof];
+    completion(jsonString, proofString, nil);
   }
-
-  NSString *profile = [NSString stringWithUTF8String:json];
-  NSString *proofString = [NSString stringWithUTF8String:proof];
-  NSDictionary *resultDict =
-      @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-  return resultDict;
 }
 
-+ (NSDictionary *)getUberRiderTripHistory:(NSInteger)limit
-                                andOffset:(NSInteger)offset {
-  char *json;
-  char *proof;
-  char *err;
++ (void)getUberRiderProfile:(void (^)(NSString *json, NSString *proof,
+                                      NSError *error))completion {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
 
-  int c_limit = static_cast<int>(limit);
-  int c_offset = static_cast<int>(offset);
+        int status = opacity_core::get_uber_rider_profile(&json, &proof, &err);
 
-  int status = opacity_core::get_uber_rider_trip_history(c_limit, c_offset,
-                                                         &json, &proof, &err);
-
-  if (status != opacity_core::OPACITY_OK) {
-    NSString *errorMessage = [NSString stringWithUTF8String:err];
-    NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-    return errorDict;
-  }
-
-  NSString *profile = [NSString stringWithUTF8String:json];
-  NSString *proofString = [NSString stringWithUTF8String:proof];
-  NSDictionary *resultDict =
-      @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-  return resultDict;
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
 }
 
-+ (NSDictionary *)getUberRiderTrip:(NSString *)uuid {
-  char *json;
-  char *proof;
-  char *err;
++ (void)getUberRiderTripHistory:(NSInteger)limit
+                      andOffset:(NSInteger)offset
+                  andCompletion:
+                      (void (^)(NSString *, NSString *, NSError *))completion {
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                 ^{
+                   char *json, *proof, *err;
+
+                   int c_limit = static_cast<int>(limit);
+                   int c_offset = static_cast<int>(offset);
+
+                   int status = opacity_core::get_uber_rider_trip_history(
+                       c_limit, c_offset, &json, &proof, &err);
+
+                   [self handleStatus:status
+                                 json:json
+                                proof:proof
+                                  err:err
+                           completion:completion];
+                 });
+}
+
++ (void)getUberRiderTrip:(NSString *)uuid
+           andCompletion:
+               (void (^)(NSString *, NSString *, NSError *))completion {
+  char *json, *proof, *err;
 
   const char *c_uuid = [uuid UTF8String];
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
 
-  int status = opacity_core::get_uber_rider_trip(c_uuid, &json, &proof, &err);
+        int status =
+            opacity_core::get_uber_rider_trip(c_uuid, &json, &proof, &err);
 
-  if (status != opacity_core::OPACITY_OK) {
-    NSString *errorMessage = [NSString stringWithUTF8String:err];
-    NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-    return errorDict;
-  }
-
-  NSString *profile = [NSString stringWithUTF8String:json];
-  NSString *proofString = [NSString stringWithUTF8String:proof];
-  NSDictionary *resultDict =
-      @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-  return resultDict;
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
 }
 
-+ (NSDictionary *)getUberDriverProfile {
-  char *json;
-  char *proof;
-  char *err;
++ (void)getUberDriverProfile:(void (^)(NSString *json, NSString *proof,
+                                       NSError *error))completion {
+  char *json, *proof, *err;
 
-  int status = opacity_core::get_uber_driver_profile(&json, &proof, &err);
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
 
-  if (status != opacity_core::OPACITY_OK) {
-    NSString *errorMessage = [NSString stringWithUTF8String:err];
-    NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-    return errorDict;
-  }
+        int status = opacity_core::get_uber_driver_profile(&json, &proof, &err);
 
-  NSString *profile = [NSString stringWithUTF8String:json];
-  NSString *proofString = [NSString stringWithUTF8String:proof];
-  NSDictionary *resultDict =
-      @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-  return resultDict;
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
 }
-+ (NSDictionary *)getUberDriverTrips:(NSString *)startDate
-                          andEndDate:(NSString *)endDate
-                           andCursor:(NSString *)cursor {
-  char *json;
-  char *proof;
-  char *err;
+
++ (void)getUberDriverTrips:(NSString *)startDate
+                andEndDate:(NSString *)endDate
+                 andCursor:(NSString *)cursor
+             andCompletion:
+                 (void (^)(NSString *, NSString *, NSError *))completion {
+  char *json, *proof, *err;
 
   const char *c_start_date = [startDate UTF8String];
   const char *c_end_date = [endDate UTF8String];
   const char *c_cursor = [cursor UTF8String];
 
-  int status = opacity_core::get_uber_driver_trips(
-      c_start_date, c_end_date, c_cursor, &json, &proof, &err);
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                 ^{
+                   char *json, *proof, *err;
 
-  if (status != opacity_core::OPACITY_OK) {
-    NSString *errorMessage = [NSString stringWithUTF8String:err];
-    NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-    return errorDict;
-  }
+                   int status = opacity_core::get_uber_driver_trips(
+                       c_start_date, c_end_date, c_cursor, &json, &proof, &err);
 
-  NSString *profile = [NSString stringWithUTF8String:json];
-  NSString *proofString = [NSString stringWithUTF8String:proof];
-  NSDictionary *resultDict =
-      @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-  return resultDict;
+                   [self handleStatus:status
+                                 json:json
+                                proof:proof
+                                  err:err
+                           completion:completion];
+                 });
 }
-+ (NSDictionary *)getUberFareEstimate:(NSNumber *)pickupLatitude
-                   andPickupLongitude:(NSNumber *)pickupLongitude
-               andDestinationLatitude:(NSNumber *)destinationLatitude
-              andDestinationLongitude:(NSNumber *)destinationLongitude {
-  char *json;
-  char *proof;
-  char *err;
+
++ (void)getUberFareEstimate:(NSNumber *)pickupLatitude
+         andPickupLongitude:(NSNumber *)pickupLongitude
+     andDestinationLatitude:(NSNumber *)destinationLatitude
+    andDestinationLongitude:(NSNumber *)destinationLongitude
+              andCompletion:
+                  (void (^)(NSString *, NSString *, NSError *))completion {
+  char *json, *proof, *err;
 
   double c_pickup_latitude = [pickupLatitude doubleValue];
   double c_pickup_longitude = [pickupLongitude doubleValue];
   double c_destination_latitude = [destinationLatitude doubleValue];
   double c_destination_longitude = [destinationLongitude doubleValue];
 
-  int status = opacity_core::get_uber_fare_estimate(
-      c_pickup_latitude, c_pickup_longitude, c_destination_latitude,
-      c_destination_longitude, &json, &proof, &err);
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
 
-  if (status != opacity_core::OPACITY_OK) {
-    NSString *errorMessage = [NSString stringWithUTF8String:err];
-    NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-    return errorDict;
-  }
+        int status = opacity_core::get_uber_fare_estimate(
+            c_pickup_latitude, c_pickup_longitude, c_destination_latitude,
+            c_destination_longitude, &json, &proof, &err);
 
-  NSString *profile = [NSString stringWithUTF8String:json];
-  NSString *proofString = [NSString stringWithUTF8String:proof];
-  NSDictionary *resultDict =
-      @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-  return resultDict;
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
 }
-+ (NSDictionary *)getRedditAccount {
-    char *json;
-        char *proof;
-        char *err;
+
++ (void)getRedditAccount:(void (^)(NSString *json, NSString *proof,
+                                   NSError *error))completion {
+  char *json, *proof, *err;
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
 
         int status = opacity_core::get_reddit_account(&json, &proof, &err);
 
-        if (status != opacity_core::OPACITY_OK) {
-          NSString *errorMessage = [NSString stringWithUTF8String:err];
-          NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-          return errorDict;
-        }
-
-        NSString *profile = [NSString stringWithUTF8String:json];
-        NSString *proofString = [NSString stringWithUTF8String:proof];
-        NSDictionary *resultDict =
-            @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-        return resultDict;
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
 }
 
-+ (NSDictionary *)getRedditFollowedSubreddits {
-    char *json;
-        char *proof;
-        char *err;
++ (void)getRedditFollowedSubreddits:(void (^)(NSString *json, NSString *proof,
+                                              NSError *error))completion {
+  char *json, *proof, *err;
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
 
-    int status = opacity_core::get_reddit_followed_subreddits(&json, &proof, &err);
+        int status =
+            opacity_core::get_reddit_followed_subreddits(&json, &proof, &err);
 
-        if (status != opacity_core::OPACITY_OK) {
-          NSString *errorMessage = [NSString stringWithUTF8String:err];
-          NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-          return errorDict;
-        }
-
-        NSString *profile = [NSString stringWithUTF8String:json];
-        NSString *proofString = [NSString stringWithUTF8String:proof];
-        NSDictionary *resultDict =
-            @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-        return resultDict;
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
 }
 
-+ (NSDictionary *)getRedditComments {
-    char *json;
-        char *proof;
-        char *err;
++ (void)getRedditComments:(void (^)(NSString *json, NSString *proof,
+                                    NSError *error))completion {
+  char *json, *proof, *err;
+
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
 
         int status = opacity_core::get_reddit_comments(&json, &proof, &err);
 
-        if (status != opacity_core::OPACITY_OK) {
-          NSString *errorMessage = [NSString stringWithUTF8String:err];
-          NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-          return errorDict;
-        }
-
-        NSString *profile = [NSString stringWithUTF8String:json];
-        NSString *proofString = [NSString stringWithUTF8String:proof];
-        NSDictionary *resultDict =
-            @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-        return resultDict;
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
 }
-+ (NSDictionary *)getRedditPosts {
-    char *json;
-        char *proof;
-        char *err;
+
++ (void)getRedditPosts:(void (^)(NSString *json, NSString *proof,
+                                 NSError *error))completion {
+  char *json, *proof, *err;
+
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
 
         int status = opacity_core::get_reddit_posts(&json, &proof, &err);
 
-        if (status != opacity_core::OPACITY_OK) {
-          NSString *errorMessage = [NSString stringWithUTF8String:err];
-          NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-          return errorDict;
-        }
-
-        NSString *profile = [NSString stringWithUTF8String:json];
-        NSString *proofString = [NSString stringWithUTF8String:proof];
-        NSDictionary *resultDict =
-            @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-        return resultDict;
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
 }
-+ (NSDictionary *)getZabkaAccount {
-    char *json;
-        char *proof;
-        char *err;
+
++ (void)getZabkaAccount:(void (^)(NSString *json, NSString *proof,
+                                  NSError *error))completion {
+  char *json, *proof, *err;
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
 
         int status = opacity_core::get_zabka_account(&json, &proof, &err);
 
-        if (status != opacity_core::OPACITY_OK) {
-          NSString *errorMessage = [NSString stringWithUTF8String:err];
-          NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-          return errorDict;
-        }
-
-        NSString *profile = [NSString stringWithUTF8String:json];
-        NSString *proofString = [NSString stringWithUTF8String:proof];
-        NSDictionary *resultDict =
-            @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-        return resultDict;
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
 }
-+ (NSDictionary *)getZabkaPoints {
-    char *json;
-        char *proof;
-        char *err;
+
++ (void)getZabkaPoints:(void (^)(NSString *json, NSString *proof,
+                                 NSError *error))completion {
+  char *json, *proof, *err;
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
 
         int status = opacity_core::get_zabka_points(&json, &proof, &err);
 
-        if (status != opacity_core::OPACITY_OK) {
-          NSString *errorMessage = [NSString stringWithUTF8String:err];
-          NSDictionary *errorDict = @{@"status" : @(status), @"error" : errorMessage};
-          return errorDict;
-        }
-
-        NSString *profile = [NSString stringWithUTF8String:json];
-        NSString *proofString = [NSString stringWithUTF8String:proof];
-        NSDictionary *resultDict =
-            @{@"status" : @(status), @"profile" : profile, @"proof" : proofString};
-        return resultDict;
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
 }
 
 @end
