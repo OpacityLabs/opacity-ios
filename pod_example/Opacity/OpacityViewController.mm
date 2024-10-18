@@ -42,12 +42,10 @@
   return [envVariables copy];
 }
 
-- (void)get_rider_profile {
+- (void)getRiderProfile {
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        char *json;
-        char *proof;
-        char *err;
+        char *json, *proof, *err;
 
         int status = opacity_core::get_uber_rider_profile(&json, &proof, &err);
 
@@ -229,7 +227,7 @@
   [uberProfileButton setTitle:@"Uber get rider profile"
                      forState:UIControlStateNormal];
   [uberProfileButton addTarget:self
-                        action:@selector(get_rider_profile)
+                        action:@selector(getRiderProfile)
               forControlEvents:UIControlEventTouchUpInside];
   uberProfileButton.frame = CGRectMake(100, 300, 200, 50);
   [self.view addSubview:uberProfileButton];
