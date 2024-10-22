@@ -7,3 +7,4 @@ spm_example/test_app/.env
 .DS_Store
 .build
 **/*.xcuserdatad
+opacity.xcframework

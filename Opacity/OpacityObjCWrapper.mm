@@ -257,4 +257,89 @@
       });
 }
 
++ (void)getCartaProfile:(void (^)(NSString *json, NSString *proof,
+                                  NSError *error))completion {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
+
+        int status = opacity_core::get_carta_profile(&json, &proof, &err);
+
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
+}
++ (void)getCartaOrganizations:(void (^)(NSString *json, NSString *proof,
+                                        NSError *error))completion {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
+
+        int status = opacity_core::get_carta_organizations(&json, &proof, &err);
+
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
+}
++ (void)getCartaPortfolioInvestments:(NSString *)firm_id
+                        andAccountId:(NSString *)account_id
+                       andCompletion:(void (^)(NSString *json, NSString *proof,
+                                               NSError *error))completion {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
+
+        int status = opacity_core::get_carta_portfolio_investments(
+            [firm_id UTF8String], [account_id UTF8String], &json, &proof, &err);
+
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
+}
++ (void)getCartaHoldingCompanies:(NSString *)accountId
+                   ancCompletion:(void (^)(NSString *json, NSString *proof,
+                                           NSError *error))completion {
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                 ^{
+                   char *json, *proof, *err;
+
+                   int status = opacity_core::get_carta_holding_companies(
+                       [account_id UTF8String], &json, &proof, &err);
+
+                   [self handleStatus:status
+                                 json:json
+                                proof:proof
+                                  err:err
+                           completion:completion];
+                 });
+}
++ (void)getCartaCorporationSecurities:(NSString *)account_id
+                     andCorporationId:(NSString *)corporation_id
+                        andCompletion:(void (^)(NSString *json, NSString *proof,
+                                                NSError *error))completion {
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                 ^{
+                   char *json, *proof, *err;
+
+                   int status = opacity_core::get_carta_corporation_securities(
+                       [account_id UTF8String], [corporation_id UTF8String],
+                       &json, &proof, &err);
+
+                   [self handleStatus:status
+                                 json:json
+                                proof:proof
+                                  err:err
+                           completion:completion];
+                 });
+}
+
 @end

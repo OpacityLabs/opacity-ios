@@ -156,4 +156,74 @@ public class OpacitySwiftWrapper {
       }
     }
   }
+
+  // Carta
+  public static func getCartaProfile() async throws -> (json: String, proof: String) {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getCartaProfile { (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json, let proof {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
+
+  public static func getCartaOrganizations() async throws -> (json: String, proof: String) {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getCartaOrganizations { (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json, let proof {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
+
+  public static func getCartaPortfolioInvestments(firmId: String, accountId: String) async throws
+    -> (json: String, proof: String)
+  {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getCartaPortfolioInvestments(firmId, andAccountId: accountId) {
+        (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json, let proof {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
+
+  public static func getCartaHoldingCompanies(accountId: String) async throws -> (
+    json: String, proof: String
+  ) {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getCartaHoldingCompanies(accountId) { (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json, let proof {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
+
+  public static func getCartaCorporationSecurities(accountId: String, corporationId: String)
+    async throws
+    -> (json: String, proof: String)
+  {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getCartaCorporationSecurities(accountId, andCorporationId: corporationId) {
+        (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json, let proof {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
 }
