@@ -197,11 +197,11 @@ public class OpacitySwiftWrapper {
     }
   }
 
-  public static func getCartaHoldingCompanies(accountId: String) async throws -> (
+  public static func getCartaHoldingsCompanies(accountId: String) async throws -> (
     json: String, proof: String
   ) {
     return try await withCheckedThrowingContinuation { continuation in
-      OpacityObjCWrapper.getCartaHoldingCompanies(accountId) { (json, proof, error) in
+      OpacityObjCWrapper.getCartaHoldingsCompanies(accountId) { (json, proof, error) in
         if let error {
           continuation.resume(throwing: error)
         } else if let json, let proof {

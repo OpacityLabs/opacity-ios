@@ -305,14 +305,14 @@
                 completion:completion];
       });
 }
-+ (void)getCartaHoldingCompanies:(NSString *)accountId
++ (void)getCartaHoldingsCompanies:(NSString *)account_id
                    ancCompletion:(void (^)(NSString *json, NSString *proof,
                                            NSError *error))completion {
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                  ^{
                    char *json, *proof, *err;
 
-                   int status = opacity_core::get_carta_holding_companies(
+                   int status = opacity_core::get_carta_holdings_companies(
                        [account_id UTF8String], &json, &proof, &err);
 
                    [self handleStatus:status

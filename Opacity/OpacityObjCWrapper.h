@@ -53,7 +53,7 @@
                         andAccountId:(NSString *)account_id
                        andCompletion:(void (^)(NSString *json, NSString *proof,
                                                NSError *error))completion;
-+ (void)getCartaHoldingCompanies:(NSString *)accountId
++ (void)getCartaHoldingsCompanies:(NSString *)accountId
                    ancCompletion:(void (^)(NSString *json, NSString *proof,
                                            NSError *error))completion;
 + (void)getCartaCorporationSecurities:(NSString *)account_id
