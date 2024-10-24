@@ -21,6 +21,7 @@ final class OpacityTests: XCTestCase {
   }
     
     func testGetUberRiderProfileShouldSucceed() throws {
-        
+        let app = XCUIApplication()
+        app.launch()
     }
 }
