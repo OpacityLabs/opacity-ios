@@ -47,6 +47,17 @@
                ReferencedContainer = "container:Opacity.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7075C1062CCA2AF000886B9F"
+               BuildableName = "Opacity_ExampleUITests.xctest"
+               BlueprintName = "Opacity_ExampleUITests"
+               ReferencedContainer = "container:Opacity.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

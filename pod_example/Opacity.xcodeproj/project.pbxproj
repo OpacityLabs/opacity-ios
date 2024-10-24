@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,13 +14,22 @@
 		6003F598195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F596195388D20070C39A /* InfoPlist.strings */; };
 		6003F59A195388D20070C39A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F599195388D20070C39A /* main.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
-		70135B262CBD0C5E00897046 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70135B252CBD0C5E00897046 /* test.swift */; };
 		7049CBED2C91B05B003CFED4 /* .env in Resources */ = {isa = PBXBuildFile; fileRef = 7049CBEC2C91B05B003CFED4 /* .env */; };
+		7075C1132CCA2BC600886B9F /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7075C1122CCA2BC000886B9F /* MainViewController.swift */; };
 		70D84F212C8FC52A00FC4F56 /* OpacityAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 70D84F1A2C8FC52A00FC4F56 /* OpacityAppDelegate.m */; };
-		70D84F222C8FC52A00FC4F56 /* OpacityViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D84F1D2C8FC52A00FC4F56 /* OpacityViewController.mm */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7075C10D2CCA2AF000886B9F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6003F582195388D10070C39A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6003F589195388D20070C39A;
+			remoteInfo = Opacity_Example;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		214D76480E08883897303A75 /* libPods-Opacity_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Opacity_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,12 +43,11 @@
 		6003F59B195388D20070C39A /* Opacity-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Opacity-Prefix.pch"; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		70135B242CBD0C5E00897046 /* Opacity_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Opacity_Example-Bridging-Header.h"; sourceTree = "<group>"; };
-		70135B252CBD0C5E00897046 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		7049CBEC2C91B05B003CFED4 /* .env */ = {isa = PBXFileReference; lastKnownFileType = text; path = .env; sourceTree = "<group>"; };
+		7075C1072CCA2AF000886B9F /* Opacity_ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Opacity_ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7075C1122CCA2BC000886B9F /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		70D84F172C8FC52A00FC4F56 /* OpacityAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpacityAppDelegate.h; sourceTree = "<group>"; };
 		70D84F1A2C8FC52A00FC4F56 /* OpacityAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpacityAppDelegate.m; sourceTree = "<group>"; };
-		70D84F1C2C8FC52A00FC4F56 /* OpacityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpacityViewController.h; sourceTree = "<group>"; };
-		70D84F1D2C8FC52A00FC4F56 /* OpacityViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpacityViewController.mm; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8B4BEB5E01DE6050C4AE2046 /* Opacity.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Opacity.podspec; path = ../Opacity.podspec; sourceTree = "<group>"; };
@@ -48,6 +56,10 @@
 		A0286D1DEE7D60E15BC97D1D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		EC842696ACEF1BBE594C17CD /* Pods-Opacity_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Opacity_Example.release.xcconfig"; path = "Target Support Files/Pods-Opacity_Example/Pods-Opacity_Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		7075C1082CCA2AF000886B9F /* Opacity_ExampleUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Opacity_ExampleUITests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		6003F587195388D20070C39A /* Frameworks */ = {
@@ -61,6 +73,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7075C1042CCA2AF000886B9F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -69,6 +88,7 @@
 			children = (
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F593195388D20070C39A /* Example for Opacity */,
+				7075C1082CCA2AF000886B9F /* Opacity_ExampleUITests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
 				668EF3857E4916F8A1A4A966 /* Pods */,
@@ -79,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				6003F58A195388D20070C39A /* Opacity_Example.app */,
+				7075C1072CCA2AF000886B9F /* Opacity_ExampleUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -97,16 +118,14 @@
 		6003F593195388D20070C39A /* Example for Opacity */ = {
 			isa = PBXGroup;
 			children = (
+				7075C1122CCA2BC000886B9F /* MainViewController.swift */,
 				70D84F172C8FC52A00FC4F56 /* OpacityAppDelegate.h */,
 				70D84F1A2C8FC52A00FC4F56 /* OpacityAppDelegate.m */,
-				70D84F1C2C8FC52A00FC4F56 /* OpacityViewController.h */,
-				70D84F1D2C8FC52A00FC4F56 /* OpacityViewController.mm */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				7049CBEC2C91B05B003CFED4 /* .env */,
 				6003F594195388D20070C39A /* Supporting Files */,
-				70135B252CBD0C5E00897046 /* test.swift */,
 				70135B242CBD0C5E00897046 /* Opacity_Example-Bridging-Header.h */,
 			);
 			name = "Example for Opacity";
@@ -164,6 +183,29 @@
 			productReference = 6003F58A195388D20070C39A /* Opacity_Example.app */;
 			productType = "com.apple.product-type.application";
 		};
+		7075C1062CCA2AF000886B9F /* Opacity_ExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7075C1112CCA2AF000886B9F /* Build configuration list for PBXNativeTarget "Opacity_ExampleUITests" */;
+			buildPhases = (
+				7075C1032CCA2AF000886B9F /* Sources */,
+				7075C1042CCA2AF000886B9F /* Frameworks */,
+				7075C1052CCA2AF000886B9F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7075C10E2CCA2AF000886B9F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7075C1082CCA2AF000886B9F /* Opacity_ExampleUITests */,
+			);
+			name = Opacity_ExampleUITests;
+			packageProductDependencies = (
+			);
+			productName = Opacity_ExampleUITests;
+			productReference = 7075C1072CCA2AF000886B9F /* Opacity_ExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -171,12 +213,17 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = Opacity;
+				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = ospfranco;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
 						DevelopmentTeam = 238C2RSGV6;
 						LastSwiftMigration = 1600;
+					};
+					7075C1062CCA2AF000886B9F = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 6003F589195388D20070C39A;
 					};
 				};
 			};
@@ -195,6 +242,7 @@
 			projectRoot = "";
 			targets = (
 				6003F589195388D20070C39A /* Opacity_Example */,
+				7075C1062CCA2AF000886B9F /* Opacity_ExampleUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -209,6 +257,13 @@
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7075C1052CCA2AF000886B9F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,14 +299,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70D84F222C8FC52A00FC4F56 /* OpacityViewController.mm in Sources */,
-				70135B262CBD0C5E00897046 /* test.swift in Sources */,
+				7075C1132CCA2BC600886B9F /* MainViewController.swift in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				70D84F212C8FC52A00FC4F56 /* OpacityAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7075C1032CCA2AF000886B9F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7075C10E2CCA2AF000886B9F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6003F589195388D20070C39A /* Opacity_Example */;
+			targetProxy = 7075C10D2CCA2AF000886B9F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6003F596195388D20070C39A /* InfoPlist.strings */ = {
@@ -389,6 +458,100 @@
 			};
 			name = Release;
 		};
+		7075C10F2CCA2AF000886B9F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 24CMR7378R;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ospfranco.Opacity-ExampleUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Opacity_Example;
+			};
+			name = Debug;
+		};
+		7075C1102CCA2AF000886B9F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 24CMR7378R;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ospfranco.Opacity-ExampleUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Opacity_Example;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -406,6 +569,15 @@
 			buildConfigurations = (
 				6003F5C0195388D20070C39A /* Debug */,
 				6003F5C1195388D20070C39A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7075C1112CCA2AF000886B9F /* Build configuration list for PBXNativeTarget "Opacity_ExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7075C10F2CCA2AF000886B9F /* Debug */,
+				7075C1102CCA2AF000886B9F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

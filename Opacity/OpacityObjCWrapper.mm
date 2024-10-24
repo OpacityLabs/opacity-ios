@@ -23,6 +23,17 @@
   }
 }
 
++ (void)initSDK:(NSString *)api_key andDryRun:(BOOL)dry_run {
+  int status = opacity_core::init([api_key UTF8String], dry_run);
+
+  if (status != opacity_core::OPACITY_OK) {
+      NSString *errorMessage = @"Error initializing Opacity SDK";
+    @throw [NSException exceptionWithName:@"OpacityInitException"
+                                   reason:errorMessage
+                                 userInfo:nil];
+  }
+}
+
 + (void)getUberRiderProfile:(void (^)(NSString *json, NSString *proof,
                                       NSError *error))completion {
   dispatch_async(
@@ -81,7 +92,6 @@
 
 + (void)getUberDriverProfile:(void (^)(NSString *json, NSString *proof,
                                        NSError *error))completion {
-  char *json, *proof, *err;
 
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -102,7 +112,6 @@
                  andCursor:(NSString *)cursor
              andCompletion:
                  (void (^)(NSString *, NSString *, NSError *))completion {
-  char *json, *proof, *err;
 
   const char *c_start_date = [startDate UTF8String];
   const char *c_end_date = [endDate UTF8String];
@@ -129,7 +138,6 @@
     andDestinationLongitude:(NSNumber *)destinationLongitude
               andCompletion:
                   (void (^)(NSString *, NSString *, NSError *))completion {
-  char *json, *proof, *err;
 
   double c_pickup_latitude = [pickupLatitude doubleValue];
   double c_pickup_longitude = [pickupLongitude doubleValue];
@@ -154,7 +162,6 @@
 
 + (void)getRedditAccount:(void (^)(NSString *json, NSString *proof,
                                    NSError *error))completion {
-  char *json, *proof, *err;
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         char *json, *proof, *err;
@@ -171,7 +178,6 @@
 
 + (void)getRedditFollowedSubreddits:(void (^)(NSString *json, NSString *proof,
                                               NSError *error))completion {
-  char *json, *proof, *err;
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         char *json, *proof, *err;
@@ -189,8 +195,6 @@
 
 + (void)getRedditComments:(void (^)(NSString *json, NSString *proof,
                                     NSError *error))completion {
-  char *json, *proof, *err;
-
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         char *json, *proof, *err;
@@ -207,8 +211,6 @@
 
 + (void)getRedditPosts:(void (^)(NSString *json, NSString *proof,
                                  NSError *error))completion {
-  char *json, *proof, *err;
-
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         char *json, *proof, *err;
@@ -225,7 +227,6 @@
 
 + (void)getZabkaAccount:(void (^)(NSString *json, NSString *proof,
                                   NSError *error))completion {
-  char *json, *proof, *err;
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         char *json, *proof, *err;
@@ -242,7 +243,6 @@
 
 + (void)getZabkaPoints:(void (^)(NSString *json, NSString *proof,
                                  NSError *error))completion {
-  char *json, *proof, *err;
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         char *json, *proof, *err;
@@ -306,8 +306,8 @@
       });
 }
 + (void)getCartaHoldingsCompanies:(NSString *)account_id
-                   ancCompletion:(void (^)(NSString *json, NSString *proof,
-                                           NSError *error))completion {
+                    ancCompletion:(void (^)(NSString *json, NSString *proof,
+                                            NSError *error))completion {
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                  ^{
                    char *json, *proof, *err;

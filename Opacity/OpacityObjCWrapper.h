@@ -8,6 +8,7 @@
                  err:(char *)err
           completion:(void (^)(NSString *json, NSString *proof,
                                NSError *error))completion;
++ (void)initSDK:(NSString *)api_key andDryRun: (BOOL) dry_run;
 // uber
 + (void)getUberRiderProfile:(void (^)(NSString *json, NSString *proof,
                                       NSError *error))completion;
