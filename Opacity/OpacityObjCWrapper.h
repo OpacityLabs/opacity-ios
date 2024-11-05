@@ -2,6 +2,8 @@
 
 @interface OpacityObjCWrapper : NSObject
 
++ (void)init:(NSString *)apiKey andDryRun:(BOOL)dryRun;
+
 + (void)handleStatus:(int)status
                 json:(char *)json
                proof:(char *)proof
@@ -54,8 +56,8 @@
                        andCompletion:(void (^)(NSString *json, NSString *proof,
                                                NSError *error))completion;
 + (void)getCartaHoldingsCompanies:(NSString *)accountId
-                   ancCompletion:(void (^)(NSString *json, NSString *proof,
-                                           NSError *error))completion;
+                    ancCompletion:(void (^)(NSString *json, NSString *proof,
+                                            NSError *error))completion;
 + (void)getCartaCorporationSecurities:(NSString *)account_id
                      andCorporationId:(NSString *)corporation_id
                         andCompletion:(void (^)(NSString *json, NSString *proof,

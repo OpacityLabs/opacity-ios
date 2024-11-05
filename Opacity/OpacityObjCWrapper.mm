@@ -23,6 +23,18 @@
   }
 }
 
++ (void)init:(NSString *)api_key andDryRun:(BOOL)dry_run {
+  int status = opacity_core::init([api_key UTF8String], dry_run);
+  if (status != opacity_core::OPACITY_OK) {
+    NSString *errorMessage = @"Failed to initialize Opacity";
+    NSError *error =
+        [NSError errorWithDomain:@"com.opacity"
+                            code:status
+                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    NSLog(@"%@", error);
+  }
+}
+
 + (void)getUberRiderProfile:(void (^)(NSString *json, NSString *proof,
                                       NSError *error))completion {
   dispatch_async(
@@ -306,8 +318,8 @@
       });
 }
 + (void)getCartaHoldingsCompanies:(NSString *)account_id
-                   ancCompletion:(void (^)(NSString *json, NSString *proof,
-                                           NSError *error))completion {
+                    ancCompletion:(void (^)(NSString *json, NSString *proof,
+                                            NSError *error))completion {
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                  ^{
                    char *json, *proof, *err;

@@ -1,4 +1,7 @@
 public class OpacitySwiftWrapper {
+  public static func initialize(apiKey: String, dryRun: Bool) {
+    OpacityObjCWrapper.init(apiKey, dryRun)
+  }
   public static func getUberRiderProfile() async throws -> (json: String, proof: String) {
     return try await withCheckedThrowingContinuation { continuation in
       OpacityObjCWrapper.getUberRiderProfile { (json, proof, error) in
