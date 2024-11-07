@@ -186,7 +186,7 @@
   NSDictionary *env = [self loadEnvFile];
   NSString *api_key = env[@"OPACITY_API_KEY"];
 
-  auto status = opacity_core::init([api_key UTF8String], false);
+  auto status = opacity_core::init([api_key UTF8String], false, opacity_core::OPACITY_ENVIRONMENT_STAGING);
 
   if (status != opacity_core::OPACITY_OK) {
     NSLog(@"Error initializing Opacity SDK");

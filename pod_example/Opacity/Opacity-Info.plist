@@ -24,6 +24,19 @@
 	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your contacts to provide better service.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Your location is required to provide accurate information.</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>PurposeString</key>
+		<string>$(PRODUCT_NAME) needs access to your precise location to provide better services.</string>
+	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is required to provide accurate information.</string>
+	<key>NSPhoneNumberUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your phone number to provide better services.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -45,18 +58,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is required to provide accurate information.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Your location is required to provide accurate information.</string>
-	<key>NSContactsUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs access to your contacts to provide better service.</string>
-	<key>NSPhoneNumberUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs access to your phone number to provide better services.</string>
-	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
-	<dict>
-		<key>PurposeString</key>
-		<string>$(PRODUCT_NAME) needs access to your precise location to provide better services.</string>
-	</dict>
 </dict>
 </plist>

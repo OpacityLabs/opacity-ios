@@ -23,8 +23,8 @@
   }
 }
 
-+ (void)init:(NSString *)api_key andDryRun:(BOOL)dry_run {
-  int status = opacity_core::init([api_key UTF8String], dry_run);
++ (void)initialize:(NSString *)api_key andDryRun:(BOOL)dry_run andEnvironment:(OpacityEnvironment) environment {
+  int status = opacity_core::init([api_key UTF8String], dry_run, environment);
   if (status != opacity_core::OPACITY_OK) {
     NSString *errorMessage = @"Failed to initialize Opacity";
     NSError *error =

@@ -1,8 +1,15 @@
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, OpacityEnvironment) {
+    Test,
+    Local,
+    Staging,
+    Production
+};
+
 @interface OpacityObjCWrapper : NSObject
 
-+ (void)init:(NSString *)apiKey andDryRun:(BOOL)dryRun;
++ (void)initialize:(NSString *)apiKey andDryRun:(BOOL)dryRun andEnvironment:(OpacityEnvironment) environment;
 
 + (void)handleStatus:(int)status
                 json:(char *)json

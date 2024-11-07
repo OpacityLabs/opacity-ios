@@ -1,6 +1,13 @@
 public class OpacitySwiftWrapper {
-  public static func initialize(apiKey: String, dryRun: Bool) {
-    OpacityObjCWrapper.init(apiKey, dryRun)
+    public enum Environment: Int {
+        case Test = 0
+        case Local
+        case Staging
+        case Production
+    }
+    
+    public static func initialize(apiKey: String, dryRun: Bool, environment: Environment) {
+        OpacityObjCWrapper.initialize(apiKey, andDryRun: dryRun, andEnvironment: OpacityEnvironment(rawValue: environment.rawValue) ?? OpacityEnvironment.Production)
   }
   public static func getUberRiderProfile() async throws -> (json: String, proof: String) {
     return try await withCheckedThrowingContinuation { continuation in
