@@ -353,5 +353,20 @@
                            completion:completion];
                  });
 }
++ (void)getGithubProfile:(void (^)(NSString *json, NSString *proof,
+                                  NSError *error))completion {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
+
+        int status = opacity_core::get_github_profile(&json, &proof, &err);
+
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
+}
 
 @end

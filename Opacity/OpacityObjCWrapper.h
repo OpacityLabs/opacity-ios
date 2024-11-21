@@ -9,7 +9,7 @@ typedef NS_ENUM(NSInteger, OpacityEnvironment) {
 
 @interface OpacityObjCWrapper : NSObject
 
-+ (void)initialize:(NSString *)apiKey andDryRun:(BOOL)dryRun andEnvironment:(OpacityEnvironment) environment;
++ (void)initialize:(NSString *)apiKey andDryRun:(BOOL)dryRun andEnvironment:(OpacityEnvironment)environment;
 
 + (void)handleStatus:(int)status
                 json:(char *)json
@@ -69,4 +69,7 @@ typedef NS_ENUM(NSInteger, OpacityEnvironment) {
                      andCorporationId:(NSString *)corporation_id
                         andCompletion:(void (^)(NSString *json, NSString *proof,
                                                 NSError *error))completion;
+// github
++ (void)getGithubProfile:(void (^)(NSString *json, NSString *proof,
+                                   NSError *error))completion;
 @end
