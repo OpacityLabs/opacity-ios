@@ -104,7 +104,7 @@ class MainViewController: UIViewController {
     }
   }
 
-//  @objc func runLua() {
-//     OpacitySwiftWrapper.runLua()
-//  }
+  @objc func runLua() {
+     OpacitySwiftWrapper.runLua()
+  }
 }

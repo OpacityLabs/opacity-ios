@@ -23,7 +23,9 @@
   }
 }
 
-+ (void)initialize:(NSString *)api_key andDryRun:(BOOL)dry_run andEnvironment:(OpacityEnvironment) environment {
++ (void)initialize:(NSString *)api_key
+         andDryRun:(BOOL)dry_run
+    andEnvironment:(OpacityEnvironment)environment {
   int status = opacity_core::init([api_key UTF8String], dry_run, environment);
   if (status != opacity_core::OPACITY_OK) {
     NSString *errorMessage = @"Failed to initialize Opacity";
@@ -341,7 +343,7 @@
 }
 
 + (void)getGithubProfile:(void (^)(NSString *json, NSString *proof,
-                                  NSError *error))completion {
+                                   NSError *error))completion {
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         char *json, *proof, *err;
@@ -356,8 +358,8 @@
       });
 }
 
-//+ (void)runLua {
-//               opacity_core::run_lua();
-//}
++ (void)runLua {
+  opacity_core::run_lua();
+}
 
 @end
