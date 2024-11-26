@@ -236,4 +236,17 @@ public class OpacitySwiftWrapper {
       }
     }
   }
+
+  // github
+  public static func getGithubProfile() async throws -> (json: String, proof: String) {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getGithubProfile { (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json, let proof {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
 }
