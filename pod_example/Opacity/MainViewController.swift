@@ -10,7 +10,7 @@ class MainViewController: UIViewController {
     ("zabka Profile", #selector(getZabkaProfile)),
     ("reddit account", #selector(getRedditProfile)),
     ("github profile", #selector(getGithubProfile)),
-//    ("run lua", #selector(runLua)),
+    ("run lua", #selector(runLua)),
   ]
 
   override func viewDidLoad() {
