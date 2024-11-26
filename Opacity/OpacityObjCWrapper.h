@@ -72,4 +72,6 @@ typedef NS_ENUM(NSInteger, OpacityEnvironment) {
 // github
 + (void)getGithubProfile:(void (^)(NSString *json, NSString *proof,
                                    NSError *error))completion;
+
++ (void)runLua;
 @end

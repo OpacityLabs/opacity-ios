@@ -249,4 +249,8 @@ public class OpacitySwiftWrapper {
       }
     }
   }
+    
+//    public static func runLua()  {
+//        OpacityObjCWrapper.runLua()
+//    }
 }
