@@ -180,6 +180,26 @@
       });
 }
 
+- (void)getGithubProfile {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json;
+        char *proof;
+        char *err;
+
+        const char status =
+            opacity_core::get_github_profile(&json, &proof, &err);
+        if (status != opacity_core::OPACITY_OK) {
+          NSString *errorMessage = [NSString stringWithUTF8String:err];
+          NSLog(@"Error: %@", errorMessage);
+          return;
+        }
+
+        NSString *data = [NSString stringWithUTF8String:json];
+        NSLog(@" %@", data);
+      });
+}
+
 - (void)viewDidLoad {
   [super viewDidLoad];
 
@@ -261,6 +281,14 @@
                    forControlEvents:UIControlEventTouchUpInside];
   getRedditAccountButton.frame = CGRectMake(100, 600, 200, 50);
   [self.view addSubview:getRedditAccountButton];
+
+  UIButton *getGithubProfileButton = [UIButton buttonWithType:UIButtonTypeSystem];
+  [getGithubProfileButton setTitle:@"github profile" forState:UIControlStateNormal];
+  [zabkaProfileButton addTarget:self
+                         action:@selector(getGithubProfile)
+               forControlEvents:UIControlEventTouchUpInside];
+  getGithubProfileButton.frame = CGRectMake(100, 550, 200, 50);
+  [self.view addSubview:getGithubProfileButton];
 }
 
 @end
