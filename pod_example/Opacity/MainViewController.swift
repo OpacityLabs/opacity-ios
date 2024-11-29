@@ -105,6 +105,8 @@ class MainViewController: UIViewController {
   }
 
   @objc func runLua() {
-     OpacitySwiftWrapper.runLua()
+      DispatchQueue.global(qos: .background).async {
+          OpacitySwiftWrapper.runLua()
+      }
   }
 }
