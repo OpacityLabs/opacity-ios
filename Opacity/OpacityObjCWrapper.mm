@@ -23,18 +23,10 @@
   }
 }
 
-+ (void)initialize:(NSString *)api_key
++ (int)initialize:(NSString *)api_key
          andDryRun:(BOOL)dry_run
     andEnvironment:(OpacityEnvironment)environment {
-  int status = opacity_core::init([api_key UTF8String], dry_run, environment);
-  if (status != opacity_core::OPACITY_OK) {
-    NSString *errorMessage = @"Failed to initialize Opacity";
-    NSError *error =
-        [NSError errorWithDomain:@"com.opacity"
-                            code:status
-                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-    NSLog(@"%@", error);
-  }
+  return opacity_core::init([api_key UTF8String], dry_run, environment);
 }
 
 + (void)getUberRiderProfile:(void (^)(NSString *json, NSString *proof,

@@ -1,14 +1,21 @@
 public class OpacitySwiftWrapper {
-    public enum Environment: Int {
-        case Test = 0
-        case Local
-        case Staging
-        case Production
-    }
-    
-    public static func initialize(apiKey: String, dryRun: Bool, environment: Environment) {
-        OpacityObjCWrapper.initialize(apiKey, andDryRun: dryRun, andEnvironment: OpacityEnvironment(rawValue: environment.rawValue) ?? OpacityEnvironment.Production)
+  public enum Environment: Int {
+    case Test = 0
+    case Local
+    case Staging
+    case Production
   }
+
+  public static func initialize(apiKey: String, dryRun: Bool, environment: Environment) throws {
+    let status = OpacityObjCWrapper.initialize(
+      apiKey, andDryRun: dryRun,
+      andEnvironment: OpacityEnvironment(rawValue: environment.rawValue)
+        ?? OpacityEnvironment.Production)
+    if status != 0 {
+      throw OpacityError("Failed to initialize the SDK")
+    }
+  }
+
   public static func getUberRiderProfile() async throws -> (json: String, proof: String) {
     return try await withCheckedThrowingContinuation { continuation in
       OpacityObjCWrapper.getUberRiderProfile { (json, proof, error) in
@@ -249,8 +256,8 @@ public class OpacitySwiftWrapper {
       }
     }
   }
-    
-    public static func runLua()  {
-        OpacityObjCWrapper.runLua()
-    }
+
+  public static func runLua() {
+    OpacityObjCWrapper.runLua()
+  }
 }
