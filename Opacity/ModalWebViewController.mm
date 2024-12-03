@@ -118,19 +118,37 @@
                                                         timeIntervalSince1970]]
            forKey:@"id"];
 
-    [dict setObject:self.cookies forKey:@"cookies"];
+    // Insert the HTML body inside of 'html_body'
+    // And also append ALL the cookies
+    [webView evaluateJavaScript:@"document.documentElement.outerHTML.toString()"
+              completionHandler:^(NSString *html, NSError *error) {
+      if (!error) {
+        [dict setObject:html forKey:@"html_body"];
+      } else {
+          NSLog(@"Error fetching the body of html: %@", error);
+      }
 
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
-                                                       options:0
-                                                         error:&error];
-    NSString *payload = [[NSString alloc] initWithData:jsonData
-                                              encoding:NSUTF8StringEncoding];
+      // Use WKHTTPCookieStore to get all cookies after JavaScript evaluation
+      WKHTTPCookieStore *cookieStore = self.webView.configuration.websiteDataStore.httpCookieStore;
+      [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
+        for (NSHTTPCookie *cookie in cookies) {
+          // Update self.cookies with the latest cookies
+          [self.cookies setObject:cookie.value forKey:cookie.name];
+        }
+        [dict setObject:self.cookies forKey:@"cookies"];
 
-    opacity_core::emit_webview_event([payload UTF8String]);
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                           options:0
+                                                             error:&error];
+        NSString *payload = [[NSString alloc] initWithData:jsonData
+                                                  encoding:NSUTF8StringEncoding];
+
+        opacity_core::emit_webview_event([payload UTF8String]);
+      }];
+    }];
   }
 }
-
 // -(void)webView:(WKWebView *)webView
 // didReceiveServerRedirectForProvisionalNavigation:(WKNavigation *)navigation {
 //     NSLog(@"🟥 didReceiveServerRedirectForProvisionalNavigation");
