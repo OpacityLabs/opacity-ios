@@ -5,12 +5,10 @@ import UIKit
 class MainViewController: UIViewController {
 
   let buttons = [
-    ("uber get rider profile", #selector(getRiderProfile)),
-    ("uber rider trip history", #selector(getUberRiderTripHistory)),
-    ("zabka Profile", #selector(getZabkaProfile)),
-    ("reddit account", #selector(getRedditProfile)),
-    ("github profile", #selector(getGithubProfile)),
-//    ("run lua", #selector(runLua)),
+    ("uber get rider profile", #selector(getRiderProfileTapped)),
+    ("zabka Profile", #selector(getZabkaProfileButtonTapped)),
+    ("github profile", #selector(getGithubProfileButtonTapped)),
+    //    ("run lua", #selector(runLua)),
   ]
 
   override func viewDidLoad() {
@@ -21,7 +19,7 @@ class MainViewController: UIViewController {
       return
     }
 
-    OpacitySwiftWrapper.initialize(apiKey: apiKey, dryRun: false, environment: .Test)
+    OpacitySwiftWrapper.initialize(apiKey: apiKey, dryRun: false, environment: .Local)
 
     for (index, buttonInfo) in buttons.enumerated() {
       let button = UIButton(type: .system)
@@ -59,7 +57,13 @@ class MainViewController: UIViewController {
     }
   }
 
-  @objc func getRiderProfile() async {
+  @objc func getRiderProfileTapped() {
+    Task {
+      await getRiderProfile()
+    }
+  }
+
+  func getRiderProfile() async {
     do {
       let (json) = try await OpacitySwiftWrapper.getUberRiderProfile()
       print(json)
@@ -86,7 +90,13 @@ class MainViewController: UIViewController {
     }
   }
 
-  @objc func getZabkaProfile() async {
+  @objc func getZabkaProfileButtonTapped() {
+    Task {
+      await getZabkaProfile()
+    }
+  }
+
+  func getZabkaProfile() async {
     do {
       let (json) = try await OpacitySwiftWrapper.getZabkaAccount()
       print(json)
@@ -95,7 +105,13 @@ class MainViewController: UIViewController {
     }
   }
 
-  @objc func getGithubProfile() async {
+  @objc func getGithubProfileButtonTapped() {
+    Task {
+      await getGithubProfile()
+    }
+  }
+
+  func getGithubProfile() async {
     do {
       let (json) = try await OpacitySwiftWrapper.getGithubProfile()
       print(json)
@@ -104,7 +120,7 @@ class MainViewController: UIViewController {
     }
   }
 
-//  @objc func runLua() {
-//     OpacitySwiftWrapper.runLua()
-//  }
+  //  @objc func runLua() {
+  //     OpacitySwiftWrapper.runLua()
+  //  }
 }
