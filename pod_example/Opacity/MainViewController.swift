@@ -8,6 +8,7 @@ class MainViewController: UIViewController {
     ("uber get rider profile", #selector(getRiderProfileTapped)),
     ("zabka Profile", #selector(getZabkaProfileButtonTapped)),
     ("github profile", #selector(getGithubProfileButtonTapped)),
+    ("instagram profile", #selector(getInstagramProfileButtonTapped)),
     //    ("run lua", #selector(runLua)),
   ]
 
@@ -117,6 +118,21 @@ class MainViewController: UIViewController {
       print(json)
     } catch {
       print("Could not get github account: \(error)")
+    }
+  }
+
+  @objc func getInstagramProfileButtonTapped() {
+    Task {
+      await getInstagramProfile()
+    }
+  }
+
+  func getInstagramProfile() async {
+    do {
+      let (json) = try await OpacitySwiftWrapper.getInstagramProfile()
+      print(json)
+    } catch {
+      print("Could not get instagram account: \(error)")
     }
   }
 
