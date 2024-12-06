@@ -250,6 +250,56 @@ public class OpacitySwiftWrapper {
       }
     }
   }
+
+  // instagram
+  public static func getInstagramProfile() async throws -> (json: String, proof: String?) {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getInstagramProfile { (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
+
+
+  public static func getInstagramLikes() async throws -> (json: String, proof: String?) {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getInstagramLikes { (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
+
+  public static func getInstagramComments() async throws -> (json: String, proof: String?) {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getInstagramComments { (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
+
+  public static func getInstagramSavedPosts() async throws -> (json: String, proof: String?) {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getInstagramSavedPosts { (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
     
 //    public static func runLua()  {
 //        OpacityObjCWrapper.runLua()
