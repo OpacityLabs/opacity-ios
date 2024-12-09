@@ -10,7 +10,7 @@ class MainViewController: UIViewController {
     ("reddit account", #selector(getRedditProfileTapped)),
     ("github profile", #selector(getGithubProfileButtonTapped)),
     ("instagram profile", #selector(getInstagramProfileButtonTapped)),
-    ("run lua", #selector(runLua)),
+    ("run lua", #selector(runLuaTapped)),
   ]
 
   override func viewDidLoad() {
@@ -136,11 +136,20 @@ class MainViewController: UIViewController {
     }
   }
 
-  @objc func runLua() {
-    DispatchQueue.global(qos: .userInteractive).async {
-      OpacitySwiftWrapper.runLua()
-    }
+  @objc func runLuaTapped() {
+      Task {
+          await runLua()
+      }
   }
+    
+    func runLua() async {
+        do {
+            let (json) = try await OpacitySwiftWrapper.get(name: "gusto:profile")
+            print(json)
+        } catch {
+            print("Could not get gusto profile: \(error)")
+        }
+    }
 
   @objc func getInstagramProfileButtonTapped() {
     Task {

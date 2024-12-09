@@ -1,15 +1,17 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, OpacityEnvironment) {
-    Test,
-    Local,
-    Staging,
-    Production
+  Test,
+  Local,
+  Staging,
+  Production
 };
 
 @interface OpacityObjCWrapper : NSObject
 
-+ (int)initialize:(NSString *)apiKey andDryRun:(BOOL)dryRun andEnvironment:(OpacityEnvironment)environment;
++ (int)initialize:(NSString *)apiKey
+         andDryRun:(BOOL)dryRun
+    andEnvironment:(OpacityEnvironment)environment;
 
 + (void)handleStatus:(int)status
                 json:(char *)json
@@ -73,18 +75,19 @@ typedef NS_ENUM(NSInteger, OpacityEnvironment) {
 + (void)getGithubProfile:(void (^)(NSString *json, NSString *proof,
                                    NSError *error))completion;
 
-//instagram
+// instagram
 + (void)getInstagramProfile:(void (^)(NSString *json, NSString *proof,
-                                   NSError *error))completion;
+                                      NSError *error))completion;
 
 + (void)getInstagramLikes:(void (^)(NSString *json, NSString *proof,
-                                   NSError *error))completion;
+                                    NSError *error))completion;
 
 + (void)getInstagramComments:(void (^)(NSString *json, NSString *proof,
-                                   NSError *error))completion;
+                                       NSError *error))completion;
 
 + (void)getInstagramSavedPosts:(void (^)(NSString *json, NSString *proof,
-                                   NSError *error))completion;
+                                         NSError *error))completion;
 
-+ (void)runLua;
++ (void)get:(NSString *)name completion:(void (^)(NSString *json, NSString *proof,
+                      NSError *error))completion;
 @end

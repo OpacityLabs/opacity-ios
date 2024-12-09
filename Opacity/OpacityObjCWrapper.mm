@@ -26,7 +26,8 @@
 + (int)initialize:(NSString *)api_key
          andDryRun:(BOOL)dry_run
     andEnvironment:(OpacityEnvironment)environment {
-  return opacity_core::init([api_key UTF8String], dry_run, static_cast<int>(environment));
+  return opacity_core::init([api_key UTF8String], dry_run,
+                            static_cast<int>(environment));
 }
 
 + (void)getUberRiderProfile:(void (^)(NSString *json, NSString *proof,
@@ -350,8 +351,21 @@
       });
 }
 
-+ (void)runLua {
-  opacity_core::run_lua();
++ (void)get:(NSString *)name completion:(void (^)(NSString *json, NSString *proof,
+                      NSError *error))completion {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
+
+          int status = opacity_core::get([name UTF8String], &json, &proof, &err);
+
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
+  // opacity_core::run_lua();
 }
 
 + (void)getInstagramProfile:(void (^)(NSString *json, NSString *proof,
