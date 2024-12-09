@@ -10,6 +10,7 @@ class MainViewController: UIViewController {
     ("zabka Profile", #selector(getZabkaProfile)),
     ("reddit account", #selector(getRedditProfile)),
     ("github profile", #selector(getGithubProfile)),
+    ("instagram profile", #selector(getInstagramProfileButtonTapped)),
     ("run lua", #selector(runLua)),
   ]
 
@@ -67,7 +68,13 @@ class MainViewController: UIViewController {
     }
   }
 
-  @objc func getRiderProfile() async {
+  @objc func getRiderProfileTapped() {
+    Task {
+      await getRiderProfile()
+    }
+  }
+
+  func getRiderProfile() async {
     do {
       let (json) = try await OpacitySwiftWrapper.getUberRiderProfile()
       print(json)
@@ -94,7 +101,13 @@ class MainViewController: UIViewController {
     }
   }
 
-  @objc func getZabkaProfile() async {
+  @objc func getZabkaProfileButtonTapped() {
+    Task {
+      await getZabkaProfile()
+    }
+  }
+
+  func getZabkaProfile() async {
     do {
       let (json) = try await OpacitySwiftWrapper.getZabkaAccount()
       print(json)
@@ -103,7 +116,13 @@ class MainViewController: UIViewController {
     }
   }
 
-  @objc func getGithubProfile() async {
+  @objc func getGithubProfileButtonTapped() {
+    Task {
+      await getGithubProfile()
+    }
+  }
+
+  func getGithubProfile() async {
     do {
       let (json) = try await OpacitySwiftWrapper.getGithubProfile()
       print(json)
@@ -117,4 +136,23 @@ class MainViewController: UIViewController {
       OpacitySwiftWrapper.runLua()
     }
   }
+
+  @objc func getInstagramProfileButtonTapped() {
+    Task {
+      await getInstagramProfile()
+    }
+  }
+
+  func getInstagramProfile() async {
+    do {
+      let (json) = try await OpacitySwiftWrapper.getInstagramProfile()
+      print(json)
+    } catch {
+      print("Could not get instagram account: \(error)")
+    }
+  }
+
+  //  @objc func runLua() {
+  //     OpacitySwiftWrapper.runLua()
+  //  }
 }

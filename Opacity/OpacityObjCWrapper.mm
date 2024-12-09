@@ -354,4 +354,69 @@
   opacity_core::run_lua();
 }
 
++ (void)getInstagramProfile:(void (^)(NSString *json, NSString *proof,
+                                      NSError *error))completion {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
+
+        int status = opacity_core::get_instagram_profile(&json, &proof, &err);
+
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
+}
+
++ (void)getInstagramLikes:(void (^)(NSString *json, NSString *proof,
+                                    NSError *error))completion {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
+
+        int status = opacity_core::get_instagram_likes(&json, &proof, &err);
+
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
+}
+
++ (void)getInstagramComments:(void (^)(NSString *json, NSString *proof,
+                                       NSError *error))completion {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
+
+        int status = opacity_core::get_instagram_comments(&json, &proof, &err);
+
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
+}
+
++ (void)getInstagramSavedPosts:(void (^)(NSString *json, NSString *proof,
+                                         NSError *error))completion {
+  dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char *json, *proof, *err;
+
+        int status =
+            opacity_core::get_instagram_saved_posts(&json, &proof, &err);
+
+        [self handleStatus:status
+                      json:json
+                     proof:proof
+                       err:err
+                completion:completion];
+      });
+}
+
 @end

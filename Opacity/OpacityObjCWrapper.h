@@ -73,5 +73,18 @@ typedef NS_ENUM(NSInteger, OpacityEnvironment) {
 + (void)getGithubProfile:(void (^)(NSString *json, NSString *proof,
                                    NSError *error))completion;
 
+//instagram
++ (void)getInstagramProfile:(void (^)(NSString *json, NSString *proof,
+                                   NSError *error))completion;
+
++ (void)getInstagramLikes:(void (^)(NSString *json, NSString *proof,
+                                   NSError *error))completion;
+
++ (void)getInstagramComments:(void (^)(NSString *json, NSString *proof,
+                                   NSError *error))completion;
+
++ (void)getInstagramSavedPosts:(void (^)(NSString *json, NSString *proof,
+                                   NSError *error))completion;
+
 + (void)runLua;
 @end
