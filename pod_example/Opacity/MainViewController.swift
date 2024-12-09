@@ -5,11 +5,10 @@ import UIKit
 class MainViewController: UIViewController {
 
   let buttons = [
-    ("uber get rider profile", #selector(getRiderProfile)),
-    ("uber rider trip history", #selector(getUberRiderTripHistory)),
-    ("zabka Profile", #selector(getZabkaProfile)),
-    ("reddit account", #selector(getRedditProfile)),
-    ("github profile", #selector(getGithubProfile)),
+    ("uber get rider profile", #selector(getRiderProfileTapped)),
+    ("zabka Profile", #selector(getZabkaProfileButtonTapped)),
+    ("reddit account", #selector(getRedditProfileTapped)),
+    ("github profile", #selector(getGithubProfileButtonTapped)),
     ("instagram profile", #selector(getInstagramProfileButtonTapped)),
     ("run lua", #selector(runLua)),
   ]
@@ -26,9 +25,18 @@ class MainViewController: UIViewController {
       try OpacitySwiftWrapper.initialize(apiKey: apiKey, dryRun: false, environment: .Test)
     } catch {
       let errorLabel = UILabel()
-      errorLabel.text = "SDK is not initialized"
+      errorLabel.text = "⚠️ SDK is not initialized! Check server is started and API key"
       errorLabel.textColor = .red
-      errorLabel.frame = CGRect(x: 120, y: 50, width: 200, height: 50)
+      //        errorLabel.frame = CGRect(x: 120, y: 50, width: .infinity, height: 50)
+      errorLabel.translatesAutoresizingMaskIntoConstraints = false
+      view.addSubview(errorLabel)
+      NSLayoutConstraint.activate([
+        errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        errorLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+        errorLabel.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20),
+      ])
+      errorLabel.numberOfLines = 0
+      errorLabel.lineBreakMode = .byWordWrapping
       view.addSubview(errorLabel)
     }
 
@@ -83,16 +91,13 @@ class MainViewController: UIViewController {
     }
   }
 
-  @objc func getUberRiderTripHistory() async {
-    do {
-      let (json) = try await OpacitySwiftWrapper.getUberRiderTripHistory(cursor: "")
-      print(json)
-    } catch {
-      print("Could not get uber rider profile: \(error)")
+  @objc func getRedditProfileTapped() {
+    Task {
+      await getRedditProfile()
     }
   }
 
-  @objc func getRedditProfile() async {
+  func getRedditProfile() async {
     do {
       let (json) = try await OpacitySwiftWrapper.getRedditAccount()
       print(json)

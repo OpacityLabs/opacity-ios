@@ -26,7 +26,7 @@
 + (int)initialize:(NSString *)api_key
          andDryRun:(BOOL)dry_run
     andEnvironment:(OpacityEnvironment)environment {
-  return opacity_core::init([api_key UTF8String], dry_run, environment);
+  return opacity_core::init([api_key UTF8String], dry_run, static_cast<int>(environment));
 }
 
 + (void)getUberRiderProfile:(void (^)(NSString *json, NSString *proof,
