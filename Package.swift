@@ -9,7 +9,7 @@ let package = Package(
   products: [
     .library(
       name: "OpacityCore",
-      targets: ["OpacityCore"])
+      targets: ["OpacityCoreObjc", "OpacityCoreSwift"])
   ],
   dependencies: [],
   targets: [
