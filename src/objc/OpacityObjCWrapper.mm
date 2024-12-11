@@ -352,13 +352,14 @@
 }
 
 + (void)get:(NSString *)name
+     andParams:(NSString *)params
     completion:
         (void (^)(NSString *json, NSString *proof, NSError *error))completion {
   dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         char *json, *proof, *err;
 
-        int status = opacity_core::get([name UTF8String], &json, &proof, &err);
+          int status = opacity_core::get([name UTF8String], [params UTF8String], &json, &proof, &err);
 
         [self handleStatus:status
                       json:json

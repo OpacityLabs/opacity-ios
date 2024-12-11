@@ -310,9 +310,11 @@ public class OpacitySwiftWrapper {
     }
   }
 
-  public static func get(name: String) async throws -> (json: String, proof: String?) {
+  public static func get(name: String, params: String?) async throws -> (
+    json: String, proof: String?
+  ) {
     return try await withCheckedThrowingContinuation { continuation in
-      OpacityObjCWrapper.get(name) { (json, proof, error) in
+      OpacityObjCWrapper.get(name, andParams: params) { (json, proof, error) in
         if let error {
           continuation.resume(throwing: error)
         } else if let json {

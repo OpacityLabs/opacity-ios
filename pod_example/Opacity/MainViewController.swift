@@ -11,6 +11,7 @@ class MainViewController: UIViewController {
     ("github profile", #selector(getGithubProfileButtonTapped)),
     ("instagram profile", #selector(getInstagramProfileButtonTapped)),
     ("run lua", #selector(runLuaTapped)),
+    ("run lua with params", #selector(runLuaWithParamsTapped)),
   ]
 
   override func viewDidLoad() {
@@ -144,7 +145,27 @@ class MainViewController: UIViewController {
 
   func runLua() async {
     do {
-      let (json) = try await OpacitySwiftWrapper.get(name: "sample")
+      let (json) = try await OpacitySwiftWrapper.get(name: "sample", params: nil)
+      print(json)
+    } catch {
+      print("Could not run lua: \(error)")
+    }
+  }
+
+  @objc func runLuaWithParamsTapped() {
+    Task {
+      await runLuaWithParams()
+    }
+  }
+
+  func runLuaWithParams() async {
+    do {
+      let jsonParams = ["param": "value"]
+
+      let jsonData = try JSONSerialization.data(withJSONObject: jsonParams, options: .prettyPrinted)
+      let jsonString = String(data: jsonData, encoding: .utf8)!
+
+      let (json) = try await OpacitySwiftWrapper.get(name: "test_with_params", params: jsonString)
       print(json)
     } catch {
       print("Could not run lua: \(error)")
