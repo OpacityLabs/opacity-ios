@@ -58,7 +58,7 @@
   NSDictionary *env = [self loadEnvFile];
   NSString *api_key = env[@"OPACITY_API_KEY"];
 
-  opacity_core::init([api_key UTF8String], false);
+    opacity_core::init([api_key UTF8String], false, opacity_core::OPACITY_ENVIRONMENT_PRODUCTION);
 
   UIButton *uberProfileButton = [UIButton buttonWithType:UIButtonTypeSystem];
   [uberProfileButton setTitle:@"uber profile" forState:UIControlStateNormal];
