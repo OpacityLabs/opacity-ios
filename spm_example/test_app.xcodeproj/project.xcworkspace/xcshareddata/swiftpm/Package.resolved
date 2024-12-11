@@ -1,0 +1,15 @@
+{
+  "originHash" : "d4ebd53e067077dd801f053d0e53ff41d142e4c5de7938abc62e7bd7073a759a",
+  "pins" : [
+    {
+      "identity" : "opacity-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:OpacityLabs/opacity-ios.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "484d4b1f5b488c0c147340ac9cf68188aa7fc348"
+      }
+    }
+  ],
+  "version" : 3
+}
