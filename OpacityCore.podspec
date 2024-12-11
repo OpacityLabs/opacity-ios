@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
     'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17'
   }
   s.pod_target_xcconfig = { 'DEAD_CODE_STRIPPING' => 'YES' }
-  s.source_files = 'Opacity/**/*'
+  s.source_files = 'src/**/*'
   if File.exist?('opacity-debug.xcframework')
     s.vendored_frameworks = 'opacity-debug.xcframework'
   else

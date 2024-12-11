@@ -137,19 +137,19 @@ class MainViewController: UIViewController {
   }
 
   @objc func runLuaTapped() {
-      Task {
-          await runLua()
-      }
-  }
-    
-    func runLua() async {
-        do {
-            let (json) = try await OpacitySwiftWrapper.get(name: "gusto:profile")
-            print(json)
-        } catch {
-            print("Could not get gusto profile: \(error)")
-        }
+    Task {
+      await runLua()
     }
+  }
+
+  func runLua() async {
+    do {
+      let (json) = try await OpacitySwiftWrapper.get(name: "sample")
+      print(json)
+    } catch {
+      print("Could not run lua: \(error)")
+    }
+  }
 
   @objc func getInstagramProfileButtonTapped() {
     Task {
