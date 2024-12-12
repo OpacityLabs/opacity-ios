@@ -88,6 +88,14 @@ typedef NS_ENUM(NSInteger, OpacityEnvironment) {
 + (void)getInstagramSavedPosts:(void (^)(NSString *json, NSString *proof,
                                          NSError *error))completion;
 
-+ (void)get:(NSString *)name andParams:(NSString *)params completion:(void (^)(NSString *json, NSString *proof,
-                      NSError *error))completion;
++ (void)get:(NSString *)name
+     andParams:(NSString *)params
+    completion:
+        (void (^)(NSString *json, NSString *proof, NSError *error))completion;
+
++ (void)getGustoMembersTable:(void (^)(NSString *json, NSString *proof,
+                                       NSError *error))completion;
+
++ (void)getGustoPayrollAdminId:(void (^)(NSString *json, NSString *proof,
+                                         NSError *error))completion;
 @end

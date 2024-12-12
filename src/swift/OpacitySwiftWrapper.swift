@@ -323,4 +323,28 @@ public class OpacitySwiftWrapper {
       }
     }
   }
+
+  public static func getGustoMembersTable() async throws -> (json: String, proof: String?) {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getGustoMembersTable { (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json {
+          continuation.resume(returning: (json, proof))
+        }
+      }
+    }
+  }
+
+  public static func getGustoPayrollAdminId() async throws -> String {
+    return try await withCheckedThrowingContinuation { continuation in
+      OpacityObjCWrapper.getGustoPayrollAdminId { (json, proof, error) in
+        if let error {
+          continuation.resume(throwing: error)
+        } else if let json {
+          continuation.resume(returning: json)
+        }
+      }
+    }
+  }
 }
