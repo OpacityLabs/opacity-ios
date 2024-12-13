@@ -10,7 +10,6 @@ class MainViewController: UIViewController {
     ("reddit account", #selector(getRedditProfileTapped)),
     ("github profile", #selector(getGithubProfileButtonTapped)),
     ("instagram profile", #selector(getInstagramProfileButtonTapped)),
-    ("gusto members table", #selector(getGustoMembersTableTapped)),
     ("run lua", #selector(runLuaTapped)),
     ("run lua with params", #selector(runLuaWithParamsTapped)),
     ("run lua gusto", #selector(runLuaGustoTapped)),
@@ -19,24 +18,30 @@ class MainViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    guard let env = loadEnvFile(), let apiKey = env["OPACITY_API_KEY"] else {
+    guard let env = loadEnvFile(), let apiKey = env["OPACITY_API_KEY"]
+    else {
       print("Error loading .env file or API key not found")
       return
     }
 
     do {
-      try OpacitySwiftWrapper.initialize(apiKey: apiKey, dryRun: false, environment: .Production)
+      try OpacitySwiftWrapper.initialize(
+        apiKey: apiKey, dryRun: false, environment: .Production)
     } catch {
       let errorLabel = UILabel()
-      errorLabel.text = "⚠️ SDK is not initialized! Check server is started and API key"
+      errorLabel.text =
+        "⚠️ SDK is not initialized! Check server is started and API key"
       errorLabel.textColor = .red
-      //        errorLabel.frame = CGRect(x: 120, y: 50, width: .infinity, height: 50)
+      // errorLabel.frame = CGRect(x: 120, y: 50, width: .infinity, height: 50)
       errorLabel.translatesAutoresizingMaskIntoConstraints = false
       view.addSubview(errorLabel)
       NSLayoutConstraint.activate([
-        errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        errorLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-        errorLabel.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20),
+        errorLabel.centerXAnchor.constraint(
+          equalTo: view.centerXAnchor),
+        errorLabel.topAnchor.constraint(
+          equalTo: view.topAnchor, constant: 50),
+        errorLabel.widthAnchor.constraint(
+          equalTo: view.widthAnchor, constant: -20),
       ])
       errorLabel.numberOfLines = 0
       errorLabel.lineBreakMode = .byWordWrapping
@@ -47,13 +52,15 @@ class MainViewController: UIViewController {
       let button = UIButton(type: .system)
       button.setTitle(buttonInfo.0, for: .normal)
       button.addTarget(self, action: buttonInfo.1, for: .touchUpInside)
-      button.frame = CGRect(x: 100, y: 80 + (index * 30), width: 200, height: 50)
+      button.frame = CGRect(
+        x: 100, y: 80 + (index * 30), width: 200, height: 50)
       view.addSubview(button)
     }
   }
 
   func loadEnvFile() -> [String: String]? {
-    guard let filePath = Bundle.main.path(forResource: ".env", ofType: nil) else {
+    guard let filePath = Bundle.main.path(forResource: ".env", ofType: nil)
+    else {
       print("Error finding .env file")
       return nil
     }
@@ -147,7 +154,8 @@ class MainViewController: UIViewController {
 
   func runLuaGusto() async {
     do {
-      let (json) = try await OpacitySwiftWrapper.get(name: "flow:gusto:my_pay", params: nil)
+      let (json) = try await OpacitySwiftWrapper.get(
+        name: "flow:gusto:my_pay", params: nil)
       print(json)
     } catch {
       print("Could not run lua: \(error)")
@@ -162,7 +170,8 @@ class MainViewController: UIViewController {
 
   func runLua() async {
     do {
-      let (json) = try await OpacitySwiftWrapper.get(name: "sample", params: nil)
+      let (json) = try await OpacitySwiftWrapper.get(
+        name: "sample", params: nil)
       print(json)
     } catch {
       print("Could not run lua: \(error)")
@@ -179,10 +188,12 @@ class MainViewController: UIViewController {
     do {
       let jsonParams = ["param": "value"]
 
-      let jsonData = try JSONSerialization.data(withJSONObject: jsonParams, options: .prettyPrinted)
+      let jsonData = try JSONSerialization.data(
+        withJSONObject: jsonParams, options: .prettyPrinted)
       let jsonString = String(data: jsonData, encoding: .utf8)!
 
-      let (json) = try await OpacitySwiftWrapper.get(name: "test_with_params", params: jsonString)
+      let (json) = try await OpacitySwiftWrapper.get(
+        name: "test_with_params", params: jsonString)
       print(json)
     } catch {
       print("Could not run lua: \(error)")
@@ -204,21 +215,4 @@ class MainViewController: UIViewController {
     }
   }
 
-  @objc func getGustoMembersTableTapped() {
-    Task {
-      await getGustoMembersTable()
-    }
-  }
-
-  func getGustoMembersTable() async {
-    Task {
-      do {
-        let (json) = try await OpacitySwiftWrapper.getGustoMembersTable()
-        print(json)
-      } catch {
-        print("Could not getgusto members table: \(error)")
-      }
-
-    }
-  }
 }
