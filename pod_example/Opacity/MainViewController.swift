@@ -10,6 +10,7 @@ class MainViewController: UIViewController {
     ("reddit account", #selector(getRedditProfileTapped)),
     ("github profile", #selector(getGithubProfileButtonTapped)),
     ("instagram profile", #selector(getInstagramProfileButtonTapped)),
+    ("gusto members table", #selector(getGustoMembersTableTapped)),
     ("run lua", #selector(runLuaTapped)),
     ("run lua with params", #selector(runLuaWithParamsTapped)),
     ("run lua gusto", #selector(runLuaGustoTapped)),
@@ -24,7 +25,7 @@ class MainViewController: UIViewController {
     }
 
     do {
-      try OpacitySwiftWrapper.initialize(apiKey: apiKey, dryRun: false, environment: .Staging)
+      try OpacitySwiftWrapper.initialize(apiKey: apiKey, dryRun: false, environment: .Production)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text = "⚠️ SDK is not initialized! Check server is started and API key"
@@ -203,7 +204,21 @@ class MainViewController: UIViewController {
     }
   }
 
-  //  @objc func runLua() {
-  //     OpacitySwiftWrapper.runLua()
-  //  }
+  @objc func getGustoMembersTableTapped() {
+    Task {
+      await getGustoMembersTable()
+    }
+  }
+
+  func getGustoMembersTable() async {
+    Task {
+      do {
+        let (json) = try await OpacitySwiftWrapper.getGustoMembersTable()
+        print(json)
+      } catch {
+        print("Could not getgusto members table: \(error)")
+      }
+
+    }
+  }
 }
