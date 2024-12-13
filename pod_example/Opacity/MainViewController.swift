@@ -12,6 +12,7 @@ class MainViewController: UIViewController {
     ("instagram profile", #selector(getInstagramProfileButtonTapped)),
     ("run lua", #selector(runLuaTapped)),
     ("run lua with params", #selector(runLuaWithParamsTapped)),
+    ("run lua gusto", #selector(runLuaGustoTapped)),
   ]
 
   override func viewDidLoad() {
@@ -23,7 +24,7 @@ class MainViewController: UIViewController {
     }
 
     do {
-      try OpacitySwiftWrapper.initialize(apiKey: apiKey, dryRun: false, environment: .Test)
+      try OpacitySwiftWrapper.initialize(apiKey: apiKey, dryRun: false, environment: .Staging)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text = "⚠️ SDK is not initialized! Check server is started and API key"
@@ -134,6 +135,21 @@ class MainViewController: UIViewController {
       print(json)
     } catch {
       print("Could not get github account: \(error)")
+    }
+  }
+
+  @objc func runLuaGustoTapped() {
+    Task {
+      await runLuaGusto()
+    }
+  }
+
+  func runLuaGusto() async {
+    do {
+      let (json) = try await OpacitySwiftWrapper.get(name: "flow:gusto:my_pay", params: nil)
+      print(json)
+    } catch {
+      print("Could not run lua: \(error)")
     }
   }
 
