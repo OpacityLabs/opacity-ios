@@ -13,6 +13,7 @@ class MainViewController: UIViewController {
     ("run lua", #selector(runLuaTapped)),
     ("run lua with params", #selector(runLuaWithParamsTapped)),
     ("run lua gusto", #selector(runLuaGustoTapped)),
+    ("run lua with 404 flow", #selector(runLuaUndefinedTapped))
   ]
 
   override func viewDidLoad() {
@@ -171,6 +172,7 @@ class MainViewController: UIViewController {
   func runLua() async {
     do {
       let (json) = try await OpacitySwiftWrapper.get(
+        
         name: "sample", params: nil)
       print(json)
     } catch {
@@ -212,6 +214,22 @@ class MainViewController: UIViewController {
       print(json)
     } catch {
       print("Could not get instagram account: \(error)")
+    }
+  }
+  
+  @objc func runLuaUndefinedTapped() {
+    Task {
+      await runLuaUndefined()
+    }
+  }
+  
+  func runLuaUndefined() async {
+    do {
+      let (json) = try await OpacitySwiftWrapper.get(
+        name: "undefined", params: nil)
+      print(json)
+    } catch {
+      print("Could not run lua: \(error)")
     }
   }
 
