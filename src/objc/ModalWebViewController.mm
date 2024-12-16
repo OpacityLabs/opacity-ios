@@ -87,6 +87,8 @@
                                             encoding:NSUTF8StringEncoding];
 
   opacity_core::emit_webview_event([payload UTF8String]);
+
+  [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - WKNavigationDelegate Methods
