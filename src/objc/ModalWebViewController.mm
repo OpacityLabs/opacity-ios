@@ -195,8 +195,6 @@
 //     }
 // }
 
-- (void)webView:(WKWebView *)webView
-    
 
 // Called if an error occurs during navigation
 - (void)webView:(WKWebView *)webView
