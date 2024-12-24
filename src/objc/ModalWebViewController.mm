@@ -259,38 +259,7 @@
                     decisionHandler:
                         (void (^)(WKNavigationActionPolicy))decisionHandler {
 
-  NSURLRequest *request = navigationAction.request;
-  NSURLSession *session =
-      [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration
-                                                 defaultSessionConfiguration]
-                                    delegate:self
-                               delegateQueue:nil];
-  NSURLSessionDataTask *task = [session
-      dataTaskWithRequest:request
-        completionHandler:^(NSData *data, NSURLResponse *response,
-                            NSError *error) {
-          if (error) {
-            NSLog(@"Could not extract cookies from url: %@, with error: %@",
-                  request.URL, error.localizedDescription);
-          }
-
-          if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            NSHTTPURLResponse *resp = (NSHTTPURLResponse *)response;
-
-            NSDictionary *diction = [resp allHeaderFields];
-
-            NSArray *cookies =
-                [NSHTTPCookie cookiesWithResponseHeaderFields:diction
-                                                       forURL:[resp URL]];
-
-            for (NSHTTPCookie *cookie in cookies) {
-              [self.cookies setObject:cookie.value forKey:cookie.name];
-            }
-          }
-
-          decisionHandler(WKNavigationActionPolicyAllow);
-        }];
-  [task resume];
+    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
 @end
