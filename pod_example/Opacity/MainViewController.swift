@@ -27,7 +27,7 @@ class MainViewController: UIViewController {
 
     do {
       try OpacitySwiftWrapper.initialize(
-        apiKey: apiKey, dryRun: false, environment: .Production)
+        apiKey: apiKey, dryRun: false, environment: .Test)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text =
@@ -173,7 +173,7 @@ class MainViewController: UIViewController {
     do {
       let (json) = try await OpacitySwiftWrapper.get(
         
-        name: "sample", params: nil)
+        name: "compiled", params: nil)
       print(json)
     } catch {
       print("Could not run lua: \(error)")
