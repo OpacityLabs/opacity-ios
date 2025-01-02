@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  OpacityCore: b0a7ad71ac6e9b3c9eb75a02fb656f27f1d62be8
+  OpacityCore: 50df61e1ca676c0b02ca7ca957d576427807434a
 
 PODFILE CHECKSUM: ff9e9e9c364e565f76bc9c596fb67e52b43e0be9
 
