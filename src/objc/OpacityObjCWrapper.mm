@@ -15,10 +15,13 @@
         [NSError errorWithDomain:@"com.opacity"
                             code:status
                         userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    opacity_core::free_string(err);
     completion(nil, nil, error);
   } else {
     NSString *jsonString = [NSString stringWithUTF8String:json];
     NSString *proofString = [NSString stringWithUTF8String:proof];
+    opacity_core::free_string(json);
+    opacity_core::free_string(proof);
     completion(jsonString, proofString, nil);
   }
 }
@@ -368,7 +371,6 @@
                        err:err
                 completion:completion];
       });
-  // opacity_core::run_lua();
 }
 
 + (void)getInstagramProfile:(void (^)(NSString *json, NSString *proof,
