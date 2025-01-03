@@ -21,7 +21,7 @@
     NSString *jsonString = [NSString stringWithUTF8String:json];
     NSString *proofString = [NSString stringWithUTF8String:proof];
     opacity_core::free_string(json);
-    opacity_core::free_string(proof);
+//    opacity_core::free_string(proof);
     completion(jsonString, proofString, nil);
   }
 }
