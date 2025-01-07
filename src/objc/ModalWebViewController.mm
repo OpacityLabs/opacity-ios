@@ -93,18 +93,6 @@
 
 #pragma mark - WKNavigationDelegate Methods
 
-// Called when the web view starts to load a page
-//- (void)webView:(WKWebView *)webView
-//    didStartProvisionalNavigation:(WKNavigation *)navigation {
-//  NSLog(@"🔹 Started loading: %@", webView.URL.absoluteString);
-//}
-
-/// Called when the content starts arriving for a page
-//- (void)webView:(WKWebView *)webView
-//    didCommitNavigation:(WKNavigation *)navigation {
-//  NSLog(@"Content started arriving: %@", webView.URL.absoluteString);
-//}
-
 /// Called when the page finishes loading
 - (void)webView:(WKWebView *)webView
     didFinishNavigation:(WKNavigation *)navigation {
@@ -154,6 +142,7 @@
               }];
   }
 }
+
 // -(void)webView:(WKWebView *)webView
 // didReceiveServerRedirectForProvisionalNavigation:(WKNavigation *)navigation {
 //     NSLog(@"🟥 didReceiveServerRedirectForProvisionalNavigation");
@@ -226,15 +215,6 @@
         error.localizedDescription);
 }
 
-//// Called if an error occurs after the navigation has started
-//- (void)webView:(WKWebView *)webView
-//    didFailNavigation:(WKNavigation *)navigation
-//            withError:(NSError *)error {
-//  NSLog(@"Failed during navigation: %@, Error: %@",
-//  webView.URL.absoluteString,
-//        error.localizedDescription);
-//}
-
 - (void)URLSession:(NSURLSession *)session
                           task:(NSURLSessionTask *)task
     willPerformHTTPRedirection:(NSHTTPURLResponse *)response
@@ -264,8 +244,8 @@
   /// We potentially want to intercept navigation requests with deeplinks
   /// A deeplink might take you out of the current app and into the service app
   /// The problem is by canceling the redirection none of the other handlers are
-  /// triggered. Which means the cookies at the moment of the redirection are not
-  /// sent to Rust. We could potentially move the code of
+  /// triggered. Which means the cookies at the moment of the redirection are
+  /// not sent to Rust. We could potentially move the code of
   /// didFailProvisionalNavigation here and it might work... I don't know, this
   /// needs testing. For now allowing all redirections causes the deeplinks we
   /// need to fail which then triggeres didFailProvisionalNavigation and
