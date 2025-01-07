@@ -245,15 +245,6 @@ didFailProvisionalNavigation:(WKNavigation *)navigation
           error.localizedDescription);
 }
 
-//// Called if an error occurs after the navigation has started
-//- (void)webView:(WKWebView *)webView
-//    didFailNavigation:(WKNavigation *)navigation
-//            withError:(NSError *)error {
-//  NSLog(@"Failed during navigation: %@, Error: %@",
-//  webView.URL.absoluteString,
-//        error.localizedDescription);
-//}
-
 - (void)URLSession:(NSURLSession *)session
               task:(NSURLSessionTask *)task
 willPerformHTTPRedirection:(NSHTTPURLResponse *)response

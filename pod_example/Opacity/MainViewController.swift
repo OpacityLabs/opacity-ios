@@ -27,7 +27,7 @@ class MainViewController: UIViewController {
 
     do {
       try OpacitySwiftWrapper.initialize(
-        apiKey: apiKey, dryRun: false, environment: .Test)
+        apiKey: apiKey, dryRun: false, environment: .Local)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text =
@@ -95,8 +95,11 @@ class MainViewController: UIViewController {
 
   func getRiderProfile() async {
     do {
-      let (json) = try await OpacitySwiftWrapper.getUberRiderProfile()
-      print(json)
+      let (json) = try await OpacitySwiftWrapper.get(
+        name: "flow:uber_rider:profile",
+        params: nil
+      )
+      print("uber rider profile: \(json)")
     } catch {
       print("Could not get uber rider profile: \(error)")
     }
