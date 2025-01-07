@@ -93,11 +93,15 @@
   [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)addUrl:(NSString *)urlToAdd {
+- (void)addToVisitedUrls:(NSString *)urlToAdd {
   if (self.visitedUrls.count == 0 ||
       ![self.visitedUrls.lastObject isEqualToString:urlToAdd]) {
     [self.visitedUrls addObject:urlToAdd];
   }
+}
+
+- (void)resetVisitedUrls {
+    [self.visitedUrls removeAllObjects];
 }
 
 #pragma mark - WKNavigationDelegate Methods
@@ -106,9 +110,8 @@
 - (void)webView:(WKWebView *)webView
     didStartProvisionalNavigation:(WKNavigation *)navigation {
   if (webView.URL) {
-    [self addUrl:webView.URL.absoluteString];
+    [self addToVisitedUrls:webView.URL.absoluteString];
   }
-  //    NSLog(@"🔹 Started loading: %@", webView.URL.absoluteString);
 }
 
 /// Called when the content starts arriving for a page
@@ -121,10 +124,9 @@
 - (void)webView:(WKWebView *)webView
     didFinishNavigation:(WKNavigation *)navigation {
   NSURL *url = webView.URL;
-  NSLog(@"%@", webView.URL.absoluteString);
 
   if (url) {
-    [self addUrl:webView.URL.absoluteString];
+    [self addToVisitedUrls:webView.URL.absoluteString];
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:url.absoluteString forKey:@"url"];
     [dict setObject:@"navigation" forKey:@"event"];
@@ -165,7 +167,7 @@
                                             encoding:NSUTF8StringEncoding];
 
                   opacity_core::emit_webview_event([payload UTF8String]);
-                  [self.visitedUrls removeAllObjects];
+                  [self resetVisitedUrls];
                 }];
               }];
   }
@@ -173,44 +175,10 @@
 - (void)webView:(WKWebView *)webView
     didReceiveServerRedirectForProvisionalNavigation:
         (WKNavigation *)navigation {
-  //  NSLog(@"🟥 didReceiveServerRedirectForProvisionalNavigation");
   NSURL *url = webView.URL;
 
   if (url) {
-    [self addUrl:url.absoluteString];
-    //    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    //    [dict setObject:url.absoluteString forKey:@"url"];
-    //    [dict setObject:@"navigation" forKey:@"event"];
-
-    //    dispatch_after(
-    //        dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)),
-    //        dispatch_get_main_queue(), ^{
-    //          WKHTTPCookieStore *cookieStore =
-    //              self.webView.configuration.websiteDataStore.httpCookieStore;
-
-    //          [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
-    //            NSMutableDictionary *cookies_dict =
-    //                [NSMutableDictionary dictionary];
-
-    //            for (NSHTTPCookie *cookie in cookies) {
-    //              [cookies_dict setObject:cookie.value forKey:cookie.name];
-    //            }
-
-    //            [dict setObject:cookies_dict forKey:@"cookies"];
-
-    //            // Convert the dictionary to a JSON string
-    //            NSError *error;
-    //            NSData *jsonData = [NSJSONSerialization
-    //            dataWithJSONObject:dict
-    //                                                               options:0
-    //                                                                 error:&error];
-    //            NSString *payload =
-    //                [[NSString alloc] initWithData:jsonData
-    //                                      encoding:NSUTF8StringEncoding];
-
-    //            opacity_core::emit_webview_event([payload UTF8String]);
-    //          }];
-    //        });
+    [self addToVisitedUrls:url.absoluteString];
   }
 }
 
@@ -220,7 +188,7 @@
                        withError:(NSError *)error {
   NSString *url = error.userInfo[NSURLErrorFailingURLStringErrorKey];
   if (url) {
-    [self addUrl:webView.URL.absoluteString];
+    [self addToVisitedUrls:webView.URL.absoluteString];
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:url forKey:@"url"];
     [dict setObject:@"navigation" forKey:@"event"];
@@ -240,7 +208,7 @@
                                               encoding:NSUTF8StringEncoding];
 
     opacity_core::emit_webview_event([payload UTF8String]);
-    [self.visitedUrls removeAllObjects];
+    [self resetVisitedUrls];
   }
 
   NSLog(@"Failed to load: %@, Error: %@",
@@ -266,10 +234,10 @@
   }
 
   if (request.URL) {
-    [self addUrl:request.URL.absoluteString];
+    [self addToVisitedUrls:request.URL.absoluteString];
   }
   if (response.URL) {
-    [self addUrl:response.URL.absoluteString];
+    [self addToVisitedUrls:response.URL.absoluteString];
   }
   completionHandler(request);
 }
@@ -298,7 +266,7 @@
   //  }
 
   if (webView.URL) {
-    [self addUrl:webView.URL.absoluteString];
+    [self addToVisitedUrls:webView.URL.absoluteString];
   }
 
   decisionHandler(WKNavigationActionPolicyAllow);
