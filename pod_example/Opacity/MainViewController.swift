@@ -13,11 +13,12 @@ class MainViewController: UIViewController {
     ("run lua", #selector(runLuaTapped)),
     ("run lua with params", #selector(runLuaWithParamsTapped)),
     ("run lua gusto", #selector(runLuaGustoTapped)),
-    ("run lua with 404 flow", #selector(runLuaUndefinedTapped))
+    ("run lua with 404 flow", #selector(runLuaUndefinedTapped)),
   ]
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    view.backgroundColor = .black
 
     guard let env = loadEnvFile(), let apiKey = env["OPACITY_API_KEY"]
     else {
@@ -175,7 +176,7 @@ class MainViewController: UIViewController {
   func runLua() async {
     do {
       let (json) = try await OpacitySwiftWrapper.get(
-        
+
         name: "compiled", params: nil)
       print(json)
     } catch {
@@ -219,13 +220,13 @@ class MainViewController: UIViewController {
       print("Could not get instagram account: \(error)")
     }
   }
-  
+
   @objc func runLuaUndefinedTapped() {
     Task {
       await runLuaUndefined()
     }
   }
-  
+
   func runLuaUndefined() async {
     do {
       let (json) = try await OpacitySwiftWrapper.get(

@@ -67,12 +67,11 @@
   }
 
   // Add a Close button
-  UIBarButtonItem *closeButton =
-      [[UIBarButtonItem alloc] initWithTitle:@"Close"
-                                       style:UIBarButtonItemStylePlain
-                                      target:self
-                                      action:@selector(close)];
-  self.navigationItem.leftBarButtonItem = closeButton;
+  UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]
+      initWithBarButtonSystemItem:UIBarButtonSystemItemStop
+                           target:self
+                           action:@selector(close)];
+  self.navigationItem.rightBarButtonItem = closeButton;
 }
 
 - (void)close {
@@ -101,7 +100,7 @@
 }
 
 - (void)resetVisitedUrls {
-    [self.visitedUrls removeAllObjects];
+  [self.visitedUrls removeAllObjects];
 }
 
 #pragma mark - WKNavigationDelegate Methods
