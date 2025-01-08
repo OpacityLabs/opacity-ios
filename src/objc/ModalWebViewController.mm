@@ -154,7 +154,7 @@
                     [self.cookies setObject:cookie.value forKey:cookie.name];
                   }
                   [dict setObject:self.cookies forKey:@"cookies"];
-                  [dict setObject:self.visitedUrls forKey:@"visitedUrls"];
+                  [dict setObject:self.visitedUrls forKey:@"visited_urls"];
 
                   NSError *error;
                   NSData *jsonData =
@@ -197,7 +197,7 @@
            forKey:@"id"];
 
     [dict setObject:self.cookies forKey:@"cookies"];
-    [dict setObject:self.visitedUrls forKey:@"visitedUrls"];
+    [dict setObject:self.visitedUrls forKey:@"visited_urls"];
 
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
