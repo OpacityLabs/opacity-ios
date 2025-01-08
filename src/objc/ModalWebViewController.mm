@@ -187,7 +187,7 @@
                        withError:(NSError *)error {
   NSString *url = error.userInfo[NSURLErrorFailingURLStringErrorKey];
   if (url) {
-    [self addToVisitedUrls:webView.URL.absoluteString];
+    [self addToVisitedUrls:url];
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:url forKey:@"url"];
     [dict setObject:@"navigation" forKey:@"event"];
