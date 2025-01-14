@@ -90,6 +90,9 @@
   opacity_core::emit_webview_event([payload UTF8String]);
 
   [self dismissViewControllerAnimated:YES completion:nil];
+  [self.webView stopLoading];
+  [self.webView loadHTMLString:@"" baseURL:nil];
+  [self resetVisitedUrls];
 }
 
 - (void)addToVisitedUrls:(NSString *)urlToAdd {
