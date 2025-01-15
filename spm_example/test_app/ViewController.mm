@@ -1,5 +1,5 @@
 #import "ViewController.h"
-#import "opacity.h"
+#import "OpacityObjCWrapper.h"
 
 @interface ViewController ()
 
@@ -40,25 +40,25 @@
 }
 
 - (void)getUberProfile {
-  dispatch_async(
-      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        char *json;
-        char *proof;
-        char *err;
-        int status = opacity_core::get_uber_rider_profile(&json, &proof, &err);
-        if (status == opacity_core::OPACITY_OK) {
-          NSString *data = [NSString stringWithUTF8String:json];
-          NSLog(@" %@", data);
-        }
-      });
+  [OpacityObjCWrapper get:@"flow:uber_rider:profile"
+                andParams:nil
+               completion:^(NSString *json, NSString *proof, NSError *error) {
+                 if (error != NULL) {
+                   NSLog(@"Error %@", error);
+                 } else {
+                   NSLog(@"Response %@", json);
+                 }
+               }];
 }
 
 - (void)viewDidLoad {
   [super viewDidLoad];
   NSDictionary *env = [self loadEnvFile];
   NSString *api_key = env[@"OPACITY_API_KEY"];
-
-    opacity_core::init([api_key UTF8String], false, opacity_core::OPACITY_ENVIRONMENT_PRODUCTION);
+  OpacityEnvironment environment = Production;
+  [OpacityObjCWrapper initialize:api_key
+                       andDryRun:false
+                  andEnvironment:environment];
 
   UIButton *uberProfileButton = [UIButton buttonWithType:UIButtonTypeSystem];
   [uberProfileButton setTitle:@"uber profile" forState:UIControlStateNormal];

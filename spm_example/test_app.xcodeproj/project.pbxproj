@@ -15,7 +15,7 @@
 		702228422C74DF6D00C5DC56 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 702228412C74DF6D00C5DC56 /* Base */; };
 		702228452C74DF6D00C5DC56 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 702228442C74DF6D00C5DC56 /* main.m */; };
 		703D249D2C9A2A6800EEE75E /* .env in Resources */ = {isa = PBXBuildFile; fileRef = 703D249C2C9A2A6800EEE75E /* .env */; };
-		7060712B2D099691000DF008 /* OpacityCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7060712A2D099691000DF008 /* OpacityCore */; };
+		7078F9562D381A8800B43FEB /* OpacityCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7078F9552D381A8800B43FEB /* OpacityCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7060712B2D099691000DF008 /* OpacityCore in Frameworks */,
+				7078F9562D381A8800B43FEB /* OpacityCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +98,7 @@
 			);
 			name = test_app;
 			packageProductDependencies = (
-				7060712A2D099691000DF008 /* OpacityCore */,
+				7078F9552D381A8800B43FEB /* OpacityCore */,
 			);
 			productName = test_app;
 			productReference = 7022282F2C74DF6C00C5DC56 /* test_app.app */;
@@ -128,7 +128,7 @@
 			);
 			mainGroup = 702228262C74DF6C00C5DC56;
 			packageReferences = (
-				706071292D099691000DF008 /* XCRemoteSwiftPackageReference "opacity-ios" */,
+				7078F9542D381A8800B43FEB /* XCRemoteSwiftPackageReference "opacity-ios" */,
 			);
 			productRefGroup = 702228302C74DF6C00C5DC56 /* Products */;
 			projectDirPath = "";
@@ -381,20 +381,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		706071292D099691000DF008 /* XCRemoteSwiftPackageReference "opacity-ios" */ = {
+		7078F9542D381A8800B43FEB /* XCRemoteSwiftPackageReference "opacity-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@github.com:OpacityLabs/opacity-ios.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.23.64;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7060712A2D099691000DF008 /* OpacityCore */ = {
+		7078F9552D381A8800B43FEB /* OpacityCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 706071292D099691000DF008 /* XCRemoteSwiftPackageReference "opacity-ios" */;
+			package = 7078F9542D381A8800B43FEB /* XCRemoteSwiftPackageReference "opacity-ios" */;
 			productName = OpacityCore;
 		};
 /* End XCSwiftPackageProductDependency section */
