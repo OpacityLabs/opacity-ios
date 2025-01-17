@@ -34,17 +34,11 @@ extern const int32_t OPACITY_ENVIRONMENT_PRODUCTION;
 
 int32_t init(const char *api_key_str, bool dry_run, int32_t backend_environment);
 
-int32_t get(const char *name,
-            const char *params,
-            char **json_ptr,
-            char **proof_ptr,
-            char **err_ptr);
+int32_t get(const char *name, const char *params, char **res_ptr, char **err_ptr);
 
 void free_string(char *ptr);
 
 void emit_webview_event(const char *payload);
-
-const char *start(const char *request);
 
 int32_t get_uber_rider_profile(char **json_ptr, char **proof_ptr, char **err_ptr);
 
@@ -165,8 +159,6 @@ extern double get_vertical_accuracy(void);
 extern bool is_wifi_connected(void);
 
 extern bool is_rooted(void);
-
-const char *verify(const char *proof);
 
 extern void secure_set(const char *key, const char *value);
 
