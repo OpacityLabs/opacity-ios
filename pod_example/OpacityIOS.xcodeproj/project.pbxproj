@@ -13,7 +13,6 @@
 		6003F598195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F596195388D20070C39A /* InfoPlist.strings */; };
 		6003F59A195388D20070C39A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F599195388D20070C39A /* main.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
-		70135B262CBD0C5E00897046 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70135B252CBD0C5E00897046 /* test.swift */; };
 		7049CBED2C91B05B003CFED4 /* .env in Resources */ = {isa = PBXBuildFile; fileRef = 7049CBEC2C91B05B003CFED4 /* .env */; };
 		708AFD062CF5ADF900BAB6FD /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AFD052CF5ADF900BAB6FD /* MainViewController.swift */; };
 		70D84F212C8FC52A00FC4F56 /* OpacityAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 70D84F1A2C8FC52A00FC4F56 /* OpacityAppDelegate.m */; };
@@ -34,7 +33,6 @@
 		6003F59B195388D20070C39A /* OpacityIOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OpacityIOS-Prefix.pch"; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		70135B242CBD0C5E00897046 /* Opacity_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Opacity_Example-Bridging-Header.h"; sourceTree = "<group>"; };
-		70135B252CBD0C5E00897046 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		7049CBEC2C91B05B003CFED4 /* .env */ = {isa = PBXFileReference; lastKnownFileType = text; path = .env; sourceTree = "<group>"; };
 		708AFD052CF5ADF900BAB6FD /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		70D84F172C8FC52A00FC4F56 /* OpacityAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpacityAppDelegate.h; sourceTree = "<group>"; };
@@ -106,7 +104,6 @@
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				7049CBEC2C91B05B003CFED4 /* .env */,
 				6003F594195388D20070C39A /* Supporting Files */,
-				70135B252CBD0C5E00897046 /* test.swift */,
 				70135B242CBD0C5E00897046 /* Opacity_Example-Bridging-Header.h */,
 			);
 			path = Opacity;
@@ -246,7 +243,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				708AFD062CF5ADF900BAB6FD /* MainViewController.swift in Sources */,
-				70135B262CBD0C5E00897046 /* test.swift in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				70D84F212C8FC52A00FC4F56 /* OpacityAppDelegate.m in Sources */,
 			);

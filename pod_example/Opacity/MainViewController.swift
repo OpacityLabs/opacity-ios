@@ -6,10 +6,10 @@ class MainViewController: UIViewController {
 
   let buttons = [
     ("uber get rider profile", #selector(getRiderProfileTapped)),
-    ("zabka Profile", #selector(getZabkaProfileButtonTapped)),
-    ("reddit account", #selector(getRedditProfileTapped)),
-    ("github profile", #selector(getGithubProfileButtonTapped)),
-    ("instagram profile", #selector(getInstagramProfileButtonTapped)),
+//    ("zabka Profile", #selector(getZabkaProfileButtonTapped)),
+//    ("reddit account", #selector(getRedditProfileTapped)),
+//    ("github profile", #selector(getGithubProfileButtonTapped)),
+//    ("instagram profile", #selector(getInstagramProfileButtonTapped)),
     ("run lua", #selector(runLuaTapped)),
     ("run lua with params", #selector(runLuaWithParamsTapped)),
     ("run lua gusto", #selector(runLuaGustoTapped)),
@@ -105,51 +105,51 @@ class MainViewController: UIViewController {
       print("Could not get uber rider profile: \(error)")
     }
   }
-
-  @objc func getRedditProfileTapped() {
-    Task {
-      await getRedditProfile()
-    }
-  }
-
-  func getRedditProfile() async {
-    do {
-      let (json) = try await OpacitySwiftWrapper.getRedditAccount()
-      print(json)
-    } catch {
-      print("Could not get reddit account: \(error)")
-    }
-  }
-
-  @objc func getZabkaProfileButtonTapped() {
-    Task {
-      await getZabkaProfile()
-    }
-  }
-
-  func getZabkaProfile() async {
-    do {
-      let (json) = try await OpacitySwiftWrapper.getZabkaAccount()
-      print(json)
-    } catch {
-      print("Could not get zabka account: \(error)")
-    }
-  }
-
-  @objc func getGithubProfileButtonTapped() {
-    Task {
-      await getGithubProfile()
-    }
-  }
-
-  func getGithubProfile() async {
-    do {
-      let (json) = try await OpacitySwiftWrapper.getGithubProfile()
-      print(json)
-    } catch {
-      print("Could not get github account: \(error)")
-    }
-  }
+//
+//  @objc func getRedditProfileTapped() {
+//    Task {
+//      await getRedditProfile()
+//    }
+//  }
+//
+//  func getRedditProfile() async {
+//    do {
+//      let (json) = try await OpacitySwiftWrapper.getRedditAccount()
+//      print(json)
+//    } catch {
+//      print("Could not get reddit account: \(error)")
+//    }
+//  }
+//
+//  @objc func getZabkaProfileButtonTapped() {
+//    Task {
+//      await getZabkaProfile()
+//    }
+//  }
+//
+//  func getZabkaProfile() async {
+//    do {
+//      let (json) = try await OpacitySwiftWrapper.getZabkaAccount()
+//      print(json)
+//    } catch {
+//      print("Could not get zabka account: \(error)")
+//    }
+//  }
+//
+//  @objc func getGithubProfileButtonTapped() {
+//    Task {
+//      await getGithubProfile()
+//    }
+//  }
+//
+//  func getGithubProfile() async {
+//    do {
+//      let (json) = try await OpacitySwiftWrapper.getGithubProfile()
+//      print(json)
+//    } catch {
+//      print("Could not get github account: \(error)")
+//    }
+//  }
 
   @objc func runLuaGustoTapped() {
     Task {
@@ -194,32 +194,28 @@ class MainViewController: UIViewController {
     do {
       let jsonParams = ["param": "value"]
 
-      let jsonData = try JSONSerialization.data(
-        withJSONObject: jsonParams, options: .prettyPrinted)
-      let jsonString = String(data: jsonData, encoding: .utf8)!
-
       let (json) = try await OpacitySwiftWrapper.get(
-        name: "test_with_params", params: jsonString)
+        name: "test_with_params", params: jsonParams)
       print(json)
     } catch {
       print("Could not run lua: \(error)")
     }
   }
-
-  @objc func getInstagramProfileButtonTapped() {
-    Task {
-      await getInstagramProfile()
-    }
-  }
-
-  func getInstagramProfile() async {
-    do {
-      let (json) = try await OpacitySwiftWrapper.getInstagramProfile()
-      print(json)
-    } catch {
-      print("Could not get instagram account: \(error)")
-    }
-  }
+//
+//  @objc func getInstagramProfileButtonTapped() {
+//    Task {
+//      await getInstagramProfile()
+//    }
+//  }
+//
+//  func getInstagramProfile() async {
+//    do {
+//      let (json) = try await OpacitySwiftWrapper.getInstagramProfile()
+//      print(json)
+//    } catch {
+//      print("Could not get instagram account: \(error)")
+//    }
+//  }
 
   @objc func runLuaUndefinedTapped() {
     Task {
@@ -227,11 +223,12 @@ class MainViewController: UIViewController {
     }
   }
 
+  @MainActor
   func runLuaUndefined() async {
     do {
-      let (json) = try await OpacitySwiftWrapper.get(
+      let res = try await OpacitySwiftWrapper.get(
         name: "undefined", params: nil)
-      print(json)
+      print(res)
     } catch {
       print("Could not run lua: \(error)")
     }
