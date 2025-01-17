@@ -12,9 +12,7 @@ ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
 UINavigationController *navController;
 
-CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
-NSDictionary<NSString *, CTCarrier *> *carriers =
-    [networkInfo serviceSubscriberCellularProviders];
+
 CLLocationManager *locationManager = [[CLLocationManager alloc] init];
 
 UIViewController *topMostViewController() {
@@ -108,6 +106,9 @@ const char *get_battery_status() {
 }
 
 const char *get_carrier_name() {
+  CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+  NSDictionary<NSString *, CTCarrier *> *carriers =
+  [networkInfo serviceSubscriberCellularProviders];
   CTCarrier *carrier = carriers.allValues.firstObject;
   NSString *carrierName = [carrier carrierName];
   const char *name = [carrierName UTF8String];
@@ -115,6 +116,9 @@ const char *get_carrier_name() {
 }
 
 const char *get_carrier_mcc() {
+  CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+  NSDictionary<NSString *, CTCarrier *> *carriers =
+  [networkInfo serviceSubscriberCellularProviders];
   CTCarrier *carrier = carriers.allValues.firstObject;
   NSString *mcc = [carrier mobileCountryCode];
   const char *mccCString = [mcc UTF8String];
@@ -122,6 +126,9 @@ const char *get_carrier_mcc() {
 }
 
 const char *get_carrier_mnc() {
+  CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+  NSDictionary<NSString *, CTCarrier *> *carriers =
+  [networkInfo serviceSubscriberCellularProviders];
   CTCarrier *carrier = carriers.allValues.firstObject;
   NSString *mnc = [carrier mobileNetworkCode];
   const char *mncCString = [mnc UTF8String];
