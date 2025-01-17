@@ -19,7 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7022282F2C74DF6C00C5DC56 /* test_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7022282F2C74DF6C00C5DC56 /* OpacitySPM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpacitySPM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		702228322C74DF6C00C5DC56 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		702228332C74DF6C00C5DC56 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		702228352C74DF6C00C5DC56 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 		702228302C74DF6C00C5DC56 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7022282F2C74DF6C00C5DC56 /* test_app.app */,
+				7022282F2C74DF6C00C5DC56 /* OpacitySPM.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -84,9 +84,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7022282E2C74DF6C00C5DC56 /* test_app */ = {
+		7022282E2C74DF6C00C5DC56 /* OpacitySPM */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 702228482C74DF6D00C5DC56 /* Build configuration list for PBXNativeTarget "test_app" */;
+			buildConfigurationList = 702228482C74DF6D00C5DC56 /* Build configuration list for PBXNativeTarget "OpacitySPM" */;
 			buildPhases = (
 				7022282B2C74DF6C00C5DC56 /* Sources */,
 				7022282C2C74DF6C00C5DC56 /* Frameworks */,
@@ -96,12 +96,12 @@
 			);
 			dependencies = (
 			);
-			name = test_app;
+			name = OpacitySPM;
 			packageProductDependencies = (
 				7078F9552D381A8800B43FEB /* OpacityCore */,
 			);
 			productName = test_app;
-			productReference = 7022282F2C74DF6C00C5DC56 /* test_app.app */;
+			productReference = 7022282F2C74DF6C00C5DC56 /* OpacitySPM.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -118,7 +118,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7022282A2C74DF6C00C5DC56 /* Build configuration list for PBXProject "test_app" */;
+			buildConfigurationList = 7022282A2C74DF6C00C5DC56 /* Build configuration list for PBXProject "OpacitySPM" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -134,7 +134,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7022282E2C74DF6C00C5DC56 /* test_app */,
+				7022282E2C74DF6C00C5DC56 /* OpacitySPM */,
 			);
 		};
 /* End PBXProject section */
@@ -360,7 +360,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7022282A2C74DF6C00C5DC56 /* Build configuration list for PBXProject "test_app" */ = {
+		7022282A2C74DF6C00C5DC56 /* Build configuration list for PBXProject "OpacitySPM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				702228462C74DF6D00C5DC56 /* Debug */,
@@ -369,7 +369,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		702228482C74DF6D00C5DC56 /* Build configuration list for PBXNativeTarget "test_app" */ = {
+		702228482C74DF6D00C5DC56 /* Build configuration list for PBXNativeTarget "OpacitySPM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				702228492C74DF6D00C5DC56 /* Debug */,
@@ -386,7 +386,7 @@
 			repositoryURL = "git@github.com:OpacityLabs/opacity-ios.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 3.23.64;
+				minimumVersion = 4.0.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
