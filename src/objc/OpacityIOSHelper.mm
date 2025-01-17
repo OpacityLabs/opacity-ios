@@ -12,9 +12,6 @@ ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
 UINavigationController *navController;
 
-
-CLLocationManager *locationManager = [[CLLocationManager alloc] init];
-
 UIViewController *topMostViewController() {
   // Fetch the key window's root view controller
   UIWindow *keyWindow = [UIApplication sharedApplication].windows.firstObject;
@@ -147,18 +144,24 @@ const char *get_cpu_abi() {
 }
 
 double get_altitude() {
+  CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+
   CLLocation *location = locationManager.location;
   double altitude = location.altitude;
   return altitude;
 }
 
 double get_latitude() {
+  CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+
   CLLocation *location = locationManager.location;
   double latitude = location.coordinate.latitude;
   return latitude;
 }
 
 double get_longitude() {
+  CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+
   CLLocation *location = locationManager.location;
   double longitude = location.coordinate.longitude;
   return longitude;
@@ -193,12 +196,16 @@ bool is_emulator() {
 }
 
 double get_horizontal_accuracy() {
+  CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+
   CLLocation *location = locationManager.location;
   double horizontalAccuracy = location.horizontalAccuracy;
   return horizontalAccuracy;
 }
 
 double get_vertical_accuracy() {
+  CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+
   CLLocation *location = locationManager.location;
   double verticalAccuracy = location.verticalAccuracy;
   return verticalAccuracy;

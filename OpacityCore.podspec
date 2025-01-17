@@ -11,10 +11,6 @@ Pod::Spec.new do |s|
 
   s.swift_version = '5.9'
   s.ios.deployment_target = '14.0'
-  s.xcconfig = {
-    'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17'
-  }
-  s.pod_target_xcconfig = { 'DEAD_CODE_STRIPPING' => 'YES' }
   s.source_files = 'src/**/*'
   if File.exist?('opacity-debug.xcframework')
     s.vendored_frameworks = 'opacity-debug.xcframework'
