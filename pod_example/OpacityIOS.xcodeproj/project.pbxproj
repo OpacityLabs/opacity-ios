@@ -41,11 +41,9 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8B4BEB5E01DE6050C4AE2046 /* Opacity.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Opacity.podspec; path = ../Opacity.podspec; sourceTree = "<group>"; };
 		8B99EDB1471452A5A4E480F7 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		968ACD83BAD991034F97D218 /* Pods-Opacity_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Opacity_Example.debug.xcconfig"; path = "Target Support Files/Pods-Opacity_Example/Pods-Opacity_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		9A568B63E4F3DF4D9A7F89C0 /* Pods-OpacityIOS_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpacityIOS_Example.release.xcconfig"; path = "Target Support Files/Pods-OpacityIOS_Example/Pods-OpacityIOS_Example.release.xcconfig"; sourceTree = "<group>"; };
 		A0286D1DEE7D60E15BC97D1D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		AE3DACDD0CA21D46B8A75B50 /* Pods-OpacityIOS_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpacityIOS_Example.debug.xcconfig"; path = "Target Support Files/Pods-OpacityIOS_Example/Pods-OpacityIOS_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		EC842696ACEF1BBE594C17CD /* Pods-Opacity_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Opacity_Example.release.xcconfig"; path = "Target Support Files/Pods-Opacity_Example/Pods-Opacity_Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,8 +131,6 @@
 		668EF3857E4916F8A1A4A966 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				968ACD83BAD991034F97D218 /* Pods-Opacity_Example.debug.xcconfig */,
-				EC842696ACEF1BBE594C17CD /* Pods-Opacity_Example.release.xcconfig */,
 				AE3DACDD0CA21D46B8A75B50 /* Pods-OpacityIOS_Example.debug.xcconfig */,
 				9A568B63E4F3DF4D9A7F89C0 /* Pods-OpacityIOS_Example.release.xcconfig */,
 			);
