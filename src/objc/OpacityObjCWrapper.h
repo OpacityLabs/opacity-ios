@@ -15,7 +15,7 @@ typedef NS_ENUM(NSInteger, OpacityEnvironment) {
 
 + (void)get:(NSString *)name
      andParams:(NSDictionary *)params
-    completion:(void (^)(NSString *res, NSError *error))completion;
+    completion:(void (^)(NSDictionary *res, NSError *error))completion;
 
 //// Reddit
 //+ (void)getRedditAccount:(void (^)(NSString *json, NSString *proof,
