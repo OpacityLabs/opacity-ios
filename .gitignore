@@ -9,3 +9,4 @@ spm_example/test_app/.env
 **/*.xcuserdatad
 # opacity.xcframework
 opacity-debug.xcframework
+opacity-ios/spm_example/test_app/.env

@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:OpacityLabs/opacity-ios.git",
       "state" : {
-        "revision" : "21bace103be5dff0408bcfd75ab05a8415eb0736",
-        "version" : "3.23.64"
+        "revision" : "0f2a90d8229bcac5524f709d94f5fd95dbc17e6a",
+        "version" : "4.0.1"
       }
     }
   ],
