@@ -26,7 +26,7 @@ class MainViewController: UIViewController {
 
     do {
       try OpacitySwiftWrapper.initialize(
-        apiKey: apiKey, dryRun: false, environment: .Test)
+        apiKey: apiKey, dryRun: false, environment: .Test, shouldShowErrorsInWebView: true)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text =

@@ -10,8 +10,9 @@ typedef NS_ENUM(NSInteger, OpacityEnvironment) {
 @interface OpacityObjCWrapper : NSObject
 
 + (int)initialize:(NSString *)apiKey
-         andDryRun:(BOOL)dryRun
-    andEnvironment:(OpacityEnvironment)environment;
+                       andDryRun:(BOOL)dryRun
+                  andEnvironment:(OpacityEnvironment)environment
+    andShouldShowErrorsInWebview:(BOOL)shouldShowErrorsInWebview;
 
 + (void)get:(NSString *)name
      andParams:(NSDictionary *)params
