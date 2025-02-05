@@ -11,6 +11,7 @@ class MainViewController: UIViewController {
     ("run lua with params", #selector(runLuaWithParamsTapped)),
     ("run lua gusto", #selector(runLuaGustoTapped)),
     ("run lua with 404 flow", #selector(runLuaUndefinedTapped)),
+    ("run lua that calls terminate", #selector(runLuaTerminateTapped)),
   ]
 
   override func viewDidLoad() {
@@ -25,7 +26,7 @@ class MainViewController: UIViewController {
 
     do {
       try OpacitySwiftWrapper.initialize(
-        apiKey: apiKey, dryRun: false, environment: .Production)
+        apiKey: apiKey, dryRun: false, environment: .Test)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text =
@@ -152,21 +153,6 @@ class MainViewController: UIViewController {
       print("Could not run lua: \(error)")
     }
   }
-  //
-  //  @objc func getInstagramProfileButtonTapped() {
-  //    Task {
-  //      await getInstagramProfile()
-  //    }
-  //  }
-  //
-  //  func getInstagramProfile() async {
-  //    do {
-  //      let (json) = try await OpacitySwiftWrapper.getInstagramProfile()
-  //      print(json)
-  //    } catch {
-  //      print("Could not get instagram account: \(error)")
-  //    }
-  //  }
 
   @objc func runLuaUndefinedTapped() {
     Task {
@@ -179,6 +165,23 @@ class MainViewController: UIViewController {
     do {
       let res = try await OpacitySwiftWrapper.get(
         name: "undefined", params: nil)
+      print(res)
+    } catch {
+      print("Could not run lua: \(error)")
+    }
+  }
+
+  @objc func runLuaTerminateTapped() {
+    Task {
+      await runLuaTerminate()
+    }
+  }
+
+    @MainActor 
+  func runLuaTerminate() async {
+    do {
+      let res = try await OpacitySwiftWrapper.get(
+        name: "terminate", params: nil)
       print(res)
     } catch {
       print("Could not run lua: \(error)")
