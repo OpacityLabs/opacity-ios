@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6003F589195388D20070C39A"
-               BuildableName = "OpacityIOS_Example.app"
-               BlueprintName = "OpacityIOS_Example"
-               ReferencedContainer = "container:OpacityIOS.xcodeproj">
+               BuildableName = "OpacityPod_Example.app"
+               BlueprintName = "OpacityPod_Example"
+               ReferencedContainer = "container:OpacityPod.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "OpacityIOS_Example.app"
-            BlueprintName = "OpacityIOS_Example"
-            ReferencedContainer = "container:OpacityIOS.xcodeproj">
+            BuildableName = "OpacityPod_Example.app"
+            BlueprintName = "OpacityPod_Example"
+            ReferencedContainer = "container:OpacityPod.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "OpacityIOS_Example.app"
-            BlueprintName = "OpacityIOS_Example"
-            ReferencedContainer = "container:OpacityIOS.xcodeproj">
+            BuildableName = "OpacityPod_Example.app"
+            BlueprintName = "OpacityPod_Example"
+            ReferencedContainer = "container:OpacityPod.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -1,5 +1,5 @@
 platform :ios, '14.0'
 
-target 'OpacityIOS_Example' do
+target 'OpacityPod_Example' do
   pod 'OpacityCore', :path => '../'
 end
