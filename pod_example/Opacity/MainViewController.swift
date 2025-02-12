@@ -4,18 +4,15 @@ import UIKit
 
 class MainViewController: UIViewController {
 
-  let buttons = [
-    ("uber get rider profile", #selector(getRiderProfileTapped)),
-
-    ("run lua", #selector(runLuaTapped)),
-    ("run lua with params", #selector(runLuaWithParamsTapped)),
-    ("run lua gusto", #selector(runLuaGustoTapped)),
-    ("run lua with 404 flow", #selector(runLuaUndefinedTapped)),
-    ("run lua that calls terminate", #selector(runLuaTerminateTapped)),
-  ]
+  var buttons: [(String, () async throws -> Void)]!
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    buttons = [
+      ("flow:uber_rider:profile", getRiderProfile),
+      ("flow:gusto:profile_pay", gustoProfilePay),
+      ("404 flow", run404Flow),
+    ]
     view.backgroundColor = .black
 
     guard let env = loadEnvFile(), let apiKey = env["OPACITY_API_KEY"]
@@ -26,7 +23,8 @@ class MainViewController: UIViewController {
 
     do {
       try OpacitySwiftWrapper.initialize(
-        apiKey: apiKey, dryRun: false, environment: .Test, shouldShowErrorsInWebView: true)
+        apiKey: apiKey, dryRun: false, environment: .Production,
+        shouldShowErrorsInWebView: true)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text =
@@ -45,12 +43,15 @@ class MainViewController: UIViewController {
       errorLabel.numberOfLines = 0
       errorLabel.lineBreakMode = .byWordWrapping
       view.addSubview(errorLabel)
+      return
     }
 
     for (index, buttonInfo) in buttons.enumerated() {
       let button = UIButton(type: .system)
       button.setTitle(buttonInfo.0, for: .normal)
-      button.addTarget(self, action: buttonInfo.1, for: .touchUpInside)
+      button.tag = index
+      button.addTarget(
+        self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
       button.frame = CGRect(
         x: 100, y: 80 + (index * 30), width: 200, height: 50)
       view.addSubview(button)
@@ -72,8 +73,10 @@ class MainViewController: UIViewController {
       for line in lines {
         let keyValuePair = line.split(separator: "=")
         if keyValuePair.count == 2 {
-          let key = keyValuePair[0].trimmingCharacters(in: .whitespaces)
-          let value = keyValuePair[1].trimmingCharacters(in: .whitespaces)
+          let key = keyValuePair[0].trimmingCharacters(
+            in: .whitespaces)
+          let value = keyValuePair[1].trimmingCharacters(
+            in: .whitespaces)
           envVariables[key] = value
         }
       }
@@ -85,107 +88,96 @@ class MainViewController: UIViewController {
     }
   }
 
-  @objc func getRiderProfileTapped() {
+  func showGreenToast(message: String) {
+    let toastLabel = UILabel()
+    toastLabel.backgroundColor = UIColor.green.withAlphaComponent(0.6)
+    toastLabel.textColor = UIColor.white
+    toastLabel.textAlignment = .center
+    toastLabel.font = UIFont(name: "Montserrat-Light", size: 12.0)
+    toastLabel.text = message
+    toastLabel.alpha = 1.0
+    toastLabel.layer.cornerRadius = 10
+    toastLabel.clipsToBounds = true
+    toastLabel.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(toastLabel)
+
+    NSLayoutConstraint.activate([
+      toastLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      toastLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+      toastLabel.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
+      toastLabel.heightAnchor.constraint(equalToConstant: 35),
+    ])
+
+    UIView.animate(
+      withDuration: 4.0, delay: 0.1, options: .curveEaseOut,
+      animations: {
+        toastLabel.alpha = 0.0
+      },
+      completion: { _ in
+        toastLabel.removeFromSuperview()
+      })
+  }
+
+  func showRedToast(message: String) {
+    let toastLabel = UILabel()
+    toastLabel.backgroundColor = UIColor.red.withAlphaComponent(0.6)
+    toastLabel.textColor = UIColor.white
+    toastLabel.textAlignment = .center
+    toastLabel.font = UIFont(name: "Montserrat-Light", size: 12.0)
+    toastLabel.text = message
+    toastLabel.alpha = 1.0
+    toastLabel.layer.cornerRadius = 10
+    toastLabel.clipsToBounds = true
+    toastLabel.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(toastLabel)
+
+    NSLayoutConstraint.activate([
+      toastLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      toastLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+      toastLabel.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
+      toastLabel.heightAnchor.constraint(equalToConstant: 35),
+    ])
+
+    UIView.animate(
+      withDuration: 4.0, delay: 0.1, options: .curveEaseOut,
+      animations: {
+        toastLabel.alpha = 0.0
+      },
+      completion: { _ in
+        toastLabel.removeFromSuperview()
+      })
+  }
+
+  @objc private func buttonTapped(_ sender: UIButton) {
+    let action = buttons[sender.tag].1
     Task {
-      await getRiderProfile()
+      do {
+        try await action()
+        showGreenToast(message: "Success")
+      } catch {
+        showRedToast(message: "Error: \(error.localizedDescription)")
+      }
     }
   }
 
-  func getRiderProfile() async {
-    do {
-      let (json) = try await OpacitySwiftWrapper.get(
-        name: "flow:uber_rider:profile",
-        params: nil
-      )
-      print("uber rider profile: \(json)")
-    } catch {
-      print("Could not get uber rider profile: \(error)")
-    }
+  func getRiderProfile() async throws {
+    let (json) = try await OpacitySwiftWrapper.get(
+      name: "flow:uber_rider:profile",
+      params: nil
+    )
+    print("uber rider profile: \(json)")
   }
 
-
-  @objc func runLuaGustoTapped() {
-    Task {
-      await runLuaGusto()
-    }
+  func gustoProfilePay() async throws {
+    let res = try await OpacitySwiftWrapper.get(
+      name: "flow:gusto:profile_pay", params: nil)
+    print(res)
   }
 
-  func runLuaGusto() async {
-    do {
-      let res = try await OpacitySwiftWrapper.get(
-        name: "flow:gusto:my_pay", params: nil)
-      print(res)
-    } catch {
-      print("Could not run lua: \(error)")
-    }
-  }
-
-  @objc func runLuaTapped() {
-    Task {
-      await runLua()
-    }
-  }
-
-  func runLua() async {
-    do {
-      let res = try await OpacitySwiftWrapper.get(
-        name: "generate_proof", params: nil)
-      print(res)
-    } catch {
-      print("Could not run lua: \(error)")
-    }
-  }
-
-  @objc func runLuaWithParamsTapped() {
-    Task {
-      await runLuaWithParams()
-    }
-  }
-
-  func runLuaWithParams() async {
-    do {
-      let jsonParams = ["param": "value"]
-
-      let res = try await OpacitySwiftWrapper.get(
-        name: "test_with_params", params: jsonParams)
-      print(res)
-    } catch {
-      print("Could not run lua: \(error)")
-    }
-  }
-
-  @objc func runLuaUndefinedTapped() {
-    Task {
-      await runLuaUndefined()
-    }
-  }
-
-  @MainActor
-  func runLuaUndefined() async {
-    do {
-      let res = try await OpacitySwiftWrapper.get(
-        name: "undefined", params: nil)
-      print(res)
-    } catch {
-      print("Could not run lua: \(error)")
-    }
-  }
-
-  @objc func runLuaTerminateTapped() {
-    Task {
-      await runLuaTerminate()
-    }
-  }
-
-    @MainActor 
-  func runLuaTerminate() async {
-    do {
-      let res = try await OpacitySwiftWrapper.get(
-        name: "terminate", params: nil)
-      print(res)
-    } catch {
-      print("Could not run lua: \(error)")
-    }
+  func run404Flow() async throws {
+    let res = try await OpacitySwiftWrapper.get(
+      name: "404", params: nil)
+    print(res)
   }
 
 }
