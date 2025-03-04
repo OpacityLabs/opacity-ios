@@ -43,6 +43,8 @@ void free_string(char *ptr);
 
 void emit_webview_event(const char *payload);
 
+const char *get_sdk_versions(void);
+
 extern const char *get_ip_address(void);
 
 extern void secure_set(const char *key, const char *value);
