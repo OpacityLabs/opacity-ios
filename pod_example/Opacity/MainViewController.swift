@@ -56,6 +56,52 @@ class MainViewController: UIViewController {
         x: 100, y: 80 + (index * 30), width: 200, height: 50)
       view.addSubview(button)
     }
+
+    let inputField = UITextField()
+    inputField.borderStyle = .roundedRect
+    inputField.placeholder = "Enter flow name"
+    inputField.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(inputField)
+
+    let submitButton = UIButton(type: .system)
+    submitButton.setTitle("Submit", for: .normal)
+    submitButton.translatesAutoresizingMaskIntoConstraints = false
+    submitButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
+    view.addSubview(submitButton)
+
+    NSLayoutConstraint.activate([
+      inputField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      inputField.topAnchor.constraint(equalTo: view.topAnchor, constant: 300),
+      inputField.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
+      inputField.heightAnchor.constraint(equalToConstant: 40),
+
+      submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      submitButton.topAnchor.constraint(equalTo: inputField.bottomAnchor, constant: 20),
+      submitButton.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
+      submitButton.heightAnchor.constraint(equalToConstant: 40),
+    ])
+  }
+
+  @objc private func submitButtonTapped() {
+    guard let inputField = view.subviews.compactMap({ $0 as? UITextField }).first,
+      let flowName = inputField.text, !flowName.isEmpty
+    else {
+      showRedToast(message: "Please enter a flow name")
+      return
+    } 
+
+    Task {
+      do {
+        let res = try await OpacitySwiftWrapper.get(
+          name: flowName.lowercased(),
+          params: nil
+        )
+        print(res)
+        showGreenToast(message: "Success")
+      } catch {
+        showRedToast(message: "Error: \(error.localizedDescription)")
+      }
+    }
   }
 
   func loadEnvFile() -> [String: String]? {
