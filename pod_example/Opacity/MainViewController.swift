@@ -12,7 +12,9 @@ class MainViewController: UIViewController {
       ("flow:uber_rider:profile", getRiderProfile),
       ("flow:gusto:profile_pay", gustoProfilePay),
       ("404 flow", run404Flow),
+      ("re-initialize SDK", reinitializeSdk)
     ]
+    
     view.backgroundColor = .black
 
     guard let env = loadEnvFile(), let apiKey = env["OPACITY_API_KEY"]
@@ -224,6 +226,38 @@ class MainViewController: UIViewController {
     let res = try await OpacitySwiftWrapper.get(
       name: "404", params: nil)
     print(res)
+  }
+  
+  func reinitializeSdk() {
+    do {
+      guard let env = loadEnvFile(), let apiKey = env["OPACITY_API_KEY"]
+      else {
+        print("Error loading .env file or API key not found")
+        return
+      }
+      
+      try OpacitySwiftWrapper.initialize(
+        apiKey: apiKey, dryRun: false, environment: .Production,
+        shouldShowErrorsInWebView: true)
+    } catch {
+      let errorLabel = UILabel()
+      errorLabel.text =
+      "⚠️ SDK is not initialized! Check server is started and API key"
+      errorLabel.textColor = .red
+      errorLabel.translatesAutoresizingMaskIntoConstraints = false
+      view.addSubview(errorLabel)
+      NSLayoutConstraint.activate([
+        errorLabel.centerXAnchor.constraint(
+          equalTo: view.centerXAnchor),
+        errorLabel.topAnchor.constraint(
+          equalTo: view.topAnchor, constant: 50),
+        errorLabel.widthAnchor.constraint(
+          equalTo: view.widthAnchor, constant: -20),
+      ])
+      errorLabel.numberOfLines = 0
+      errorLabel.lineBreakMode = .byWordWrapping
+      view.addSubview(errorLabel)
+    }
   }
 
 }

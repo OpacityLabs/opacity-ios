@@ -5,10 +5,6 @@ class ViewController: UIViewController {
   
   let buttons = [
     ("uber get rider profile", #selector(getRiderProfileTapped)),
-    //    ("zabka Profile", #selector(getZabkaProfileButtonTapped)),
-    //    ("reddit account", #selector(getRedditProfileTapped)),
-    //    ("github profile", #selector(getGithubProfileButtonTapped)),
-    //    ("instagram profile", #selector(getInstagramProfileButtonTapped)),
     ("run lua", #selector(runLuaTapped)),
     ("run lua with params", #selector(runLuaWithParamsTapped)),
     ("run lua gusto", #selector(runLuaGustoTapped)),
@@ -27,7 +23,7 @@ class ViewController: UIViewController {
     
     do {
       try OpacitySwiftWrapper.initialize(
-                                         apiKey: apiKey, dryRun: false, environment: .Test)
+        apiKey: apiKey, dryRun: false, environment: .Production, shouldShowErrorsInWebView: true)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text =
@@ -104,51 +100,6 @@ class ViewController: UIViewController {
       print("Could not get uber rider profile: \(error)")
     }
   }
-  //
-  //  @objc func getRedditProfileTapped() {
-  //    Task {
-  //      await getRedditProfile()
-  //    }
-  //  }
-  //
-  //  func getRedditProfile() async {
-  //    do {
-  //      let (json) = try await OpacitySwiftWrapper.getRedditAccount()
-  //      print(json)
-  //    } catch {
-  //      print("Could not get reddit account: \(error)")
-  //    }
-  //  }
-  //
-  //  @objc func getZabkaProfileButtonTapped() {
-  //    Task {
-  //      await getZabkaProfile()
-  //    }
-  //  }
-  //
-  //  func getZabkaProfile() async {
-  //    do {
-  //      let (json) = try await OpacitySwiftWrapper.getZabkaAccount()
-  //      print(json)
-  //    } catch {
-  //      print("Could not get zabka account: \(error)")
-  //    }
-  //  }
-  //
-  //  @objc func getGithubProfileButtonTapped() {
-  //    Task {
-  //      await getGithubProfile()
-  //    }
-  //  }
-  //
-  //  func getGithubProfile() async {
-  //    do {
-  //      let (json) = try await OpacitySwiftWrapper.getGithubProfile()
-  //      print(json)
-  //    } catch {
-  //      print("Could not get github account: \(error)")
-  //    }
-  //  }
   
   @objc func runLuaGustoTapped() {
     Task {

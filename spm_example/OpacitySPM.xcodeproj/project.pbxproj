@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,7 +15,7 @@
 		702228422C74DF6D00C5DC56 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 702228412C74DF6D00C5DC56 /* Base */; };
 		702228452C74DF6D00C5DC56 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 702228442C74DF6D00C5DC56 /* main.m */; };
 		703D249D2C9A2A6800EEE75E /* .env in Resources */ = {isa = PBXBuildFile; fileRef = 703D249C2C9A2A6800EEE75E /* .env */; };
-		7078F9562D381A8800B43FEB /* OpacityCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7078F9552D381A8800B43FEB /* OpacityCore */; };
+		70431F8A2D782B2200A54A30 /* OpacityCore in Frameworks */ = {isa = PBXBuildFile; productRef = 70431F892D782B2200A54A30 /* OpacityCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7078F9562D381A8800B43FEB /* OpacityCore in Frameworks */,
+				70431F8A2D782B2200A54A30 /* OpacityCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +98,7 @@
 			);
 			name = OpacitySPM;
 			packageProductDependencies = (
-				7078F9552D381A8800B43FEB /* OpacityCore */,
+				70431F892D782B2200A54A30 /* OpacityCore */,
 			);
 			productName = test_app;
 			productReference = 7022282F2C74DF6C00C5DC56 /* OpacitySPM.app */;
@@ -128,7 +128,7 @@
 			);
 			mainGroup = 702228262C74DF6C00C5DC56;
 			packageReferences = (
-				7078F9542D381A8800B43FEB /* XCRemoteSwiftPackageReference "opacity-ios" */,
+				70431F882D782B2200A54A30 /* XCLocalSwiftPackageReference "../../opacity-ios" */,
 			);
 			productRefGroup = 702228302C74DF6C00C5DC56 /* Products */;
 			projectDirPath = "";
@@ -382,21 +382,16 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		7078F9542D381A8800B43FEB /* XCRemoteSwiftPackageReference "opacity-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:OpacityLabs/opacity-ios.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.1;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		70431F882D782B2200A54A30 /* XCLocalSwiftPackageReference "../../opacity-ios" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../opacity-ios";
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7078F9552D381A8800B43FEB /* OpacityCore */ = {
+		70431F892D782B2200A54A30 /* OpacityCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7078F9542D381A8800B43FEB /* XCRemoteSwiftPackageReference "opacity-ios" */;
 			productName = OpacityCore;
 		};
 /* End XCSwiftPackageProductDependency section */
