@@ -22,7 +22,7 @@ jobs:
       - name: Run UI Tests
         run: |
           xcodebuild test \
-            -workspace pod_example/OpacityPod.xcworkspace 
+            -workspace pod_example/OpacityPod.xcworkspace \
             -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
             -scheme OpacityPod_Example \
             -only-testing:OpacityPod_UITests
