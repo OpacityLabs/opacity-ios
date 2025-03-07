@@ -13,20 +13,6 @@
 @end
 
 @implementation ModalWebViewController
-
-- (void)openRequest:(NSMutableURLRequest *)request {
-  _request = request;
-  [self.webView loadRequest:_request];
-}
-
-- (instancetype)initWithRequest:(NSMutableURLRequest *)request {
-  self = [super init];
-  if (self) {
-    _request = request;
-  }
-  return self;
-}
-
 - (void)viewDidLoad {
   [super viewDidLoad];
 
@@ -72,6 +58,34 @@
                            target:self
                            action:@selector(close)];
   self.navigationItem.rightBarButtonItem = closeButton;
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+  // Check if the controller or its navigation controller is being dismissed
+  if (self.isBeingDismissed || self.navigationController.isBeingDismissed) {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:@"close" forKey:@"event"];
+    [dict setObject:[NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]] forKey:@"id"];
+    
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
+    NSString *payload = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    opacity_core::emit_webview_event([payload UTF8String]);
+  }
+}
+
+- (void)openRequest:(NSMutableURLRequest *)request {
+  _request = request;
+  [self.webView loadRequest:_request];
+}
+
+- (instancetype)initWithRequest:(NSMutableURLRequest *)request {
+  self = [super init];
+  if (self) {
+    _request = request;
+  }
+  return self;
 }
 
 - (void)close {
