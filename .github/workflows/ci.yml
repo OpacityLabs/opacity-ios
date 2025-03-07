@@ -19,6 +19,12 @@ jobs:
       - name: Install dependencies (if needed)
         run: cd pod_example && pod install # or `swift package resolve` if using SPM
 
+      - name: Create .env file
+        run: |
+          echo "OPACITY_API_KEY=${{ secrets.OPACITY_API_KEY }}" > pod_example/Opacity/.env
+        env:
+          OPACITY_API_KEY: ${{ secrets.OPACITY_API_KEY }}
+
       - name: Run UI Tests
         run: |
           xcodebuild test \
