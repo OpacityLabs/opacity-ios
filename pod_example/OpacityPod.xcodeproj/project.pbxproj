@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -60,7 +60,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7018CB812D7AF5F100191CAF /* OpacityPod_UITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OpacityPod_UITests; sourceTree = "<group>"; };
+		7018CB812D7AF5F100191CAF /* OpacityPod_UITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = OpacityPod_UITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,7 +235,6 @@
 				};
 			};
 			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "OpacityPod" */;
-			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -240,6 +243,7 @@
 				Base,
 			);
 			mainGroup = 6003F581195388D10070C39A;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 6003F58B195388D20070C39A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
