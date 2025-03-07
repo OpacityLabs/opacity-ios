@@ -18,12 +18,12 @@ jobs:
 
       - name: Install dependencies (if needed)
         run: pod install # or `swift package resolve` if using SPM
-        working-directory: YourProject
+        working-directory: pod_example
 
+        # -destination 'platform=iOS Simulator,name=iPhone 15' \
       - name: Run UI Tests
         run: |
           xcodebuild test \
-            -workspace YourProject.xcworkspace \  # Use .xcworkspace if using CocoaPods
-            -scheme YourScheme \
-            -destination 'platform=iOS Simulator,name=iPhone 15' \
-            -only-testing:YourUITests
+            -workspace pod_example/OpacityPod.xcworkspace 
+            -scheme OpacityPod_Example \
+            -only-testing:OpacityPod_UITests
