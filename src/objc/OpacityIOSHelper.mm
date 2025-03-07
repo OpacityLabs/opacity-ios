@@ -48,11 +48,9 @@ void ios_present_webview() {
 
     modalWebVC = [[ModalWebViewController alloc] initWithRequest:request];
 
-    // Create a navigation controller to embed the modal web view controller
     navController =
         [[UINavigationController alloc] initWithRootViewController:modalWebVC];
 
-    // Get the topmost view controller
     UIViewController *topController = topMostViewController();
 
     [topController presentViewController:navController
@@ -105,7 +103,7 @@ const char *get_battery_status() {
 const char *get_carrier_name() {
   CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
   NSDictionary<NSString *, CTCarrier *> *carriers =
-  [networkInfo serviceSubscriberCellularProviders];
+      [networkInfo serviceSubscriberCellularProviders];
   CTCarrier *carrier = carriers.allValues.firstObject;
   NSString *carrierName = [carrier carrierName];
   const char *name = [carrierName UTF8String];
@@ -115,7 +113,7 @@ const char *get_carrier_name() {
 const char *get_carrier_mcc() {
   CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
   NSDictionary<NSString *, CTCarrier *> *carriers =
-  [networkInfo serviceSubscriberCellularProviders];
+      [networkInfo serviceSubscriberCellularProviders];
   CTCarrier *carrier = carriers.allValues.firstObject;
   NSString *mcc = [carrier mobileCountryCode];
   const char *mccCString = [mcc UTF8String];
@@ -125,7 +123,7 @@ const char *get_carrier_mcc() {
 const char *get_carrier_mnc() {
   CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
   NSDictionary<NSString *, CTCarrier *> *carriers =
-  [networkInfo serviceSubscriberCellularProviders];
+      [networkInfo serviceSubscriberCellularProviders];
   CTCarrier *carrier = carriers.allValues.firstObject;
   NSString *mnc = [carrier mobileNetworkCode];
   const char *mncCString = [mnc UTF8String];
