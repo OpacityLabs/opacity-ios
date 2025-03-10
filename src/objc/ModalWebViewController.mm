@@ -60,19 +60,69 @@
   self.navigationItem.rightBarButtonItem = closeButton;
 }
 
++ (BOOL)accessInstanceVariablesDirectly {
+  return NO;
+}
+
 - (void)viewDidDisappear:(BOOL)animated {
   // Check if the controller or its navigation controller is being dismissed
   if (self.isBeingDismissed || self.navigationController.isBeingDismissed) {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSString *event_id = [NSString
+        stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
     [dict setObject:@"close" forKey:@"event"];
-    [dict setObject:[NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]] forKey:@"id"];
-    
+    [dict setObject:event_id forKey:@"id"];
+
     NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
-    NSString *payload = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                       options:0
+                                                         error:&error];
+    NSString *payload = [[NSString alloc] initWithData:jsonData
+                                              encoding:NSUTF8StringEncoding];
+
     opacity_core::emit_webview_event([payload UTF8String]);
   }
+}
+
+- (NSDictionary *)getBrowserCookiesForCurrentUrl {
+  __block NSMutableDictionary *cookieDict = [NSMutableDictionary dictionary];
+  NSURL *url = self.webView.URL;
+  if (url == nil) {
+    return cookieDict;
+  }
+
+  WKHTTPCookieStore *cookieStore =
+      self.webView.configuration.websiteDataStore.httpCookieStore;
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+
+  [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
+    for (NSHTTPCookie *cookie in cookies) {
+      // Update self.cookies with the latest cookies
+      if ([url.host hasSuffix:cookie.domain]) {
+        [cookieDict setObject:cookie.value forKey:cookie.name];
+      }
+    }
+    dispatch_semaphore_signal(semaphore);
+  }];
+  dispatch_semaphore_wait(semaphore,
+                          dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
+  return cookieDict;
+}
+
+- (void)updateCapturedCookies {
+  WKHTTPCookieStore *cookieStore =
+      self.webView.configuration.websiteDataStore.httpCookieStore;
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+
+  [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
+    for (NSHTTPCookie *cookie in cookies) {
+      // Update self.cookies with the latest cookies
+      [self.cookies setObject:cookie.value forKey:cookie.name];
+    }
+    dispatch_semaphore_signal(semaphore);
+  }];
+  dispatch_semaphore_wait(semaphore,
+                          dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
 }
 
 - (void)openRequest:(NSMutableURLRequest *)request {
@@ -127,11 +177,22 @@
   }
 }
 
-/// Called when the content starts arriving for a page
-//- (void)webView:(WKWebView *)webView
-//    didCommitNavigation:(WKNavigation *)navigation {
-//  NSLog(@"Content started arriving: %@", webView.URL.absoluteString);
-//}
+- (NSString *)getHtmlBody {
+  __block NSString *body = nil;
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+  [self.webView
+      evaluateJavaScript:@"document.documentElement.outerHTML.toString()"
+       completionHandler:^(NSString *html, NSError *error) {
+         if (!error) {
+           body = html;
+         }
+         dispatch_semaphore_signal(semaphore);
+       }];
+  dispatch_semaphore_wait(semaphore,
+                          dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
+
+  return body;
+}
 
 /// Called when the page finishes loading
 - (void)webView:(WKWebView *)webView
@@ -141,50 +202,33 @@
   if (url) {
     [self addToVisitedUrls:webView.URL.absoluteString];
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSString *event_id = [NSString
+        stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
     [dict setObject:url.absoluteString forKey:@"url"];
     [dict setObject:@"navigation" forKey:@"event"];
-    [dict
-        setObject:[NSString stringWithFormat:@"%f", [[NSDate date]
-                                                        timeIntervalSince1970]]
-           forKey:@"id"];
+    [dict setObject:event_id forKey:@"id"];
 
-    // Insert the HTML body inside of 'html_body'
-    // And also append ALL the cookies
-    [webView evaluateJavaScript:@"document.documentElement.outerHTML.toString()"
-              completionHandler:^(NSString *html, NSError *error) {
-                if (!error) {
-                  [dict setObject:html forKey:@"html_body"];
-                } else {
-                  NSLog(@"Error fetching the body of html: %@", error);
-                }
+    NSString *body = [self getHtmlBody];
+    if (body != nil) {
+      [dict setObject:body forKey:@"html_body"];
+    }
 
-                // Use WKHTTPCookieStore to get all cookies after JavaScript
-                // evaluation
-                WKHTTPCookieStore *cookieStore =
-                    self.webView.configuration.websiteDataStore.httpCookieStore;
-                [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
-                  for (NSHTTPCookie *cookie in cookies) {
-                    // Update self.cookies with the latest cookies
-                    [self.cookies setObject:cookie.value forKey:cookie.name];
-                  }
-                  [dict setObject:self.cookies forKey:@"cookies"];
-                  [dict setObject:self.visitedUrls forKey:@"visited_urls"];
+    [self updateCapturedCookies];
+    [dict setObject:self.cookies forKey:@"cookies"];
+    [dict setObject:self.visitedUrls forKey:@"visited_urls"];
 
-                  NSError *error;
-                  NSData *jsonData =
-                      [NSJSONSerialization dataWithJSONObject:dict
-                                                      options:0
-                                                        error:&error];
-                  NSString *payload =
-                      [[NSString alloc] initWithData:jsonData
-                                            encoding:NSUTF8StringEncoding];
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                       options:0
+                                                         error:&error];
+    NSString *payload = [[NSString alloc] initWithData:jsonData
+                                              encoding:NSUTF8StringEncoding];
 
-                  opacity_core::emit_webview_event([payload UTF8String]);
-                  [self resetVisitedUrls];
-                }];
-              }];
+    opacity_core::emit_webview_event([payload UTF8String]);
+    [self resetVisitedUrls];
   }
 }
+
 - (void)webView:(WKWebView *)webView
     didReceiveServerRedirectForProvisionalNavigation:
         (WKNavigation *)navigation {

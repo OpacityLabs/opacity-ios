@@ -7,7 +7,6 @@
 #import <arpa/inet.h>
 #import <ifaddrs.h>
 #import <string>
-#import "./ModalWebViewController.h"
 
 ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
@@ -70,56 +69,28 @@ void ios_close_webview() {
   });
 }
 
-const char* ios_get_current_cookies_stringified() {
-    // Check if browser is not opened
-    if (modalWebVC == nil) {
-        return "";
-    }
-    
-    // Get the current URL of the web view
-    id webView = [modalWebVC valueForKey:@"webView"];
-    NSURL *currentURL = [webView URL];
-    
-    // Check if there's no current URL
-    if (currentURL == nil) {
-        return "";
-    }
-    
-    // Create a semaphore to wait for async cookie fetch
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    
-    // Create a dictionary to store the cookies
-    __block NSMutableDictionary *cookieDict = [NSMutableDictionary dictionary];
-    
-    // Get cookies using KVC chain
-    id configuration = [webView valueForKey:@"configuration"];
-    id websiteDataStore = [configuration valueForKey:@"websiteDataStore"];
-    id cookieStore = [websiteDataStore valueForKey:@"httpCookieStore"];
-    
-    [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
-         for (NSHTTPCookie *cookie in cookies) {
-             // Check if the cookie is valid for the current URL
-             if ([currentURL.host hasSuffix:cookie.domain]) {
-                 [cookieDict setObject:cookie.value forKey:cookie.name];
-             }
-         }
-        dispatch_semaphore_signal(semaphore);
-    }];
-    
-    // Wait for cookies to be fetched (with timeout)
-    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
-    
-    // Convert the dictionary to JSON string
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:cookieDict options:0 error:&error];
-    if (!jsonData) {
-        NSLog(@"Error serializing cookies to JSON: %@", error);
-        return "";
-    }
-    
-    // Convert JSON data to C string and return
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return [jsonString UTF8String];
+const char *ios_get_browser_cookies_for_current_url() {
+  // Check if browser is not opened
+  if (modalWebVC == nil) {
+    return "";
+  }
+
+  NSDictionary *cookies = [modalWebVC getBrowserCookiesForCurrentUrl];
+
+  // Convert the dictionary to JSON string
+  NSError *error;
+  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:cookies
+                                                     options:0
+                                                       error:&error];
+  if (!jsonData) {
+    NSLog(@"Error serializing cookies to JSON: %@", error);
+    return "";
+  }
+
+  // Convert JSON data to C string and return
+  NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                               encoding:NSUTF8StringEncoding];
+  return [jsonString UTF8String];
 }
 
 double get_battery_level() {

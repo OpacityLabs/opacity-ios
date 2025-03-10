@@ -18,7 +18,7 @@ OBJC_EXTERN void ios_prepare_request(const char *url);
 OBJC_EXTERN void ios_set_request_header(const char *key, const char *value);
 OBJC_EXTERN void ios_present_webview();
 OBJC_EXTERN void ios_close_webview();
-OBJC_EXTERN const char* ios_get_current_cookies_stringified();
+OBJC_EXTERN const char *ios_get_browser_cookies_for_current_url();
 
 #ifdef __cplusplus
 } // namespace opacity

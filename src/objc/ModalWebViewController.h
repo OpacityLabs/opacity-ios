@@ -3,8 +3,8 @@
 
 @interface ModalWebViewController
     : UIViewController <WKNavigationDelegate, NSURLSessionTaskDelegate>
-
 - (instancetype)initWithRequest:(NSMutableURLRequest *)request;
 - (void)close;
 - (void)openRequest:(NSMutableURLRequest *)request;
+- (NSDictionary *)getBrowserCookiesForCurrentUrl;
 @end
