@@ -69,7 +69,7 @@ void ios_close_webview() {
   });
 }
 
-const char *ios_get_current_cookies_stringified() {
+const char *ios_get_browser_cookies_for_current_url() {
   // Check if browser is not opened
   if (modalWebVC == nil) {
     return "";
