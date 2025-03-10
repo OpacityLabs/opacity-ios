@@ -68,6 +68,8 @@ extern void ios_present_webview(void);
 
 extern void ios_close_webview(void);
 
+extern const char *ios_get_browser_cookies_for_current_url(void);
+
 #ifdef __cplusplus
 }  // extern "C"
 #endif  // __cplusplus
