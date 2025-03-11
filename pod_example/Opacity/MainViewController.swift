@@ -10,11 +10,10 @@ class MainViewController: UIViewController {
     super.viewDidLoad()
     buttons = [
       ("flow:uber_rider:profile", getRiderProfile),
-      ("flow:gusto:profile_pay", gustoProfilePay),
       ("404 flow", run404Flow),
-      ("re-initialize SDK", reinitializeSdk)
+      ("re-initialize SDK", reinitializeSdk),
     ]
-    
+
     view.backgroundColor = .black
 
     guard let env = loadEnvFile(), let apiKey = env["OPACITY_API_KEY"]
@@ -63,6 +62,10 @@ class MainViewController: UIViewController {
     inputField.borderStyle = .roundedRect
     inputField.placeholder = "Enter flow name"
     inputField.translatesAutoresizingMaskIntoConstraints = false
+    // Load the saved value if it exists
+    inputField.text = UserDefaults.standard.string(forKey: "savedFlowName")
+    // Add a target to save the value when editing ends
+    inputField.addTarget(self, action: #selector(saveInputValue), for: .editingDidEnd)
     view.addSubview(inputField)
 
     let submitButton = UIButton(type: .system)
@@ -84,13 +87,26 @@ class MainViewController: UIViewController {
     ])
   }
 
+  @objc private func saveInputValue(_ sender: UITextField) {
+    // Get the current input value
+    if let value = sender.text, !value.isEmpty {
+      // Save the value to UserDefaults
+      UserDefaults.standard.set(value, forKey: "savedFlowName")
+      UserDefaults.standard.synchronize()  // Ensure it's immediately written to disk
+    }
+  }
+
   @objc private func submitButtonTapped() {
     guard let inputField = view.subviews.compactMap({ $0 as? UITextField }).first,
       let flowName = inputField.text, !flowName.isEmpty
     else {
       showRedToast(message: "Please enter a flow name")
       return
-    } 
+    }
+
+    // Save the flow name when submitting as well
+    UserDefaults.standard.set(flowName, forKey: "savedFlowName")
+    UserDefaults.standard.synchronize()
 
     Task {
       do {
@@ -216,18 +232,12 @@ class MainViewController: UIViewController {
     print("uber rider profile: \(json)")
   }
 
-  func gustoProfilePay() async throws {
-    let res = try await OpacitySwiftWrapper.get(
-      name: "flow:gusto:profile_pay", params: nil)
-    print(res)
-  }
-
   func run404Flow() async throws {
     let res = try await OpacitySwiftWrapper.get(
       name: "404", params: nil)
     print(res)
   }
-  
+
   func reinitializeSdk() {
     do {
       guard let env = loadEnvFile(), let apiKey = env["OPACITY_API_KEY"]
@@ -235,14 +245,14 @@ class MainViewController: UIViewController {
         print("Error loading .env file or API key not found")
         return
       }
-      
+
       try OpacitySwiftWrapper.initialize(
         apiKey: apiKey, dryRun: false, environment: .Production,
         shouldShowErrorsInWebView: true)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text =
-      "⚠️ SDK is not initialized! Check server is started and API key"
+        "⚠️ SDK is not initialized! Check server is started and API key"
       errorLabel.textColor = .red
       errorLabel.translatesAutoresizingMaskIntoConstraints = false
       view.addSubview(errorLabel)
