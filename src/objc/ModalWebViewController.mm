@@ -32,7 +32,6 @@
   // Create a WKWebsiteDataStore
   self.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
   configuration.websiteDataStore = self.websiteDataStore;
-  //  [self.websiteDataStore.httpCookieStore addObserver:self];
 
   // Initialize and configure the WKWebView
   self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds
@@ -65,6 +64,7 @@
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
+  [super viewDidDisappear:animated];
   // Check if the controller or its navigation controller is being dismissed
   if (self.isBeingDismissed || self.navigationController.isBeingDismissed) {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -84,45 +84,37 @@
   }
 }
 
-- (NSDictionary *)getBrowserCookiesForCurrentUrl {
-  __block NSMutableDictionary *cookieDict = [NSMutableDictionary dictionary];
+- (void)getBrowserCookiesForCurrentUrlWithCompletion:(void (^)(NSDictionary *))completion {
+  NSMutableDictionary *cookieDict = [NSMutableDictionary dictionary];
   NSURL *url = self.webView.URL;
   if (url == nil) {
-    return cookieDict;
+    completion(cookieDict);
+    return;
   }
 
   WKHTTPCookieStore *cookieStore =
       self.webView.configuration.websiteDataStore.httpCookieStore;
-  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
 
   [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
     for (NSHTTPCookie *cookie in cookies) {
-      // Update self.cookies with the latest cookies
       if ([url.host hasSuffix:cookie.domain]) {
         [cookieDict setObject:cookie.value forKey:cookie.name];
       }
     }
-    dispatch_semaphore_signal(semaphore);
+    completion(cookieDict);
   }];
-  dispatch_semaphore_wait(semaphore,
-                          dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
-  return cookieDict;
 }
 
-- (void)updateCapturedCookies {
+- (void)updateCapturedCookiesWithCompletion:(void (^)(void))completion {
   WKHTTPCookieStore *cookieStore =
       self.webView.configuration.websiteDataStore.httpCookieStore;
-  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
 
   [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
     for (NSHTTPCookie *cookie in cookies) {
-      // Update self.cookies with the latest cookies
       [self.cookies setObject:cookie.value forKey:cookie.name];
     }
-    dispatch_semaphore_signal(semaphore);
+    completion();
   }];
-  dispatch_semaphore_wait(semaphore,
-                          dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
 }
 
 - (void)openRequest:(NSMutableURLRequest *)request {
@@ -139,20 +131,6 @@
 }
 
 - (void)close {
-  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-  [dict setObject:@"close" forKey:@"event"];
-  [dict setObject:[NSString stringWithFormat:@"%f", [[NSDate date]
-                                                        timeIntervalSince1970]]
-           forKey:@"id"];
-  NSError *error;
-  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
-                                                     options:0
-                                                       error:&error];
-  NSString *payload = [[NSString alloc] initWithData:jsonData
-                                            encoding:NSUTF8StringEncoding];
-
-  opacity_core::emit_webview_event([payload UTF8String]);
-
   [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -169,7 +147,6 @@
 
 #pragma mark - WKNavigationDelegate Methods
 
-// Called when the web view starts to load a page
 - (void)webView:(WKWebView *)webView
     didStartProvisionalNavigation:(WKNavigation *)navigation {
   if (webView.URL) {
@@ -177,24 +154,14 @@
   }
 }
 
-- (NSString *)getHtmlBody {
-  __block NSString *body = nil;
-  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+- (void)getHtmlBodyWithCompletion:(void (^)(NSString *))completion {
   [self.webView
       evaluateJavaScript:@"document.documentElement.outerHTML.toString()"
        completionHandler:^(NSString *html, NSError *error) {
-         if (!error) {
-           body = html;
-         }
-         dispatch_semaphore_signal(semaphore);
+         completion(html);
        }];
-  dispatch_semaphore_wait(semaphore,
-                          dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
-
-  return body;
 }
 
-/// Called when the page finishes loading
 - (void)webView:(WKWebView *)webView
     didFinishNavigation:(WKNavigation *)navigation {
   NSURL *url = webView.URL;
@@ -208,24 +175,26 @@
     [dict setObject:@"navigation" forKey:@"event"];
     [dict setObject:event_id forKey:@"id"];
 
-    NSString *body = [self getHtmlBody];
-    if (body != nil) {
-      [dict setObject:body forKey:@"html_body"];
-    }
+    [self getHtmlBodyWithCompletion:^(NSString *body) {
+      if (body != nil) {
+        [dict setObject:body forKey:@"html_body"];
+      }
 
-    [self updateCapturedCookies];
-    [dict setObject:self.cookies forKey:@"cookies"];
-    [dict setObject:self.visitedUrls forKey:@"visited_urls"];
+      [self updateCapturedCookiesWithCompletion:^{
+        [dict setObject:self.cookies forKey:@"cookies"];
+        [dict setObject:self.visitedUrls forKey:@"visited_urls"];
 
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
-                                                       options:0
-                                                         error:&error];
-    NSString *payload = [[NSString alloc] initWithData:jsonData
-                                              encoding:NSUTF8StringEncoding];
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                           options:0
+                                                             error:&error];
+        NSString *payload = [[NSString alloc] initWithData:jsonData
+                                                  encoding:NSUTF8StringEncoding];
 
-    opacity_core::emit_webview_event([payload UTF8String]);
-    [self resetVisitedUrls];
+        opacity_core::emit_webview_event([payload UTF8String]);
+        [self resetVisitedUrls];
+      }];
+    }];
   }
 }
 
@@ -239,7 +208,6 @@
   }
 }
 
-// Called if an error occurs during navigation
 - (void)webView:(WKWebView *)webView
     didFailProvisionalNavigation:(WKNavigation *)navigation
                        withError:(NSError *)error {
@@ -299,7 +267,6 @@
   completionHandler(request);
 }
 
-// This method is called before the web view starts loading a page
 - (void)webView:(WKWebView *)webView
     decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
                     decisionHandler:
