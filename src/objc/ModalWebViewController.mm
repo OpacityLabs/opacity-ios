@@ -105,6 +105,19 @@
   }];
 }
 
+- (NSDictionary *)getBrowserCookiesForCurrentUrl {
+  __block NSDictionary *result = nil;
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+  
+  [self getBrowserCookiesForCurrentUrlWithCompletion:^(NSDictionary *cookies) {
+    result = cookies;
+    dispatch_semaphore_signal(semaphore);
+  }];
+  
+  dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+  return result;
+}
+
 - (void)updateCapturedCookiesWithCompletion:(void (^)(void))completion {
   WKHTTPCookieStore *cookieStore =
       self.webView.configuration.websiteDataStore.httpCookieStore;
