@@ -69,6 +69,27 @@ void ios_close_webview() {
   });
 }
 
+const char *ios_get_browser_cookies_for_url(const char *url) {
+  NSLog(@"Getting browser cookies for URL: %s", url);
+  NSString *urlString = [NSString stringWithUTF8String:url];
+  NSDictionary *cookies = [modalWebVC getBrowserCookiesForUrl:urlString];
+
+  // Convert the dictionary to JSON string
+  NSError *error;
+  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:cookies
+                                                     options:0
+                                                       error:&error];
+  if (!jsonData) {
+    NSLog(@"Error serializing cookies to JSON: %@", error);
+    return "";
+  }
+
+  // Convert JSON data to C string and return
+  NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                               encoding:NSUTF8StringEncoding];
+  return [jsonString UTF8String];
+}
+
 const char *ios_get_browser_cookies_for_current_url() {
   if (modalWebVC == nil) {
     return "";

@@ -84,25 +84,44 @@
   }
 }
 
-- (void)getBrowserCookiesForCurrentUrlWithCompletion:(void (^)(NSDictionary *))completion {
+- (void)getBrowserCookiesForUrlWithCompletion:(NSString *)domain completion:(void (^)(NSDictionary *))completion {
   NSMutableDictionary *cookieDict = [NSMutableDictionary dictionary];
-  NSURL *url = self.webView.URL;
-  if (url == nil) {
-    completion(cookieDict);
-    return;
-  }
-
-  WKHTTPCookieStore *cookieStore =
-      self.webView.configuration.websiteDataStore.httpCookieStore;
+  WKHTTPCookieStore *cookieStore = self.webView.configuration.websiteDataStore.httpCookieStore;
 
   [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
     for (NSHTTPCookie *cookie in cookies) {
-      if ([url.host hasSuffix:cookie.domain]) {
+      // Check if the cookie's domain matches the target domain
+      // This handles both exact matches and subdomain matches
+      if ([cookie.domain hasSuffix:domain] || 
+          [cookie.domain isEqualToString:domain]) {
         [cookieDict setObject:cookie.value forKey:cookie.name];
       }
     }
     completion(cookieDict);
   }];
+}
+
+- (void)getBrowserCookiesForCurrentUrlWithCompletion:(void (^)(NSDictionary *))completion {
+  NSURL *url = self.webView.URL;
+  if (url == nil) {
+    completion([NSMutableDictionary dictionary]);
+    return;
+  }
+  
+  [self getBrowserCookiesForUrlWithCompletion:url.host completion:completion];
+}
+
+- (NSDictionary *)getBrowserCookiesForUrl:(NSString *)url {
+  __block NSDictionary *result = nil;
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+  
+  [self getBrowserCookiesForUrlWithCompletion:url completion:^(NSDictionary *cookies) {
+    result = cookies;
+    dispatch_semaphore_signal(semaphore);
+  }];
+  
+  dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+  return result;
 }
 
 - (NSDictionary *)getBrowserCookiesForCurrentUrl {
