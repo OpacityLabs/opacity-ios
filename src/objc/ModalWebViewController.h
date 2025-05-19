@@ -7,5 +7,5 @@
 - (void)close;
 - (void)openRequest:(NSMutableURLRequest *)request;
 - (NSDictionary *)getBrowserCookiesForCurrentUrl;
-- (NSDictionary *)getBrowserCookiesForUrl:(NSString *)url;
+- (NSDictionary *)getBrowserCookiesForDomain:(NSString *)domain;
 @end

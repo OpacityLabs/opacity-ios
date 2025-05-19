@@ -69,10 +69,9 @@ void ios_close_webview() {
   });
 }
 
-const char *ios_get_browser_cookies_for_url(const char *url) {
-  NSLog(@"Getting browser cookies for URL: %s", url);
-  NSString *urlString = [NSString stringWithUTF8String:url];
-  NSDictionary *cookies = [modalWebVC getBrowserCookiesForUrl:urlString];
+const char *ios_get_browser_cookies_for_domain(const char *domain) {
+  NSString *domainString = [NSString stringWithUTF8String:domain];
+  NSDictionary *cookies = [modalWebVC getBrowserCookiesForDomain:domainString];
 
   // Convert the dictionary to JSON string
   NSError *error;

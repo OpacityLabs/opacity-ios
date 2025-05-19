@@ -20,7 +20,7 @@ namespace opacity
 	OBJC_EXTERN void ios_present_webview();
 	OBJC_EXTERN void ios_close_webview();
 	OBJC_EXTERN const char *ios_get_browser_cookies_for_current_url();
-	OBJC_EXTERN const char *ios_get_browser_cookies_for_url(const char *url);
+	OBJC_EXTERN const char *ios_get_browser_cookies_for_domain(const char *domain);
 
 #ifdef __cplusplus
 } // namespace opacity
