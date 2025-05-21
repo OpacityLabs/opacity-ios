@@ -62,6 +62,10 @@ class MainViewController: UIViewController {
     inputField.borderStyle = .roundedRect
     inputField.placeholder = "Enter flow name"
     inputField.translatesAutoresizingMaskIntoConstraints = false
+    // Disable autocapitalization and autocorrection
+    inputField.autocapitalizationType = .none
+    inputField.autocorrectionType = .no
+    inputField.spellCheckingType = .no
     // Load the saved value if it exists
     inputField.text = UserDefaults.standard.string(forKey: "savedFlowName")
     // Add a target to save the value when editing ends
