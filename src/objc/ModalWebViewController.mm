@@ -84,16 +84,19 @@
   }
 }
 
-- (void)getBrowserCookiesForDomainWithCompletion:(NSString *)domain completion:(void (^)(NSDictionary *))completion {
+- (void)getBrowserCookiesForDomainWithCompletion:(NSString *)domain
+                                      completion:
+                                          (void (^)(NSDictionary *))completion {
   NSMutableDictionary *cookieDict = [NSMutableDictionary dictionary];
-  WKHTTPCookieStore *cookieStore = self.webView.configuration.websiteDataStore.httpCookieStore;
+  WKHTTPCookieStore *cookieStore =
+      self.webView.configuration.websiteDataStore.httpCookieStore;
 
   [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
     for (NSHTTPCookie *cookie in cookies) {
       // Check if the cookie's domain matches the target domain
       // This handles both exact matches and subdomain matches
-      if ([cookie.domain hasSuffix:domain] || 
-          [cookie.domain isEqualToString:domain]) {
+      if ([domain hasSuffix:cookie.domain] ||
+          [domain isEqualToString:cookie.domain]) {
         [cookieDict setObject:cookie.value forKey:cookie.name];
       }
     }
@@ -101,34 +104,44 @@
   }];
 }
 
-
 - (NSDictionary *)getBrowserCookiesForDomain:(NSString *)domain {
   __block NSDictionary *result = nil;
   dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-  
-  [self getBrowserCookiesForDomainWithCompletion:domain completion:^(NSDictionary *cookies) {
-    result = cookies;
-    dispatch_semaphore_signal(semaphore);
-  }];
-  
+
+  [self getBrowserCookiesForDomainWithCompletion:domain
+                                      completion:^(NSDictionary *cookies) {
+                                        result = cookies;
+                                        dispatch_semaphore_signal(semaphore);
+                                      }];
+
   dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
   return result;
 }
-
 - (NSDictionary *)getBrowserCookiesForCurrentUrl {
   __block NSDictionary *result = nil;
   dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-  
-  NSURL *url = self.webView.URL;
-  if (url == nil) {
-    return [NSMutableDictionary dictionary];
+
+  void (^getCookiesBlock)(void) = ^{
+    NSURL *url = self.webView.URL;
+    if (url == nil) {
+      result = [NSMutableDictionary dictionary];
+      dispatch_semaphore_signal(semaphore);
+      return;
+    }
+
+    [self getBrowserCookiesForDomainWithCompletion:url.host
+                                        completion:^(NSDictionary *cookies) {
+                                          result = cookies;
+                                          dispatch_semaphore_signal(semaphore);
+                                        }];
+  };
+
+  if ([NSThread isMainThread]) {
+    getCookiesBlock();
+  } else {
+    dispatch_async(dispatch_get_main_queue(), getCookiesBlock);
   }
-  
-  [self getBrowserCookiesForDomainWithCompletion:url.host completion:^(NSDictionary *cookies) {
-    result = cookies;
-    dispatch_semaphore_signal(semaphore);
-  }];
-  
+
   dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
   return result;
 }
@@ -216,8 +229,9 @@
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
                                                            options:0
                                                              error:&error];
-        NSString *payload = [[NSString alloc] initWithData:jsonData
-                                                  encoding:NSUTF8StringEncoding];
+        NSString *payload =
+            [[NSString alloc] initWithData:jsonData
+                                  encoding:NSUTF8StringEncoding];
 
         opacity_core::emit_webview_event([payload UTF8String]);
         [self resetVisitedUrls];
