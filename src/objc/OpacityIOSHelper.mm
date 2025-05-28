@@ -38,8 +38,6 @@ void ios_set_request_header(const char *key, const char *value) {
   NSString *nsKey = [NSString stringWithUTF8String:key];
   if ([nsKey caseInsensitiveCompare:@"User-Agent"] == NSOrderedSame) {
       userAgent = [NSString stringWithUTF8String:value];
-      [request setValue:userAgent forHTTPHeaderField:nsKey];
-      return;
   }
   NSString *nsValue = [NSString stringWithUTF8String:value];
   [request setValue:nsValue forHTTPHeaderField:nsKey];
