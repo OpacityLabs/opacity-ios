@@ -51,11 +51,9 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8B4BEB5E01DE6050C4AE2046 /* Opacity.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Opacity.podspec; path = ../Opacity.podspec; sourceTree = "<group>"; };
 		8B99EDB1471452A5A4E480F7 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		9A568B63E4F3DF4D9A7F89C0 /* Pods-OpacityIOS_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpacityIOS_Example.release.xcconfig"; path = "Target Support Files/Pods-OpacityIOS_Example/Pods-OpacityIOS_Example.release.xcconfig"; sourceTree = "<group>"; };
 		A0286D1DEE7D60E15BC97D1D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		A14AFE8EE91114BE33159927 /* Pods-OpacityPod_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpacityPod_Example.release.xcconfig"; path = "Target Support Files/Pods-OpacityPod_Example/Pods-OpacityPod_Example.release.xcconfig"; sourceTree = "<group>"; };
 		A784178E24C40A59EC428CF4 /* Pods-OpacityPod_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpacityPod_Example.debug.xcconfig"; path = "Target Support Files/Pods-OpacityPod_Example/Pods-OpacityPod_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		AE3DACDD0CA21D46B8A75B50 /* Pods-OpacityIOS_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpacityIOS_Example.debug.xcconfig"; path = "Target Support Files/Pods-OpacityIOS_Example/Pods-OpacityIOS_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		E7920B2C587E2198F2348721 /* libPods-OpacityPod_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OpacityPod_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -161,8 +159,6 @@
 		668EF3857E4916F8A1A4A966 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AE3DACDD0CA21D46B8A75B50 /* Pods-OpacityIOS_Example.debug.xcconfig */,
-				9A568B63E4F3DF4D9A7F89C0 /* Pods-OpacityIOS_Example.release.xcconfig */,
 				A784178E24C40A59EC428CF4 /* Pods-OpacityPod_Example.debug.xcconfig */,
 				A14AFE8EE91114BE33159927 /* Pods-OpacityPod_Example.release.xcconfig */,
 			);
