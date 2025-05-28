@@ -9,6 +9,7 @@
 @property(nonatomic, strong) WKWebsiteDataStore *websiteDataStore;
 @property(nonatomic, strong) NSMutableDictionary *cookies;
 @property(nonatomic, strong) NSMutableArray<NSString *> *visitedUrls;
+@property(nonatomic, strong) NSString *customUserAgent;;
 
 @end
 
@@ -45,6 +46,11 @@
 
   // Add the WKWebView to the view hierarchy
   [self.view addSubview:self.webView];
+
+  // Set the custom user agent if provided
+  if (self.customUserAgent) {
+    self.webView.customUserAgent = self.customUserAgent;
+  }
 
   // Load the provided URL
   if (self.request) {
@@ -163,10 +169,12 @@
   [self.webView loadRequest:_request];
 }
 
-- (instancetype)initWithRequest:(NSMutableURLRequest *)request {
+- (instancetype)initWithRequest:(NSMutableURLRequest *)request userAgent:(NSString *)userAgent {
   self = [super init];
+
   if (self) {
     _request = request;
+    _customUserAgent = userAgent;
   }
   return self;
 }

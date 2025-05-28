@@ -11,6 +11,7 @@
 ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
 UINavigationController *navController;
+NSString *userAgent;
 
 UIViewController *topMostViewController() {
   // Fetch the key window's root view controller
@@ -35,6 +36,11 @@ void ios_prepare_request(const char *url) {
 
 void ios_set_request_header(const char *key, const char *value) {
   NSString *nsKey = [NSString stringWithUTF8String:key];
+  if ([nsKey caseInsensitiveCompare:@"User-Agent"] == NSOrderedSame) {
+      userAgent = [NSString stringWithUTF8String:value];
+      [request setValue:userAgent forHTTPHeaderField:nsKey];
+      return;
+  }
   NSString *nsValue = [NSString stringWithUTF8String:value];
   [request setValue:nsValue forHTTPHeaderField:nsKey];
 }
@@ -46,7 +52,7 @@ void ios_present_webview() {
       navController = nil;
     }
 
-    modalWebVC = [[ModalWebViewController alloc] initWithRequest:request];
+    modalWebVC = [[ModalWebViewController alloc] initWithRequest:request userAgent:userAgent];
 
     navController =
         [[UINavigationController alloc] initWithRootViewController:modalWebVC];
