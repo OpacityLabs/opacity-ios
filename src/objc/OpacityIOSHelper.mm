@@ -65,6 +65,7 @@ void ios_present_webview() {
 
 void ios_close_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
+    userAgent = nil;
     [navController dismissViewControllerAnimated:YES
                                       completion:^{
                                         modalWebVC = nil;

@@ -9,7 +9,7 @@
 @property(nonatomic, strong) WKWebsiteDataStore *websiteDataStore;
 @property(nonatomic, strong) NSMutableDictionary *cookies;
 @property(nonatomic, strong) NSMutableArray<NSString *> *visitedUrls;
-@property(nonatomic, strong) NSString *customUserAgent;;
+@property(nonatomic, strong) NSString *customUserAgent;
 
 @end
 
@@ -48,7 +48,7 @@
   [self.view addSubview:self.webView];
 
   // Set the custom user agent if provided
-  if (self.customUserAgent) {
+  if (self.customUserAgent != nil) {
     self.webView.customUserAgent = self.customUserAgent;
   }
 
