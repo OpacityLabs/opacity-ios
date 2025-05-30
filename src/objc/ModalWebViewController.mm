@@ -52,11 +52,24 @@
   }
 
   // Add a Close button
-  UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]
-      initWithBarButtonSystemItem:UIBarButtonSystemItemStop
-                           target:self
-                           action:@selector(close)];
-  self.navigationItem.rightBarButtonItem = closeButton;
+  // UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]
+  //     initWithBarButtonSystemItem:UIBarButtonSystemItemStop
+  //                          target:self
+  //                          action:@selector(close)];
+  // self.navigationItem.rightBarButtonItem = closeButton;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  
+  // Add navigation items after the view hierarchy is fully set up
+  if (!self.navigationItem.rightBarButtonItem) {
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]
+        initWithBarButtonSystemItem:UIBarButtonSystemItemStop
+                             target:self
+                             action:@selector(close)];
+    self.navigationItem.rightBarButtonItem = closeButton;
+  }
 }
 
 + (BOOL)accessInstanceVariablesDirectly {
@@ -207,37 +220,41 @@
     didFinishNavigation:(WKNavigation *)navigation {
   NSURL *url = webView.URL;
 
-  if (url) {
-    [self addToVisitedUrls:webView.URL.absoluteString];
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    NSString *event_id = [NSString
-        stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
-    [dict setObject:url.absoluteString forKey:@"url"];
-    [dict setObject:@"navigation" forKey:@"event"];
-    [dict setObject:event_id forKey:@"id"];
-
-    [self getHtmlBodyWithCompletion:^(NSString *body) {
-      if (body != nil) {
-        [dict setObject:body forKey:@"html_body"];
-      }
-
-      [self updateCapturedCookiesWithCompletion:^{
-        [dict setObject:self.cookies forKey:@"cookies"];
-        [dict setObject:self.visitedUrls forKey:@"visited_urls"];
-
-        NSError *error;
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
-                                                           options:0
-                                                             error:&error];
-        NSString *payload =
-            [[NSString alloc] initWithData:jsonData
-                                  encoding:NSUTF8StringEncoding];
-
-        opacity_core::emit_webview_event([payload UTF8String]);
-        [self resetVisitedUrls];
-      }];
-    }];
+  if (!url) {
+    return;
   }
+  
+  [self addToVisitedUrls:webView.URL.absoluteString];
+  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  NSString *event_id = [NSString
+      stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
+  [dict setObject:url.absoluteString forKey:@"url"];
+  [dict setObject:@"navigation" forKey:@"event"];
+  [dict setObject:event_id forKey:@"id"];
+
+  [self getHtmlBodyWithCompletion:^(NSString *body) {
+    if (body != nil) {
+      [dict setObject:body forKey:@"html_body"];
+    }
+
+    [self updateCapturedCookiesWithCompletion:^{
+      [dict setObject:self.cookies forKey:@"cookies"];
+      [dict setObject:self.visitedUrls forKey:@"visited_urls"];
+
+      NSError *error;
+      NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                         options:0
+                                                           error:&error];
+      NSString *payload =
+          [[NSString alloc] initWithData:jsonData
+                                encoding:NSUTF8StringEncoding];
+
+      opacity_core::emit_webview_event([payload UTF8String]);
+
+      [self resetVisitedUrls];
+    }];
+  }];
+  
 }
 
 - (void)webView:(WKWebView *)webView
@@ -254,33 +271,33 @@
     didFailProvisionalNavigation:(WKNavigation *)navigation
                        withError:(NSError *)error {
   NSString *url = error.userInfo[NSURLErrorFailingURLStringErrorKey];
-  if (url) {
-    [self addToVisitedUrls:url];
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    [dict setObject:url forKey:@"url"];
-    [dict setObject:@"navigation" forKey:@"event"];
-    [dict
-        setObject:[NSString stringWithFormat:@"%f", [[NSDate date]
-                                                        timeIntervalSince1970]]
-           forKey:@"id"];
 
-    [dict setObject:self.cookies forKey:@"cookies"];
-    [dict setObject:self.visitedUrls forKey:@"visited_urls"];
-
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
-                                                       options:0
-                                                         error:&error];
-    NSString *payload = [[NSString alloc] initWithData:jsonData
-                                              encoding:NSUTF8StringEncoding];
-
-    opacity_core::emit_webview_event([payload UTF8String]);
-    [self resetVisitedUrls];
+  if (!url) {
+    return;
   }
 
-  NSLog(@"Failed to load: %@, Error: %@",
-        error.userInfo[NSURLErrorFailingURLStringErrorKey],
-        error.localizedDescription);
+  [self addToVisitedUrls:url];
+  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  [dict setObject:url forKey:@"url"];
+  [dict setObject:@"navigation" forKey:@"event"];
+  [dict
+      setObject:[NSString stringWithFormat:@"%f", [[NSDate date]
+                                                      timeIntervalSince1970]]
+          forKey:@"id"];
+
+  [dict setObject:self.cookies forKey:@"cookies"];
+  [dict setObject:self.visitedUrls forKey:@"visited_urls"];
+
+  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                      options:0
+                                                        error:&error];
+
+  NSString *payload = [[NSString alloc] initWithData:jsonData
+                                            encoding:NSUTF8StringEncoding];
+
+  opacity_core::emit_webview_event([payload UTF8String]);
+  [self resetVisitedUrls];
+
 }
 
 - (void)URLSession:(NSURLSession *)session
