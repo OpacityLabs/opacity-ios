@@ -3,6 +3,7 @@
 typedef NS_ENUM(NSInteger, OpacityEnvironment) {
   Test,
   Local,
+  Sandbox,
   Staging,
   Production
 };

@@ -28,6 +28,8 @@ extern const int32_t OPACITY_ENVIRONMENT_TEST;
 
 extern const int32_t OPACITY_ENVIRONMENT_LOCAL;
 
+extern const int32_t OPACITY_ENVIRONMENT_SANDBOX;
+
 extern const int32_t OPACITY_ENVIRONMENT_STAGING;
 
 extern const int32_t OPACITY_ENVIRONMENT_PRODUCTION;
