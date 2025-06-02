@@ -24,6 +24,8 @@ extern const int32_t OPACITY_GENERIC_ERROR;
 
 extern const int32_t OPACITY_NOT_SUPPORTED;
 
+extern const int32_t OPACITY_INVALID_ENVIRONMENT;
+
 extern const int32_t OPACITY_ENVIRONMENT_TEST;
 
 extern const int32_t OPACITY_ENVIRONMENT_LOCAL;
