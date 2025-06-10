@@ -56,13 +56,17 @@ extern void secure_set(const char *key, const char *value);
 
 extern const char *secure_get(const char *key);
 
-extern void android_prepare_request(const char *_url);
+extern void android_prepare_request(const char *url);
 
-extern void android_set_request_header(const char *_key, const char *_value);
+extern void android_set_request_header(const char *key, const char *value);
 
 extern void android_present_webview(void);
 
 extern void android_close_webview(void);
+
+extern const char *android_get_browser_cookies_for_current_url(void);
+
+extern const char *android_get_browser_cookies_for_domain(const char *domain);
 
 extern void ios_prepare_request(const char *url);
 
