@@ -388,7 +388,7 @@
     });
   } else if ([message.name isEqualToString:@"windowCloseCalled"]) {
     NSLog(@"JS tried to call window.close(), this was redirected to a no-op and should be handled in your luau flow.");
-    opacity_core::emit_webview_event("{\"event\": \"close\"}");
+    opacity_core::emit_webview_event("{\"event\": \"no_op_close\"}");
   }
 }
 
