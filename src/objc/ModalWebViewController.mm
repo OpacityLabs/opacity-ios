@@ -2,7 +2,7 @@
 #import "OpacityIOSHelper.h"
 #import "opacity.h"
 
-@interface ModalWebViewController ()
+@interface ModalWebViewController () <WKNavigationDelegate, WKScriptMessageHandler>
 
 @property(nonatomic, strong) WKWebView *webView;
 @property(nonatomic, strong) NSMutableURLRequest *request;
@@ -30,7 +30,24 @@
   WKProcessPool *processPool = [[WKProcessPool alloc] init];
   configuration.processPool = processPool;
 
-  // Create a WKWebsiteDataStore
+  // Add user content controller for window.close override
+  WKUserContentController *userContentController = [[WKUserContentController alloc] init];
+
+  // Inject JavaScript to override window.close
+    NSString *js = @"window.close = function() { window.webkit.messageHandlers.windowCloseCalled.postMessage('noop'); };";
+
+  WKUserScript *script = [[WKUserScript alloc] initWithSource:js
+                                                injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                                             forMainFrameOnly:NO];
+    [userContentController addUserScript:script];
+    [userContentController addScriptMessageHandler:self name:@"windowCloseCalled"];
+    configuration.userContentController = userContentController;
+    
+  // Add native handler for window.close call
+  [userContentController addScriptMessageHandler:self name:@"closeHandler"];
+
+  configuration.userContentController = userContentController;
+
   self.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
   configuration.websiteDataStore = self.websiteDataStore;
 
@@ -361,6 +378,18 @@
   }
 
   decisionHandler(WKNavigationActionPolicyAllow);
+}
+
+- (void)userContentController:(WKUserContentController *)userContentController
+      didReceiveScriptMessage:(WKScriptMessage *)message {
+  if ([message.name isEqualToString:@"closeHandler"]) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self close];
+    });
+  } else if ([message.name isEqualToString:@"windowCloseCalled"]) {
+    NSLog(@"JS tried to call window.close(), this was redirected to a no-op and should be handled in your luau flow.");
+    opacity_core::emit_webview_event("{\"event\": \"noop_close\"}");
+  }
 }
 
 @end
