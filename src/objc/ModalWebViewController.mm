@@ -2,7 +2,8 @@
 #import "OpacityIOSHelper.h"
 #import "opacity.h"
 
-@interface ModalWebViewController () <WKNavigationDelegate, WKScriptMessageHandler>
+@interface ModalWebViewController () <WKNavigationDelegate,
+                                      WKScriptMessageHandler>
 
 @property(nonatomic, strong) WKWebView *webView;
 @property(nonatomic, strong) NSMutableURLRequest *request;
@@ -31,18 +32,24 @@
   configuration.processPool = processPool;
 
   // Add user content controller for window.close override
-  WKUserContentController *userContentController = [[WKUserContentController alloc] init];
+  WKUserContentController *userContentController =
+      [[WKUserContentController alloc] init];
 
   // Inject JavaScript to override window.close
-    NSString *js = @"window.close = function() { window.webkit.messageHandlers.windowCloseCalled.postMessage('noop'); };";
+  NSString *js = @"window.close = function() { "
+                 @"window.webkit.messageHandlers.windowCloseCalled.postMessage("
+                 @"'noop'); };";
 
-  WKUserScript *script = [[WKUserScript alloc] initWithSource:js
-                                                injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-                                             forMainFrameOnly:NO];
-    [userContentController addUserScript:script];
-    [userContentController addScriptMessageHandler:self name:@"windowCloseCalled"];
-    configuration.userContentController = userContentController;
-    
+  WKUserScript *script = [[WKUserScript alloc]
+        initWithSource:js
+         injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+      forMainFrameOnly:NO];
+
+  [userContentController addUserScript:script];
+  [userContentController addScriptMessageHandler:self
+                                            name:@"windowCloseCalled"];
+  configuration.userContentController = userContentController;
+
   // Add native handler for window.close call
   [userContentController addScriptMessageHandler:self name:@"closeHandler"];
 
@@ -73,18 +80,11 @@
   if (self.request) {
     [self.webView loadRequest:self.request];
   }
-
-  // Add a Close button
-  // UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]
-  //     initWithBarButtonSystemItem:UIBarButtonSystemItemStop
-  //                          target:self
-  //                          action:@selector(close)];
-  // self.navigationItem.rightBarButtonItem = closeButton;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-  
+
   // Add navigation items after the view hierarchy is fully set up
   if (!self.navigationItem.rightBarButtonItem) {
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]
@@ -199,7 +199,8 @@
   [self.webView loadRequest:_request];
 }
 
-- (instancetype)initWithRequest:(NSMutableURLRequest *)request userAgent:(NSString *)userAgent {
+- (instancetype)initWithRequest:(NSMutableURLRequest *)request
+                      userAgent:(NSString *)userAgent {
   self = [super init];
 
   if (self) {
@@ -248,11 +249,11 @@
   if (!url) {
     return;
   }
-  
+
   [self addToVisitedUrls:webView.URL.absoluteString];
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-  NSString *event_id = [NSString
-      stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
+  NSString *event_id =
+      [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
   [dict setObject:url.absoluteString forKey:@"url"];
   [dict setObject:@"navigation" forKey:@"event"];
   [dict setObject:event_id forKey:@"id"];
@@ -270,16 +271,14 @@
       NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
                                                          options:0
                                                            error:&error];
-      NSString *payload =
-          [[NSString alloc] initWithData:jsonData
-                                encoding:NSUTF8StringEncoding];
+      NSString *payload = [[NSString alloc] initWithData:jsonData
+                                                encoding:NSUTF8StringEncoding];
 
       opacity_core::emit_webview_event([payload UTF8String]);
 
       [self resetVisitedUrls];
     }];
   }];
-  
 }
 
 - (void)webView:(WKWebView *)webView
@@ -305,24 +304,22 @@
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   [dict setObject:url forKey:@"url"];
   [dict setObject:@"navigation" forKey:@"event"];
-  [dict
-      setObject:[NSString stringWithFormat:@"%f", [[NSDate date]
-                                                      timeIntervalSince1970]]
-          forKey:@"id"];
+  [dict setObject:[NSString stringWithFormat:@"%f", [[NSDate date]
+                                                        timeIntervalSince1970]]
+           forKey:@"id"];
 
   [dict setObject:self.cookies forKey:@"cookies"];
   [dict setObject:self.visitedUrls forKey:@"visited_urls"];
 
   NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
-                                                      options:0
-                                                        error:&error];
+                                                     options:0
+                                                       error:&error];
 
   NSString *payload = [[NSString alloc] initWithData:jsonData
                                             encoding:NSUTF8StringEncoding];
 
   opacity_core::emit_webview_event([payload UTF8String]);
   [self resetVisitedUrls];
-
 }
 
 - (void)URLSession:(NSURLSession *)session
@@ -387,7 +384,8 @@
       [self close];
     });
   } else if ([message.name isEqualToString:@"windowCloseCalled"]) {
-    NSLog(@"JS tried to call window.close(), this was redirected to a no-op and should be handled in your luau flow.");
+    NSLog(@"JS tried to call window.close(), this was redirected to a no-op "
+          @"and should be handled in your luau flow.");
     opacity_core::emit_webview_event("{\"event\": \"no_op_close\"}");
   }
 }
