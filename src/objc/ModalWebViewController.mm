@@ -36,13 +36,17 @@
       [[WKUserContentController alloc] init];
 
   // Inject JavaScript to override window.close
-  NSString *js = @"window.close = function() { window.webkit.messageHandlers.windowCloseCalled.postMessage('noop'); };";
+  NSString *js = @"window.close = function() { "
+                 @"window.webkit.messageHandlers.windowCloseCalled.postMessage("
+                 @"'noop'); };";
 
-  WKUserScript *script = [[WKUserScript alloc] initWithSource:js
-                                                injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-                                             forMainFrameOnly:NO];
-    [userContentController addUserScript:script];
-    [userContentController addScriptMessageHandler:self name:@"windowCloseCalled"];
+  WKUserScript *script = [[WKUserScript alloc]
+        initWithSource:js
+         injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+      forMainFrameOnly:NO];
+  [userContentController addUserScript:script];
+  [userContentController addScriptMessageHandler:self
+                                            name:@"windowCloseCalled"];
 
   configuration.userContentController = userContentController;
 
