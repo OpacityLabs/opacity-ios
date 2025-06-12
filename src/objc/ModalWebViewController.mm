@@ -375,7 +375,7 @@
 - (void)userContentController:(WKUserContentController *)userContentController
       didReceiveScriptMessage:(WKScriptMessage *)message {
   if ([message.name isEqualToString:@"windowCloseCalled"]) {
-    opacity_core::emit_webview_event("{\"event\": \"no_op_close\"}");
+    opacity_core::emit_webview_event("{\"event\": \"window.close\"}");
   }
 }
 
