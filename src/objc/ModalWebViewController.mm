@@ -23,7 +23,7 @@
 
   // Configure the view's background color
   self.view.backgroundColor = [UIColor blackColor];
-
+    
   // Create a WKWebViewConfiguration
   WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
 
@@ -56,6 +56,9 @@
   // Initialize and configure the WKWebView
   self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds
                                     configuration:configuration];
+
+  // URL listener for SPAs
+  [self.webView addObserver:self forKeyPath:@"URL" options:NSKeyValueObservingOptionNew context:nil];
 
   // Set the configuration to the WKWebView
   self.webView.allowsLinkPreview = true;
@@ -112,6 +115,38 @@
                                               encoding:NSUTF8StringEncoding];
 
     opacity_core::emit_webview_event([payload UTF8String]);
+  }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                       context:(void *)context {
+  if ([keyPath isEqualToString:@"URL"] && object == self.webView) {
+    NSURL *newURL = change[NSKeyValueChangeNewKey];
+    if (newURL && [newURL isKindOfClass:[NSURL class]]) {
+      NSDictionary *event = @{
+        @"event": @"location",
+        @"url": newURL.absoluteString ?: @"",
+        @"id": [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970] * 1000]
+      };
+
+      NSError *error = nil;
+      NSData *jsonData = [NSJSONSerialization dataWithJSONObject:event options:0 error:&error];
+
+      if (jsonData) {
+        NSString *payload = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        opacity_core::emit_webview_event([payload UTF8String]);
+      }
+    }
+  }
+}
+
+- (void)dealloc {
+  @try {
+    [self.webView removeObserver:self forKeyPath:@"URL"];
+  } @catch (NSException *exception) {
+    return
   }
 }
 
