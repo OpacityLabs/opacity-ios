@@ -143,11 +143,7 @@
 }
 
 - (void)dealloc {
-  @try {
     [self.webView removeObserver:self forKeyPath:@"URL"];
-  } @catch (NSException *exception) {
-    return
-  }
 }
 
 - (void)getBrowserCookiesForDomainWithCompletion:(NSString *)domain
