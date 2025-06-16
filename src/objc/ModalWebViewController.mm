@@ -23,14 +23,11 @@
   // Configure the view's background color
   self.view.backgroundColor = [UIColor blackColor];
 
-  // Create a WKWebViewConfiguration
   WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
 
-  // Create a WKProcessPool
   WKProcessPool *processPool = [[WKProcessPool alloc] init];
   configuration.processPool = processPool;
 
-  // Create a WKWebsiteDataStore
   self.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
   configuration.websiteDataStore = self.websiteDataStore;
 
@@ -39,8 +36,11 @@
                                     configuration:configuration];
 
   // URL listener for SPAs
-  [self.webView addObserver:self forKeyPath:@"URL" options:NSKeyValueObservingOptionNew context:nil];
-    
+  [self.webView addObserver:self
+                 forKeyPath:@"URL"
+                    options:NSKeyValueObservingOptionNew
+                    context:nil];
+
   // Set the configuration to the WKWebView
   self.webView.allowsLinkPreview = true;
   self.webView.autoresizingMask =
@@ -63,7 +63,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-  
+
   // Add navigation items after the view hierarchy is fully set up
   if (!self.navigationItem.rightBarButtonItem) {
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]
@@ -101,32 +101,41 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
-                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                        change:(NSDictionary<NSKeyValueChangeKey, id> *)change
                        context:(void *)context {
-  if ([keyPath isEqualToString:@"URL"] && object == self.webView) {
-    NSURL *newURL = change[NSKeyValueChangeNewKey];
-    if (newURL && [newURL isKindOfClass:[NSURL class]]) {
-      NSDictionary *event = @{
-        @"event": @"location_changed",
-        @"url": newURL.absoluteString ?: @"",
-        @"id": [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970] * 1000]
-      };
-
-      NSError *error = nil;
-      NSData *jsonData = [NSJSONSerialization dataWithJSONObject:event options:0 error:&error];
-
-      if (jsonData) {
-        NSString *payload = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-          
-        [self addToVisitedUrls:newURL.absoluteString];
-        opacity_core::emit_webview_event([payload UTF8String]);
-      }
-    }
+  if (![keyPath isEqualToString:@"URL"] || object != self.webView) {
+    return;
   }
+
+  NSURL *newURL = change[NSKeyValueChangeNewKey];
+  if (!newURL) {
+    return;
+  }
+
+  [self addToVisitedUrls:newURL.absoluteString];
+
+  NSDictionary *event = @{
+    @"event" : @"location_changed",
+    @"url" : newURL.absoluteString,
+    @"id" : [NSString
+        stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970] * 1000]
+  };
+
+  NSError *error = nil;
+  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:event
+                                                     options:0
+                                                       error:&error];
+  if (!jsonData) {
+    return;
+  }
+
+  NSString *payload = [[NSString alloc] initWithData:jsonData
+                                            encoding:NSUTF8StringEncoding];
+  opacity_core::emit_webview_event([payload UTF8String]);
 }
 
 - (void)dealloc {
-    [self.webView removeObserver:self forKeyPath:@"URL"];
+  [self.webView removeObserver:self forKeyPath:@"URL"];
 }
 
 - (void)getBrowserCookiesForDomainWithCompletion:(NSString *)domain
@@ -208,7 +217,8 @@
   [self.webView loadRequest:_request];
 }
 
-- (instancetype)initWithRequest:(NSMutableURLRequest *)request userAgent:(NSString *)userAgent {
+- (instancetype)initWithRequest:(NSMutableURLRequest *)request
+                      userAgent:(NSString *)userAgent {
   self = [super init];
 
   if (self) {
@@ -257,11 +267,11 @@
   if (!url) {
     return;
   }
-  
+
   [self addToVisitedUrls:webView.URL.absoluteString];
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-  NSString *event_id = [NSString
-      stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
+  NSString *event_id =
+      [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
   [dict setObject:url.absoluteString forKey:@"url"];
   [dict setObject:@"navigation" forKey:@"event"];
   [dict setObject:event_id forKey:@"id"];
@@ -279,16 +289,14 @@
       NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
                                                          options:0
                                                            error:&error];
-      NSString *payload =
-          [[NSString alloc] initWithData:jsonData
-                                encoding:NSUTF8StringEncoding];
+      NSString *payload = [[NSString alloc] initWithData:jsonData
+                                                encoding:NSUTF8StringEncoding];
 
       opacity_core::emit_webview_event([payload UTF8String]);
 
       [self resetVisitedUrls];
     }];
   }];
-  
 }
 
 - (void)webView:(WKWebView *)webView
@@ -314,17 +322,16 @@
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   [dict setObject:url forKey:@"url"];
   [dict setObject:@"navigation" forKey:@"event"];
-  [dict
-      setObject:[NSString stringWithFormat:@"%f", [[NSDate date]
-                                                      timeIntervalSince1970]]
-          forKey:@"id"];
+  [dict setObject:[NSString stringWithFormat:@"%f", [[NSDate date]
+                                                        timeIntervalSince1970]]
+           forKey:@"id"];
 
   [dict setObject:self.cookies forKey:@"cookies"];
   [dict setObject:self.visitedUrls forKey:@"visited_urls"];
 
   NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
-                                                      options:0
-                                                        error:&error];
+                                                     options:0
+                                                       error:&error];
 
   NSString *payload = [[NSString alloc] initWithData:jsonData
                                             encoding:NSUTF8StringEncoding];
