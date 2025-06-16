@@ -2,8 +2,7 @@
 #import "OpacityIOSHelper.h"
 #import "opacity.h"
 
-@interface ModalWebViewController () <WKNavigationDelegate,
-                                      WKScriptMessageHandler>
+@interface ModalWebViewController ()
 
 @property(nonatomic, strong) WKWebView *webView;
 @property(nonatomic, strong) NSMutableURLRequest *request;
@@ -24,31 +23,10 @@
   // Configure the view's background color
   self.view.backgroundColor = [UIColor blackColor];
 
-  // Create a WKWebViewConfiguration
   WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
 
-  // Create a WKProcessPool
   WKProcessPool *processPool = [[WKProcessPool alloc] init];
   configuration.processPool = processPool;
-
-  // Add user content controller for window.close override
-  WKUserContentController *userContentController =
-      [[WKUserContentController alloc] init];
-
-  // Inject JavaScript to override window.close
-  NSString *js = @"window.close = function() { "
-                 @"window.webkit.messageHandlers.windowCloseCalled.postMessage("
-                 @"'noop'); };";
-
-  WKUserScript *script = [[WKUserScript alloc]
-        initWithSource:js
-         injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-      forMainFrameOnly:NO];
-  [userContentController addUserScript:script];
-  [userContentController addScriptMessageHandler:self
-                                            name:@"windowCloseCalled"];
-
-  configuration.userContentController = userContentController;
 
   self.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
   configuration.websiteDataStore = self.websiteDataStore;
@@ -56,6 +34,12 @@
   // Initialize and configure the WKWebView
   self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds
                                     configuration:configuration];
+
+  // URL listener for SPAs
+  [self.webView addObserver:self
+                 forKeyPath:@"URL"
+                    options:NSKeyValueObservingOptionNew
+                    context:nil];
 
   // Set the configuration to the WKWebView
   self.webView.allowsLinkPreview = true;
@@ -113,6 +97,45 @@
 
     opacity_core::emit_webview_event([payload UTF8String]);
   }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey, id> *)change
+                       context:(void *)context {
+  if (![keyPath isEqualToString:@"URL"] || object != self.webView) {
+    return;
+  }
+
+  NSURL *newURL = change[NSKeyValueChangeNewKey];
+  if (!newURL) {
+    return;
+  }
+
+  [self addToVisitedUrls:newURL.absoluteString];
+
+  NSDictionary *event = @{
+    @"event" : @"location_changed",
+    @"url" : newURL.absoluteString,
+    @"id" : [NSString
+        stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970] * 1000]
+  };
+
+  NSError *error = nil;
+  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:event
+                                                     options:0
+                                                       error:&error];
+  if (!jsonData) {
+    return;
+  }
+
+  NSString *payload = [[NSString alloc] initWithData:jsonData
+                                            encoding:NSUTF8StringEncoding];
+  opacity_core::emit_webview_event([payload UTF8String]);
+}
+
+- (void)dealloc {
+  [self.webView removeObserver:self forKeyPath:@"URL"];
 }
 
 - (void)getBrowserCookiesForDomainWithCompletion:(NSString *)domain
@@ -370,13 +393,6 @@
   }
 
   decisionHandler(WKNavigationActionPolicyAllow);
-}
-
-- (void)userContentController:(WKUserContentController *)userContentController
-      didReceiveScriptMessage:(WKScriptMessage *)message {
-  if ([message.name isEqualToString:@"windowCloseCalled"]) {
-    opacity_core::emit_webview_event("{\"event\": \"window.close\"}");
-  }
 }
 
 @end
