@@ -158,6 +158,7 @@ class MainViewController: UIViewController {
 
   func showGreenToast(message: String) {
     let toastLabel = UILabel()
+    toastLabel.accessibilityIdentifier = "greenToast"
     toastLabel.backgroundColor = UIColor.green.withAlphaComponent(0.6)
     toastLabel.textColor = UIColor.white
     toastLabel.textAlignment = .center
@@ -176,18 +177,14 @@ class MainViewController: UIViewController {
       toastLabel.heightAnchor.constraint(equalToConstant: 35),
     ])
 
-    UIView.animate(
-      withDuration: 4.0, delay: 0.1, options: .curveEaseOut,
-      animations: {
-        toastLabel.alpha = 0.0
-      },
-      completion: { _ in
-        toastLabel.removeFromSuperview()
-      })
+    DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+      toastLabel.removeFromSuperview()
+    }
   }
 
   func showRedToast(message: String) {
     let toastLabel = UILabel()
+    toastLabel.accessibilityIdentifier = "redToast"
     toastLabel.backgroundColor = UIColor.red.withAlphaComponent(0.6)
     toastLabel.textColor = UIColor.white
     toastLabel.textAlignment = .center
@@ -206,14 +203,10 @@ class MainViewController: UIViewController {
       toastLabel.heightAnchor.constraint(equalToConstant: 35),
     ])
 
-    UIView.animate(
-      withDuration: 4.0, delay: 0.1, options: .curveEaseOut,
-      animations: {
-        toastLabel.alpha = 0.0
-      },
-      completion: { _ in
-        toastLabel.removeFromSuperview()
-      })
+    DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+      toastLabel.removeFromSuperview()
+    }
+
   }
 
   @objc private func buttonTapped(_ sender: UIButton) {
