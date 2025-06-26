@@ -24,7 +24,7 @@ class MainViewController: UIViewController {
 
     do {
       try OpacitySwiftWrapper.initialize(
-        apiKey: apiKey, dryRun: false, environment: .Production,
+        apiKey: apiKey, dryRun: false, environment: .Test,
         shouldShowErrorsInWebView: true)
     } catch {
       let errorLabel = UILabel()
@@ -112,18 +112,59 @@ class MainViewController: UIViewController {
     UserDefaults.standard.set(flowName, forKey: "savedFlowName")
     UserDefaults.standard.synchronize()
 
-    Task {
-      do {
-        let res = try await OpacitySwiftWrapper.get(
-          name: flowName.lowercased(),
-          params: nil
-        )
-        print(res)
-        showGreenToast(message: "Success")
-      } catch {
-        showRedToast(message: "Error: \(error.localizedDescription)")
+    let startTime = Date()
+    var completed = 0
+    var totalDuration: TimeInterval = 0
+    let totalRequests = 10000
+    let batchSize = 50
+    let lock = NSLock()
+
+    func launchBatch(start: Int, end: Int, completion: @escaping () -> Void) {
+      let group = DispatchGroup()
+      for i in start..<end {
+        group.enter()
+        Task {
+          let reqStart = Date()
+          do {
+            let res = try await OpacitySwiftWrapper.get(
+              name: flowName.lowercased(),
+              params: nil
+            )
+            let reqDuration = Date().timeIntervalSince(reqStart)
+            lock.lock()
+            totalDuration += reqDuration
+            completed += 1
+            lock.unlock()
+            print("Generated signature for request \(i) 🟢")
+          } catch {
+            lock.lock()
+            completed += 1
+            lock.unlock()
+            print("Error on task \(i): \(error.localizedDescription)")
+          }
+          group.leave()
+        }
+      }
+      group.notify(queue: .main) {
+        completion()
       }
     }
+
+    func launchBatches(current: Int) {
+      let next = min(current + batchSize, totalRequests)
+      launchBatch(start: current, end: next) {
+        if next < totalRequests {
+          launchBatches(current: next)
+        } else {
+          let avg = totalDuration / Double(totalRequests)
+          print("Average request time: \(avg) seconds")
+          self.showGreenToast(message: String(format: "Average request time: %.3f s", avg))
+        }
+      }
+    }
+
+    launchBatches(current: 0)
+    showGreenToast(message: "Launched parallel requests (batched 50 at a time)")
   }
 
   func loadEnvFile() -> [String: String]? {
