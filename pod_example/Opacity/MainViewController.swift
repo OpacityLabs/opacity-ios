@@ -25,7 +25,7 @@ class MainViewController: UIViewController {
     do {
       try OpacitySwiftWrapper.initialize(
         apiKey: apiKey, dryRun: false, environment: .Test,
-        shouldShowErrorsInWebView: true)
+        shouldShowErrorsInWebView: false)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text =
@@ -111,60 +111,64 @@ class MainViewController: UIViewController {
     // Save the flow name when submitting as well
     UserDefaults.standard.set(flowName, forKey: "savedFlowName")
     UserDefaults.standard.synchronize()
-
     let startTime = Date()
     var completed = 0
     var totalDuration: TimeInterval = 0
     let totalRequests = 10000
-    let batchSize = 50
+    let concurrentLimit = 40
     let lock = NSLock()
+    var currentIndex = 0
 
-    func launchBatch(start: Int, end: Int, completion: @escaping () -> Void) {
+    func launchNext(completion: @escaping () -> Void) {
       let group = DispatchGroup()
-      for i in start..<end {
+      for _ in 0..<concurrentLimit {
         group.enter()
-        Task {
-          let reqStart = Date()
-          do {
-            let res = try await OpacitySwiftWrapper.get(
-              name: flowName.lowercased(),
-              params: nil
-            )
-            let reqDuration = Date().timeIntervalSince(reqStart)
-            lock.lock()
-            totalDuration += reqDuration
-            completed += 1
-            lock.unlock()
-            print("Generated signature for request \(i) 🟢")
-          } catch {
-            lock.lock()
-            completed += 1
-            lock.unlock()
-            print("Error on task \(i): \(error.localizedDescription)")
+        func startTask() {
+          lock.lock()
+          let i = currentIndex
+          currentIndex += 1
+          lock.unlock()
+          guard i < totalRequests else {
+            group.leave()
+            return
           }
-          group.leave()
+          Task {
+            let reqStart = Date()
+            do {
+              print("🟠 \(i)")
+              let res = try await OpacitySwiftWrapper.get(
+                name: flowName.lowercased(),
+                params: nil
+              )
+              let reqDuration = Date().timeIntervalSince(reqStart)
+              lock.lock()
+              totalDuration += reqDuration
+              completed += 1
+              lock.unlock()
+              print("🟩 \(i) - took \(String(format: "%.3f", reqDuration)) seconds")
+            } catch {
+              lock.lock()
+              completed += 1
+              lock.unlock()
+              print("🟥 Error on task \(i): \(error.localizedDescription)")
+            }
+            // Start next task if there are more
+            startTask()
+          }
         }
+        startTask()
       }
       group.notify(queue: .main) {
         completion()
       }
     }
 
-    func launchBatches(current: Int) {
-      let next = min(current + batchSize, totalRequests)
-      launchBatch(start: current, end: next) {
-        if next < totalRequests {
-          launchBatches(current: next)
-        } else {
-          let avg = totalDuration / Double(totalRequests)
-          print("Average request time: \(avg) seconds")
-          self.showGreenToast(message: String(format: "Average request time: %.3f s", avg))
-        }
-      }
+    launchNext {
+      let avg = totalDuration / Double(totalRequests)
+      print("Average request time: \(avg) seconds")
+      self.showGreenToast(message: String(format: "Average request time: %.3f s", avg))
     }
-
-    launchBatches(current: 0)
-    showGreenToast(message: "Launched parallel requests (batched 50 at a time)")
+    showGreenToast(message: "Launched parallel requests (always 40 at a time)")
   }
 
   func loadEnvFile() -> [String: String]? {
