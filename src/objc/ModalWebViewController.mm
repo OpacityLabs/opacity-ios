@@ -10,6 +10,7 @@
 @property(nonatomic, strong) NSMutableDictionary *cookies;
 @property(nonatomic, strong) NSMutableArray<NSString *> *visitedUrls;
 @property(nonatomic, strong) NSString *customUserAgent;
+@property(nonatomic, assign) NSInteger eventCounter;
 
 @end
 
@@ -19,6 +20,7 @@
 
   self.cookies = [NSMutableDictionary dictionary];
   self.visitedUrls = [NSMutableArray array];
+  self.eventCounter = 0;
 
   // Configure the view's background color
   self.view.backgroundColor = [UIColor blackColor];
@@ -61,6 +63,11 @@
   }
 }
 
+- (NSString*)nextId {
+  self.eventCounter += 1;
+  return [NSString stringWithFormat:@"%ld", (long)self.eventCounter];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
 
@@ -83,8 +90,7 @@
   // Check if the controller or its navigation controller is being dismissed
   if (self.isBeingDismissed || self.navigationController.isBeingDismissed) {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    NSString *event_id = [NSString
-        stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
+    NSString *event_id = [self nextId];
     [dict setObject:@"close" forKey:@"event"];
     [dict setObject:event_id forKey:@"id"];
 
@@ -117,8 +123,7 @@
   NSDictionary *event = @{
     @"event" : @"location_changed",
     @"url" : newURL.absoluteString,
-    @"id" : [NSString
-        stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970] * 1000]
+    @"id" : [self nextId]
   };
 
   NSError *error = nil;
@@ -270,8 +275,7 @@
 
   [self addToVisitedUrls:webView.URL.absoluteString];
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-  NSString *event_id =
-      [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
+  NSString *event_id = [self nextId];
   [dict setObject:url.absoluteString forKey:@"url"];
   [dict setObject:@"navigation" forKey:@"event"];
   [dict setObject:event_id forKey:@"id"];
@@ -322,10 +326,7 @@
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   [dict setObject:url forKey:@"url"];
   [dict setObject:@"navigation" forKey:@"event"];
-  [dict setObject:[NSString stringWithFormat:@"%f", [[NSDate date]
-                                                        timeIntervalSince1970]]
-           forKey:@"id"];
-
+  [dict setObject:[self nextId] forKey:@"id"];
   [dict setObject:self.cookies forKey:@"cookies"];
   [dict setObject:self.visitedUrls forKey:@"visited_urls"];
 
