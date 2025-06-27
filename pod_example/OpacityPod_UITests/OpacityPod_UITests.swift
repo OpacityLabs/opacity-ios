@@ -37,5 +37,18 @@ final class OpacityPod_UITests: XCTestCase {
     let toast = app.staticTexts["redToast"]
     XCTAssertTrue(toast.waitForExistence(timeout: 5), "Red toast did not appear")
   }
+  
+  @MainActor
+  func testFlowCompletes() {
+    let app = XCUIApplication()
+    app.launch()
+    
+    var button = app.buttons["test:open_browser_must_succeed"]
+    button.tap()
+    
+    
+    let toast = app.staticTexts["greenToast"]
+    XCTAssertTrue(toast.waitForExistence(timeout: 5), "green toast did not appear")
+  }
 
 }

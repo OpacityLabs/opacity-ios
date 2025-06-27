@@ -10,6 +10,7 @@ class MainViewController: UIViewController {
     super.viewDidLoad()
     buttons = [
       ("flow:uber_rider:profile", getRiderProfile),
+      ("test:open_browser_must_succeed", testFlowAlwaysResolves),
       ("404 flow", run404Flow),
       ("re-initialize SDK", reinitializeSdk),
     ]
@@ -25,12 +26,11 @@ class MainViewController: UIViewController {
     do {
       try OpacitySwiftWrapper.initialize(
         apiKey: apiKey, dryRun: false, environment: .Production,
-        shouldShowErrorsInWebView: true)
+        shouldShowErrorsInWebView: false)
     } catch {
       let errorLabel = UILabel()
       errorLabel.text =
-        "⚠️ SDK is not initialized! Check server is started and API key"
-      errorLabel.textColor = .red
+        "🔺 SDK init error: \(error)"
       errorLabel.translatesAutoresizingMaskIntoConstraints = false
       view.addSubview(errorLabel)
       NSLayoutConstraint.activate([
@@ -227,6 +227,14 @@ class MainViewController: UIViewController {
       params: nil
     )
     print("uber rider profile: \(json)")
+  }
+
+  func testFlowAlwaysResolves() async throws {
+    let _ = try await OpacitySwiftWrapper.get(
+      name: "test:open_browser_must_succeed",
+      params: nil
+    )
+
   }
 
   func run404Flow() async throws {
