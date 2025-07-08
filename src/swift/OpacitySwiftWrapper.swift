@@ -39,12 +39,11 @@ public class OpacitySwiftWrapper {
 
     if status != 0 {
       throw error
-      ?? OpacityError(code: "UnkownError", message: "Unknown Error Initializing Opacity SDK")
+        ?? OpacityError(code: "UnkownError", message: "Unknown Error Initializing Opacity SDK")
     }
   }
 
-  public static func get(name: String, params: [String: Any]?)
-    async throws(OpacityError)
+  public static func get(name: String, params: [String: Any]?) async throws(OpacityError)
     -> [String: Any]
   {
     do {
