@@ -23,13 +23,7 @@ In the file explorer, right click and `create new file from template`, select Sw
 
 Afterwards you should be able to import the Opacity Swift wrapper and call the functions natively.
 
-```
-import OpacitySwiftWrapper
-
-...
-OpacitySwiftWrapper.initialize(YOUR API KEY, false, OpacitySwiftWrapper.Environment.PRODUCTION)
-OpacitySwiftWrapper.getUberRiderProfile()
-```
+[See code example on how to call and correctly catch errors on the SDK](https://github.com/OpacityLabs/opacity-ios/blob/60f6e731c8b06f06630f342aa1b87067cdc5fbe5/pod_example/Opacity/MainViewController.swift#L115)
 
 ## Sample App
 

@@ -114,14 +114,15 @@ class MainViewController: UIViewController {
 
     Task {
       do {
-        let res = try await OpacitySwiftWrapper.get(
+        let _ = try await OpacitySwiftWrapper.get(
           name: flowName.lowercased(),
           params: nil
         )
-        print(res)
         showGreenToast(message: "Success")
+      } catch let e as OpacityError {
+        showRedToast(message: "Code: \(e.code) Error: \(e.message)")
       } catch {
-        showRedToast(message: "Error: \(error.localizedDescription)")
+        showRedToast(message: "Unknown Error: \(error.localizedDescription)")
       }
     }
   }

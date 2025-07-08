@@ -1,6 +1,27 @@
 #import "OpacityObjCWrapper.h"
 #import "opacity.h"
 
+NSError* parseOpacityError(NSString *jsonString) {
+  NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+  NSError *parsingError;
+  NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&parsingError];
+  if (parsingError != nil) {
+    return [NSError errorWithDomain:@"OpacitySDKUnkownError"
+                               code:1001
+                           userInfo:@{ NSLocalizedDescriptionKey : jsonString }];;
+  }
+  
+  NSString *code = json[@"code"];
+  NSString *desc = json[@"description"];
+  // We are not using this field for now
+  // NSString *translation = json[@"translation_key"];
+  
+    return [NSError errorWithDomain:code
+                                    code:1001
+                                userInfo:@{ NSLocalizedDescriptionKey : desc }];
+}
+
+
 @implementation OpacityObjCWrapper
 
 + (int)initialize:(NSString *)api_key
@@ -12,12 +33,10 @@
   int status = opacity_core::init([api_key UTF8String], dry_run,
                                   static_cast<int>(environment),
                                   should_show_errors_in_webview, &err);
-  if (status != opacity_core::OPACITY_OK) {
+  if (status != opacity_core::OPACITY_OK && err != nullptr) {
     NSString *errorMessage = [NSString stringWithUTF8String:err];
-    *error =
-        [NSError errorWithDomain:@"OpacitySDK"
-                            code:status
-                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    *error = parseOpacityError(errorMessage);
+    opacity_core::free_string(err);
   }
 
   return status;
@@ -48,13 +67,10 @@
             &res, &err);
 
         if (status != opacity_core::OPACITY_OK) {
-          NSString *errorMessage = [NSString stringWithUTF8String:err];
-          NSError *error = [NSError
-              errorWithDomain:@"com.opacity"
-                         code:status
-                     userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+          NSString *error_str = [NSString stringWithUTF8String:err];
+          NSError *opacity_error = parseOpacityError(error_str);
           opacity_core::free_string(err);
-          completion(nil, error);
+          completion(nil, opacity_error);
           return;
         }
 
