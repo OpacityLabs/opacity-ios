@@ -11,7 +11,7 @@ final class OpacityPod_UITests: XCTestCase {
     let app = XCUIApplication()
     app.launch()
 
-    var button = app.buttons["flow:uber_rider:profile"]
+    var button = app.buttons["uber_rider:profile"]
     button.tap()
 
     var browser = app.webViews.firstMatch
@@ -22,7 +22,7 @@ final class OpacityPod_UITests: XCTestCase {
     XCTAssertTrue(closeButton.exists, "Close button not found")
     closeButton.tap()
 
-    button = app.buttons["flow:uber_rider:profile"]
+    button = app.buttons["uber_rider:profile"]
     button.tap()
 
     browser = app.webViews.firstMatch
@@ -37,15 +37,15 @@ final class OpacityPod_UITests: XCTestCase {
     let toast = app.staticTexts["redToast"]
     XCTAssertTrue(toast.waitForExistence(timeout: 10), "Red toast did not appear")
   }
-  
+
   @MainActor
   func testFlowCompletes() {
     let app = XCUIApplication()
     app.launch()
-    
+
     let button = app.buttons["test:open_browser_must_succeed"]
     button.tap()
-    
+
     let toast = app.staticTexts["greenToast"]
     XCTAssertTrue(toast.waitForExistence(timeout: 10), "green toast did not appear")
   }

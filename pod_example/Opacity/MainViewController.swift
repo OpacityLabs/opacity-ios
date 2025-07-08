@@ -9,7 +9,7 @@ class MainViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     buttons = [
-      ("flow:uber_rider:profile", getRiderProfile),
+      ("uber_rider:profile", getRiderProfile),
       ("test:open_browser_must_succeed", testFlowAlwaysResolves),
       ("404 flow", run404Flow),
       ("re-initialize SDK", reinitializeSdk),
@@ -223,7 +223,7 @@ class MainViewController: UIViewController {
 
   func getRiderProfile() async throws {
     let (json) = try await OpacitySwiftWrapper.get(
-      name: "flow:uber_rider:profile",
+      name: "uber_rider:profile",
       params: nil
     )
     print("uber rider profile: \(json)")
