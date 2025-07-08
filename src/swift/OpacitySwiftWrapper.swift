@@ -43,7 +43,7 @@ public class OpacitySwiftWrapper {
     }
   }
 
-  public static func get(name: String, params: [String: Any]?) async throws(OpacityError)
+  public static func get(name: String, params: [String: Any]?) async throws
     -> [String: Any]
   {
     do {
