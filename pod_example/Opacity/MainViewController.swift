@@ -184,6 +184,7 @@ class MainViewController: UIViewController {
   }
 
   func showRedToast(message: String) {
+    print(message)
     let toastLabel = UILabel()
     toastLabel.accessibilityIdentifier = "redToast"
     toastLabel.backgroundColor = UIColor.red.withAlphaComponent(0.6)
@@ -216,6 +217,9 @@ class MainViewController: UIViewController {
       do {
         try await action()
         showGreenToast(message: "Success")
+      } catch let error as OpacityError {
+        print("ERROR 🟥 \(error.code) - \(error.message)")
+        showRedToast(message: "\(error.code) - \(error.message)")
       } catch {
         showRedToast(message: "Error: \(error.localizedDescription)")
       }
@@ -223,7 +227,8 @@ class MainViewController: UIViewController {
   }
 
   func getRiderProfile() async throws {
-    let (json) = try await OpacitySwiftWrapper.get(
+    
+    let json = try await OpacitySwiftWrapper.get(
       name: "uber_rider:profile",
       params: nil
     )
