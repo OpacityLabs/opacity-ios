@@ -78,7 +78,7 @@ void ios_present_webview() {
 }
 
 const char *ios_get_browser_cookies_for_domain(const char *domain) {
-  if (modalWebVC == nil || !modalWebVC.isBeingPresented) {
+  if (modalWebVC == nil) {
     return nullptr;
   }
   NSString *domainString = [NSString stringWithUTF8String:domain];
@@ -101,7 +101,7 @@ const char *ios_get_browser_cookies_for_domain(const char *domain) {
 }
 
 const char *ios_get_browser_cookies_for_current_url() {
-  if (modalWebVC == nil || !modalWebVC.isBeingPresented) {
+  if (modalWebVC == nil) {
     return nullptr;
   }
 
