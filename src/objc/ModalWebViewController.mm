@@ -90,12 +90,6 @@
   [super viewDidDisappear:animated];
   // Check if the controller or its navigation controller is being dismissed
   if (self.isBeingDismissed || self.navigationController.isBeingDismissed) {
-    // if it's closed by the user, the `ios_close_browser` function is not
-    // getting called that means the user agent is not being set to nil, nor is
-    // the webview we have to set them manually
-    self.webView = nil;
-    self.customUserAgent = nil;
-
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSString *event_id = [self nextId];
     [dict setObject:@"close" forKey:@"event"];
