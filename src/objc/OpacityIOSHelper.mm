@@ -43,6 +43,17 @@ void ios_set_request_header(const char *key, const char *value) {
   [request setValue:nsValue forHTTPHeaderField:nsKey];
 }
 
+void ios_close_webview() {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    userAgent = nil;
+    [navController dismissViewControllerAnimated:YES
+                                      completion:^{
+                                        modalWebVC = nil;
+                                        navController = nil;
+                                      }];
+  });
+}
+
 void ios_present_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
     if (modalWebVC != nil) {
@@ -50,8 +61,10 @@ void ios_present_webview() {
       navController = nil;
     }
 
-    modalWebVC = [[ModalWebViewController alloc] initWithRequest:request
-                                                       userAgent:userAgent];
+    modalWebVC =
+        [[ModalWebViewController alloc] initWithRequest:request
+                                              userAgent:userAgent
+                                        cleanupFunction:ios_close_webview];
 
     navController =
         [[UINavigationController alloc] initWithRootViewController:modalWebVC];
@@ -61,17 +74,6 @@ void ios_present_webview() {
     [topController presentViewController:navController
                                 animated:YES
                               completion:nil];
-  });
-}
-
-void ios_close_webview() {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    userAgent = nil;
-    [navController dismissViewControllerAnimated:YES
-                                      completion:^{
-                                        modalWebVC = nil;
-                                        navController = nil;
-                                      }];
   });
 }
 

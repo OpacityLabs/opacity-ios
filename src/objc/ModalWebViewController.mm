@@ -11,6 +11,7 @@
 @property(nonatomic, strong) NSMutableArray<NSString *> *visitedUrls;
 @property(nonatomic, strong) NSString *customUserAgent;
 @property(nonatomic, assign) NSInteger eventCounter;
+@property(nonatomic, assign) CleanupFunctionPointer parentCleanupFunction;
 
 @end
 
@@ -63,7 +64,7 @@
   }
 }
 
-- (NSString*)nextId {
+- (NSString *)nextId {
   self.eventCounter += 1;
   return [NSString stringWithFormat:@"%ld", (long)self.eventCounter];
 }
@@ -89,6 +90,12 @@
   [super viewDidDisappear:animated];
   // Check if the controller or its navigation controller is being dismissed
   if (self.isBeingDismissed || self.navigationController.isBeingDismissed) {
+    // if it's closed by the user, the `ios_close_browser` function is not
+    // getting called that means the user agent is not being set to nil, nor is
+    // the webview we have to set them manually
+    self.webView = nil;
+    self.customUserAgent = nil;
+
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSString *event_id = [self nextId];
     [dict setObject:@"close" forKey:@"event"];
@@ -223,18 +230,31 @@
 }
 
 - (instancetype)initWithRequest:(NSMutableURLRequest *)request
-                      userAgent:(NSString *)userAgent {
+                      userAgent:(NSString *)userAgent
+                cleanupFunction:(CleanupFunctionPointer)cleanupFunction {
   self = [super init];
 
   if (self) {
     _request = request;
     _customUserAgent = userAgent;
+    _parentCleanupFunction = cleanupFunction;
   }
   return self;
 }
 
 - (void)close {
-  [self dismissViewControllerAnimated:YES completion:nil];
+  [self dismissViewControllerAnimated:YES
+                           completion:^{
+                             if (self.parentCleanupFunction) {
+                               // the parentCleanupFunction is the
+                               // ios_close_webview function
+                               //  which is an async function as it dispatches
+                               //  to the main queue this means the logic will
+                               //  actually run after the close function here is
+                               //  done
+                               self.parentCleanupFunction();
+                             }
+                           }];
 }
 
 - (void)addToVisitedUrls:(NSString *)urlToAdd {
