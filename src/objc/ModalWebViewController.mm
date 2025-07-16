@@ -11,7 +11,6 @@
 @property(nonatomic, strong) NSMutableArray<NSString *> *visitedUrls;
 @property(nonatomic, strong) NSString *customUserAgent;
 @property(nonatomic, assign) NSInteger eventCounter;
-@property(nonatomic, assign) CleanupFunctionPointer parentCleanupFunction;
 
 @end
 
@@ -104,14 +103,8 @@
 
     opacity_core::emit_webview_event([payload UTF8String]);
 
-    if (self.parentCleanupFunction) {
-      // the parentCleanupFunction is the
-      // ios_close_webview function
-      //  which is an async function as it dispatches
-      //  to the main queue this means the logic will
-      //  actually run after the close function here is
-      //  done
-      self.parentCleanupFunction();
+    if (self.onDismissCallback) {
+      self.onDismissCallback();
     }
   }
 }
@@ -234,15 +227,14 @@
 }
 
 - (instancetype)initWithRequest:(NSMutableURLRequest *)request
-                      userAgent:(NSString *)userAgent
-                cleanupFunction:(CleanupFunctionPointer)cleanupFunction {
+                      userAgent:(NSString *)userAgent {
   self = [super init];
 
   if (self) {
     _request = request;
     _customUserAgent = userAgent;
-    _parentCleanupFunction = cleanupFunction;
   }
+
   return self;
 }
 
