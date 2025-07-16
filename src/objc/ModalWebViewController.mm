@@ -103,6 +103,16 @@
                                               encoding:NSUTF8StringEncoding];
 
     opacity_core::emit_webview_event([payload UTF8String]);
+
+    if (self.parentCleanupFunction) {
+      // the parentCleanupFunction is the
+      // ios_close_webview function
+      //  which is an async function as it dispatches
+      //  to the main queue this means the logic will
+      //  actually run after the close function here is
+      //  done
+      self.parentCleanupFunction();
+    }
   }
 }
 
@@ -237,18 +247,7 @@
 }
 
 - (void)close {
-  [self dismissViewControllerAnimated:YES
-                           completion:^{
-                             if (self.parentCleanupFunction) {
-                               // the parentCleanupFunction is the
-                               // ios_close_webview function
-                               //  which is an async function as it dispatches
-                               //  to the main queue this means the logic will
-                               //  actually run after the close function here is
-                               //  done
-                               self.parentCleanupFunction();
-                             }
-                           }];
+  [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)addToVisitedUrls:(NSString *)urlToAdd {
