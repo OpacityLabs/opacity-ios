@@ -4,12 +4,10 @@
 @interface ModalWebViewController
     : UIViewController <WKNavigationDelegate, NSURLSessionTaskDelegate>
 
-// Add a typedef for the cleanup function pointer
-typedef void (*CleanupFunctionPointer)(void);
+@property(nonatomic, copy) void (^onDismissCallback)(void);
 
 - (instancetype)initWithRequest:(NSMutableURLRequest *)request
-                      userAgent:(NSString *)userAgent
-                cleanupFunction:(CleanupFunctionPointer)cleanupFunction;
+                      userAgent:(NSString *)userAgent;
 - (void)close;
 - (void)openRequest:(NSMutableURLRequest *)request;
 - (NSDictionary *)getBrowserCookiesForCurrentUrl;

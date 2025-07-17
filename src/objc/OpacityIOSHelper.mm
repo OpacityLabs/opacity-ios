@@ -46,25 +46,25 @@ void ios_set_request_header(const char *key, const char *value) {
 void ios_close_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
     userAgent = nil;
-    [navController dismissViewControllerAnimated:YES
-                                      completion:^{
-                                        modalWebVC = nil;
-                                        navController = nil;
-                                      }];
+    [navController dismissViewControllerAnimated:YES completion:nil];
   });
 }
 
 void ios_present_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
     if (modalWebVC != nil) {
-      modalWebVC = nil;
-      navController = nil;
+      NSLog(@"Warning: Previous modal web view controller has not been "
+            @"dismissed");
     }
 
-    modalWebVC =
-        [[ModalWebViewController alloc] initWithRequest:request
-                                              userAgent:userAgent
-                                        cleanupFunction:ios_close_webview];
+    modalWebVC = [[ModalWebViewController alloc] initWithRequest:request
+                                                       userAgent:userAgent];
+
+    // Set an on dismiss callback
+    modalWebVC.onDismissCallback = ^{
+      modalWebVC = nil;
+      navController = nil;
+    };
 
     navController =
         [[UINavigationController alloc] initWithRootViewController:modalWebVC];
