@@ -63,7 +63,7 @@
   }
 }
 
-- (NSString*)nextId {
+- (NSString *)nextId {
   self.eventCounter += 1;
   return [NSString stringWithFormat:@"%ld", (long)self.eventCounter];
 }
@@ -102,6 +102,10 @@
                                               encoding:NSUTF8StringEncoding];
 
     opacity_core::emit_webview_event([payload UTF8String]);
+
+    if (self.onDismissCallback) {
+      self.onDismissCallback();
+    }
   }
 }
 
@@ -230,6 +234,7 @@
     _request = request;
     _customUserAgent = userAgent;
   }
+
   return self;
 }
 

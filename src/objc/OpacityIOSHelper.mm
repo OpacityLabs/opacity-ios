@@ -37,20 +37,34 @@ void ios_prepare_request(const char *url) {
 void ios_set_request_header(const char *key, const char *value) {
   NSString *nsKey = [NSString stringWithUTF8String:key];
   if ([nsKey caseInsensitiveCompare:@"User-Agent"] == NSOrderedSame) {
-      userAgent = [NSString stringWithUTF8String:value];
+    userAgent = [NSString stringWithUTF8String:value];
   }
   NSString *nsValue = [NSString stringWithUTF8String:value];
   [request setValue:nsValue forHTTPHeaderField:nsKey];
 }
 
+void ios_close_webview() {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    userAgent = nil;
+    [navController dismissViewControllerAnimated:YES completion:nil];
+  });
+}
+
 void ios_present_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
     if (modalWebVC != nil) {
-      modalWebVC = nil;
-      navController = nil;
+      NSLog(@"Warning: Previous modal web view controller has not been "
+            @"dismissed");
     }
 
-    modalWebVC = [[ModalWebViewController alloc] initWithRequest:request userAgent:userAgent];
+    modalWebVC = [[ModalWebViewController alloc] initWithRequest:request
+                                                       userAgent:userAgent];
+
+    // Set an on dismiss callback
+    modalWebVC.onDismissCallback = ^{
+      modalWebVC = nil;
+      navController = nil;
+    };
 
     navController =
         [[UINavigationController alloc] initWithRootViewController:modalWebVC];
@@ -63,18 +77,10 @@ void ios_present_webview() {
   });
 }
 
-void ios_close_webview() {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    userAgent = nil;
-    [navController dismissViewControllerAnimated:YES
-                                      completion:^{
-                                        modalWebVC = nil;
-                                        navController = nil;
-                                      }];
-  });
-}
-
 const char *ios_get_browser_cookies_for_domain(const char *domain) {
+  if (modalWebVC == nil) {
+    return nullptr;
+  }
   NSString *domainString = [NSString stringWithUTF8String:domain];
   NSDictionary *cookies = [modalWebVC getBrowserCookiesForDomain:domainString];
 
@@ -96,7 +102,7 @@ const char *ios_get_browser_cookies_for_domain(const char *domain) {
 
 const char *ios_get_browser_cookies_for_current_url() {
   if (modalWebVC == nil) {
-    return "";
+    return nullptr;
   }
 
   NSDictionary *cookies = [modalWebVC getBrowserCookiesForCurrentUrl];
