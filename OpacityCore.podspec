@@ -14,12 +14,6 @@ Pod::Spec.new do |s|
   s.public_header_files = 'include/**/*.h', 'src/objc/*.h'
   s.source_files = 'src/**/*', 'include/**/*.h'
   
-  if File.exist?('sdk-debug.xcframework')
-    s.vendored_frameworks = 'sdk-debug.xcframework'
-  else
-    s.vendored_frameworks = 'sdk.xcframework'
-  end
+  s.vendored_frameworks = 'sdk.xcframework'
   s.frameworks = "WebKit", "CoreTelephony", "CoreLocation", "SystemConfiguration"
-
-  # s.module_map = 'module.modulemap'
 end
