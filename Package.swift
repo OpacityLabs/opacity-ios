@@ -14,14 +14,17 @@ let package = Package(
   dependencies: [],
   targets: [
     .binaryTarget(
-      name: "opacity_core",
-      path: "opacity.xcframework"
+      name: "sdk",
+      path: "sdk.xcframework"
     ),
     .target(
       name: "OpacityCoreObjc",
-      dependencies: ["opacity_core"],
+      dependencies: ["sdk"],
       path: "src/objc",
       publicHeadersPath: ".",
+      cSettings: [
+        .headerSearchPath("../../include")
+      ],
       linkerSettings: [
         .linkedFramework("CoreTelephony"),
         .linkedFramework("CoreLocation"),
