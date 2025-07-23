@@ -11,11 +11,24 @@ Pod::Spec.new do |s|
 
   s.swift_version = '5.9'
   s.ios.deployment_target = '14.0'
-  s.source_files = 'src/**/*'
-  if File.exist?('opacity-debug.xcframework')
-    s.vendored_frameworks = 'opacity-debug.xcframework'
+  s.public_header_files = 'include/**/*.h', 'src/objc/*.h'
+  s.source_files = 'src/**/*', 'include/**/*.h'
+
+  
+  s.pod_target_xcconfig = {
+    'OTHER_LDFLAGS' => '-Wl,-export_dynamic -rdynamic',
+    'GCC_SYMBOLS_PRIVATE_EXTERN' => 'NO'
+  }
+  s.user_target_xcconfig = {
+    'OTHER_LDFLAGS' => '-Wl,-export_dynamic -rdynamic'
+  }
+  
+  if File.exist?('sdk-debug.xcframework')
+    s.vendored_frameworks = 'sdk-debug.xcframework'
   else
-    s.vendored_frameworks = 'opacity.xcframework'
+    s.vendored_frameworks = 'sdk.xcframework'
   end
   s.frameworks = "WebKit", "CoreTelephony", "CoreLocation", "SystemConfiguration"
+
+  # s.module_map = 'module.modulemap'
 end

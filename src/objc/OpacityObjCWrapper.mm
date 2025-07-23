@@ -1,26 +1,30 @@
 #import "OpacityObjCWrapper.h"
+#import "OpacityIOSHelper.h"
 #import "opacity.h"
+#import <dlfcn.h>
 
-NSError* parseOpacityError(NSString *jsonString) {
+NSError *parseOpacityError(NSString *jsonString) {
   NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
   NSError *parsingError;
-  NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&parsingError];
+  NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
+                                                       options:0
+                                                         error:&parsingError];
   if (parsingError != nil) {
     return [NSError errorWithDomain:@"OpacitySDKUnkownError"
                                code:1001
-                           userInfo:@{ NSLocalizedDescriptionKey : jsonString }];;
+                           userInfo:@{NSLocalizedDescriptionKey : jsonString}];
+    ;
   }
-  
+
   NSString *code = json[@"code"];
   NSString *desc = json[@"description"];
   // We are not using this field for now
   // NSString *translation = json[@"translation_key"];
-  
-    return [NSError errorWithDomain:code
-                                    code:1001
-                                userInfo:@{ NSLocalizedDescriptionKey : desc }];
-}
 
+  return [NSError errorWithDomain:code
+                             code:1001
+                         userInfo:@{NSLocalizedDescriptionKey : desc}];
+}
 
 @implementation OpacityObjCWrapper
 
@@ -29,6 +33,35 @@ NSError* parseOpacityError(NSString *jsonString) {
                   andEnvironment:(OpacityEnvironment)environment
     andShouldShowErrorsInWebview:(BOOL)should_show_errors_in_webview
                         andError:(NSError *__autoreleasing *)error {
+
+  opacity::force_symbol_registration();
+
+  // First, load the main executable to make its symbols available
+  void *main_handle = dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
+  if (!main_handle) {
+    NSString *errorMessage = [NSString stringWithUTF8String:dlerror()];
+    *error =
+        [NSError errorWithDomain:@"OpacitySDKMainError"
+                            code:1003
+                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    return -1;
+  }
+
+  NSBundle *dylib_bundle =
+      [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
+  NSString *dylib_path = [dylib_bundle pathForResource:@"sdk" ofType:@""];
+
+  // Load the dynamic library
+  void *handle = dlopen([dylib_path UTF8String], RTLD_NOW | RTLD_GLOBAL);
+  if (!handle) {
+    NSString *errorMessage = [NSString stringWithUTF8String:dlerror()];
+    *error =
+        [NSError errorWithDomain:@"OpacitySDKDylibError"
+                            code:1002
+                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    return -1; // or appropriate error code
+  }
+
   char *err;
   int status = opacity_core::init([api_key UTF8String], dry_run,
                                   static_cast<int>(environment),

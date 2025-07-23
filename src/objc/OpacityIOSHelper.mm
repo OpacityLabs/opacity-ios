@@ -8,6 +8,8 @@
 #import <ifaddrs.h>
 #import <string>
 
+#define EXPORT __attribute__((visibility("default"), used))
+
 ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
 UINavigationController *navController;
@@ -28,13 +30,14 @@ UIViewController *topMostViewController() {
 
 extern "C" {
 
-void ios_prepare_request(const char *url) {
+
+EXPORT void ios_prepare_request(const char *url) {
   NSString *urlString = [NSString stringWithUTF8String:url];
   request =
       [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
 }
 
-void ios_set_request_header(const char *key, const char *value) {
+EXPORT void ios_set_request_header(const char *key, const char *value) {
   NSString *nsKey = [NSString stringWithUTF8String:key];
   if ([nsKey caseInsensitiveCompare:@"User-Agent"] == NSOrderedSame) {
     userAgent = [NSString stringWithUTF8String:value];
@@ -43,14 +46,14 @@ void ios_set_request_header(const char *key, const char *value) {
   [request setValue:nsValue forHTTPHeaderField:nsKey];
 }
 
-void ios_close_webview() {
+EXPORT void ios_close_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
     userAgent = nil;
     [navController dismissViewControllerAnimated:YES completion:nil];
   });
 }
 
-void ios_present_webview() {
+EXPORT void ios_present_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
     if (modalWebVC != nil) {
       NSLog(@"Warning: Previous modal web view controller has not been "
@@ -77,7 +80,7 @@ void ios_present_webview() {
   });
 }
 
-const char *ios_get_browser_cookies_for_domain(const char *domain) {
+EXPORT const char *ios_get_browser_cookies_for_domain(const char *domain) {
   if (modalWebVC == nil) {
     return nullptr;
   }
@@ -100,7 +103,7 @@ const char *ios_get_browser_cookies_for_domain(const char *domain) {
   return [jsonString UTF8String];
 }
 
-const char *ios_get_browser_cookies_for_current_url() {
+EXPORT const char *ios_get_browser_cookies_for_current_url() {
   if (modalWebVC == nil) {
     return nullptr;
   }
@@ -304,5 +307,19 @@ bool is_wifi_connected() {
 }
 
 bool is_rooted() { return false; }
+
+
+void force_symbol_registration() {
+  // Force these symbols to be included in the binary by referencing them
+  volatile void *ptrs[] = {(void *)ios_prepare_request,
+    (void *)ios_set_request_header,
+    (void *)ios_present_webview,
+    (void *)ios_close_webview,
+    (void *)ios_get_browser_cookies_for_current_url,
+    (void *)ios_get_browser_cookies_for_domain};
+  
+  // Prevent compiler from optimizing away the array
+  (void)ptrs;
+}
 
 } // extern "C"

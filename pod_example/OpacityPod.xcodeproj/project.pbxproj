@@ -41,6 +41,7 @@
 		6003F599195388D20070C39A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6003F59B195388D20070C39A /* OpacityPod-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OpacityPod-Prefix.pch"; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		700CFFE72E30DEFD004EAFC8 /* sdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = sdk.xcframework; path = ../sdk.xcframework; sourceTree = "<group>"; };
 		70135B242CBD0C5E00897046 /* Opacity_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Opacity_Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		7018CB802D7AF5F100191CAF /* OpacityPod_UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OpacityPod_UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7049CBEC2C91B05B003CFED4 /* .env */ = {isa = PBXFileReference; lastKnownFileType = text; path = .env; sourceTree = "<group>"; };
@@ -60,6 +61,8 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7018CB812D7AF5F100191CAF /* OpacityPod_UITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = OpacityPod_UITests;
 			sourceTree = "<group>";
 		};
@@ -111,6 +114,7 @@
 		6003F58C195388D20070C39A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				700CFFE72E30DEFD004EAFC8 /* sdk.xcframework */,
 				6003F58D195388D20070C39A /* Foundation.framework */,
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
@@ -176,6 +180,7 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
+				B4E393E70C011C3C8E3DD155 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -203,8 +208,6 @@
 				7018CB812D7AF5F100191CAF /* OpacityPod_UITests */,
 			);
 			name = OpacityPod_UITests;
-			packageProductDependencies = (
-			);
 			productName = OpacityPod_UITests;
 			productReference = 7018CB802D7AF5F100191CAF /* OpacityPod_UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -293,6 +296,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B4E393E70C011C3C8E3DD155 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OpacityPod_Example/Pods-OpacityPod_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OpacityPod_Example/Pods-OpacityPod_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OpacityPod_Example/Pods-OpacityPod_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
