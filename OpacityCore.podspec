@@ -13,15 +13,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '14.0'
   s.public_header_files = 'include/**/*.h', 'src/objc/*.h'
   s.source_files = 'src/**/*', 'include/**/*.h'
-
-  
-  s.pod_target_xcconfig = {
-    'OTHER_LDFLAGS' => '-Wl,-export_dynamic -rdynamic',
-    'GCC_SYMBOLS_PRIVATE_EXTERN' => 'NO'
-  }
-  s.user_target_xcconfig = {
-    'OTHER_LDFLAGS' => '-Wl,-export_dynamic -rdynamic'
-  }
   
   if File.exist?('sdk-debug.xcframework')
     s.vendored_frameworks = 'sdk-debug.xcframework'

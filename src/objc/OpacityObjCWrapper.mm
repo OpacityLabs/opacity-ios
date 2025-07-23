@@ -36,17 +36,6 @@ NSError *parseOpacityError(NSString *jsonString) {
 
   opacity::force_symbol_registration();
 
-  // First, load the main executable to make its symbols available
-  void *main_handle = dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
-  if (!main_handle) {
-    NSString *errorMessage = [NSString stringWithUTF8String:dlerror()];
-    *error =
-        [NSError errorWithDomain:@"OpacitySDKMainError"
-                            code:1003
-                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-    return -1;
-  }
-
   NSBundle *dylib_bundle =
       [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
   NSString *dylib_path = [dylib_bundle pathForResource:@"sdk" ofType:@""];
