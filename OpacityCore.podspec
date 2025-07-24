@@ -17,12 +17,8 @@ Pod::Spec.new do |s|
   s.vendored_frameworks = 'sdk.xcframework'
   s.frameworks = "WebKit", "CoreTelephony", "CoreLocation", "SystemConfiguration"
 
-    # Configure for dynamic library
+  # Configure for dynamic library
   s.pod_target_xcconfig = {
-    'OTHER_LDFLAGS' => '-ObjC',
-    'ENABLE_BITCODE' => 'NO'
+    'OTHER_LDFLAGS' => '-undefined dynamic_lookup'
   }
-  
-  # Mark as static framework to avoid linking issues during validation
-  s.static_framework = true
 end
