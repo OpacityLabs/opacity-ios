@@ -72,6 +72,20 @@ class MainViewController: UIViewController {
     inputField.addTarget(self, action: #selector(saveInputValue), for: .editingDidEnd)
     view.addSubview(inputField)
 
+    let inputFieldParams = UITextField()
+    inputFieldParams.borderStyle = .roundedRect
+    inputFieldParams.placeholder = "Enter params as a json string"
+    inputFieldParams.translatesAutoresizingMaskIntoConstraints = false
+    // Disable autocapitalization and autocorrection
+    inputFieldParams.autocapitalizationType = .none
+    inputFieldParams.autocorrectionType = .no
+    inputFieldParams.spellCheckingType = .no
+    inputFieldParams.smartQuotesType = .no // we need this, otherwise the json is not valid, because the quotes are not normal quotes
+    inputFieldParams.text = UserDefaults.standard.string(forKey: "savedParams")
+    // Add a target to save the value when editing ends
+    inputFieldParams.addTarget(self, action: #selector(saveInputParamsValue), for: .editingDidEnd)
+    view.addSubview(inputFieldParams)
+
     let submitButton = UIButton(type: .system)
     submitButton.setTitle("Submit", for: .normal)
     submitButton.translatesAutoresizingMaskIntoConstraints = false
@@ -79,13 +93,20 @@ class MainViewController: UIViewController {
     view.addSubview(submitButton)
 
     NSLayoutConstraint.activate([
+
       inputField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-      inputField.topAnchor.constraint(equalTo: view.topAnchor, constant: 300),
+      inputField.topAnchor
+        .constraint(equalTo: view.topAnchor, constant: 300),
       inputField.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
       inputField.heightAnchor.constraint(equalToConstant: 40),
 
+      inputFieldParams.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      inputFieldParams.topAnchor.constraint(equalTo: inputField.bottomAnchor, constant: 30),
+      inputFieldParams.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
+      inputFieldParams.heightAnchor.constraint(equalToConstant: 40),
+
       submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-      submitButton.topAnchor.constraint(equalTo: inputField.bottomAnchor, constant: 20),
+      submitButton.topAnchor.constraint(equalTo: inputFieldParams.bottomAnchor, constant: 20),
       submitButton.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
       submitButton.heightAnchor.constraint(equalToConstant: 40),
     ])
@@ -100,12 +121,53 @@ class MainViewController: UIViewController {
     }
   }
 
+  @objc private func saveInputParamsValue(_ sender: UITextField) {
+    // Get the current input value
+    if let value = sender.text, !value.isEmpty {
+      // Save the value to UserDefaults
+      UserDefaults.standard.set(value, forKey: "savedParams")
+      UserDefaults.standard.synchronize()  // Ensure it's immediately written to disk
+    }
+  }
+
   @objc private func submitButtonTapped() {
     guard let inputField = view.subviews.compactMap({ $0 as? UITextField }).first,
-      let flowName = inputField.text, !flowName.isEmpty
+          let flowName = inputField.text, !flowName.isEmpty
     else {
       showRedToast(message: "Please enter a flow name")
       return
+    }
+
+    let textFields = view.subviews.compactMap { $0 as? UITextField }
+    guard textFields.count > 1 else {
+      showRedToast(message: "Not enough UITextFields")
+      return
+    }
+
+    let jsonString = textFields[1].text ?? ""
+    let trimmed = jsonString.trimmingCharacters(in: .whitespacesAndNewlines)
+
+    let parsed: [String: Any]?
+
+    if trimmed.isEmpty {
+      parsed = nil
+    } else {
+      guard let data = trimmed.data(using: .utf8) else {
+        showRedToast(message: "String is not valid UTF-8")
+        return
+      }
+
+      do {
+        let json = try JSONSerialization.jsonObject(with: data)
+        guard let dict = json as? [String: Any] else {
+          showRedToast(message: "JSON must be an object")
+          return
+        }
+        parsed = dict
+      } catch {
+        showRedToast(message: "Invalid JSON")
+        return
+      }
     }
 
     // Save the flow name when submitting as well
@@ -114,13 +176,12 @@ class MainViewController: UIViewController {
 
     Task {
       do {
-        let _ = try await OpacitySwiftWrapper.get(
+        let res = try await OpacitySwiftWrapper.get(
           name: flowName.lowercased(),
-          params: nil
+          params: parsed
         )
+        print(res)
         showGreenToast(message: "Success")
-      } catch let e as OpacityError {
-        showRedToast(message: "Code: \(e.code) Error: \(e.message)")
       } catch {
         showRedToast(message: "Unknown Error: \(error.localizedDescription)")
       }
