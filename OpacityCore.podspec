@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '14.0'
   s.source_files = 'src/**/*'
   s.frameworks = "WebKit", "CoreTelephony", "CoreLocation", "SystemConfiguration"
+  s.preserve_paths = 'sdk.xcframework'
   s.vendored_frameworks = 'sdk.xcframework'
   s.pod_target_xcconfig = {
     'OTHER_LDFLAGS' => '-undefined dynamic_lookup'
