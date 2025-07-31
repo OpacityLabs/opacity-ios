@@ -8,7 +8,7 @@
 #import <ifaddrs.h>
 #import <string>
 
-#define EXPORT __attribute__((visibility("default"), used))
+#define EXPORT __attribute__((visibility("default"), used, retain))
 
 ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
@@ -29,7 +29,6 @@ UIViewController *topMostViewController() {
 }
 
 extern "C" {
-
 
 EXPORT void ios_prepare_request(const char *url) {
   NSString *urlString = [NSString stringWithUTF8String:url];
@@ -308,16 +307,15 @@ bool is_wifi_connected() {
 
 bool is_rooted() { return false; }
 
-
 void force_symbol_registration() {
   // Force these symbols to be included in the binary by referencing them
   volatile void *ptrs[] = {(void *)ios_prepare_request,
-    (void *)ios_set_request_header,
-    (void *)ios_present_webview,
-    (void *)ios_close_webview,
-    (void *)ios_get_browser_cookies_for_current_url,
-    (void *)ios_get_browser_cookies_for_domain};
-  
+                           (void *)ios_set_request_header,
+                           (void *)ios_present_webview,
+                           (void *)ios_close_webview,
+                           (void *)ios_get_browser_cookies_for_current_url,
+                           (void *)ios_get_browser_cookies_for_domain};
+
   // Prevent compiler from optimizing away the array
   (void)ptrs;
 }
