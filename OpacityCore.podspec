@@ -11,13 +11,9 @@ Pod::Spec.new do |s|
 
   s.swift_version = '5.9'
   s.ios.deployment_target = '14.0'
-  s.public_header_files = 'include/**/*.h', 'src/objc/*.h'
-  s.source_files = 'src/**/*', 'include/**/*.h'
-  
-  s.vendored_frameworks = 'sdk.xcframework'
+  s.source_files = 'src/**/*'
   s.frameworks = "WebKit", "CoreTelephony", "CoreLocation", "SystemConfiguration"
-
-  # Configure for dynamic library
+  s.vendored_frameworks = 'sdk.xcframework'
   s.pod_target_xcconfig = {
     'OTHER_LDFLAGS' => '-undefined dynamic_lookup'
   }
