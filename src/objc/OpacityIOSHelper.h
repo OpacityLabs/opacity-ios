@@ -1,13 +1,13 @@
 #ifdef __OBJC__
-  #import <Foundation/Foundation.h>
+#import <Foundation/Foundation.h>
 #else
-  #ifndef OBJC_EXTERN
-    #if defined(__cplusplus)
-      #define OBJC_EXTERN extern "C"
-    #else
-      #define OBJC_EXTERN extern
-    #endif
-  #endif
+#ifndef OBJC_EXTERN
+#if defined(__cplusplus)
+#define OBJC_EXTERN extern "C"
+#else
+#define OBJC_EXTERN extern
+#endif
+#endif
 #endif
 
 #ifdef __cplusplus
@@ -20,11 +20,6 @@ OBJC_EXTERN void ios_present_webview();
 OBJC_EXTERN void ios_close_webview();
 OBJC_EXTERN const char *ios_get_browser_cookies_for_current_url();
 OBJC_EXTERN const char *ios_get_browser_cookies_for_domain(const char *domain);
-/**
- * This function is a bit special, it doesn't do anything except force the compiler not to eliminate not used functions
- * In this case ↑ those above, which are used by the Rust SDK. This function needs to be called at initialization.
- */
-OBJC_EXTERN void force_symbol_registration();
 
 #ifdef __cplusplus
 } // namespace opacity

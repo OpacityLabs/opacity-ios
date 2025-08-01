@@ -1,7 +1,6 @@
 #import "OpacityObjCWrapper.h"
 #import "OpacityIOSHelper.h"
 #import "opacity.h"
-#import <dlfcn.h>
 
 NSError *parseOpacityError(NSString *jsonString) {
   NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
@@ -33,21 +32,6 @@ NSError *parseOpacityError(NSString *jsonString) {
                   andEnvironment:(OpacityEnvironment)environment
     andShouldShowErrorsInWebview:(BOOL)should_show_errors_in_webview
                         andError:(NSError *__autoreleasing *)error {
-
-  opacity::force_symbol_registration();
-
-  NSBundle *frameworkBundle = [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
-  if (![frameworkBundle isLoaded]) {
-    BOOL success = [frameworkBundle load];
-    if (!success) {
-      NSString *errorMessage = @"Failed to load framework";
-      *error = [NSError errorWithDomain:@"OpacitySDKDylibError"
-                                   code:1002
-                               userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-      return -1;
-    }
-  }
-
   char *err;
   int status = opacity_core::init([api_key UTF8String], dry_run,
                                   static_cast<int>(environment),

@@ -8,8 +8,6 @@
 #import <ifaddrs.h>
 #import <string>
 
-#define EXPORT __attribute__((visibility("default"), used, retain))
-
 ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
 UINavigationController *navController;
@@ -30,13 +28,13 @@ UIViewController *topMostViewController() {
 
 extern "C" {
 
-EXPORT void ios_prepare_request(const char *url) {
+void ios_prepare_request(const char *url) {
   NSString *urlString = [NSString stringWithUTF8String:url];
   request =
       [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
 }
 
-EXPORT void ios_set_request_header(const char *key, const char *value) {
+void ios_set_request_header(const char *key, const char *value) {
   NSString *nsKey = [NSString stringWithUTF8String:key];
   if ([nsKey caseInsensitiveCompare:@"User-Agent"] == NSOrderedSame) {
     userAgent = [NSString stringWithUTF8String:value];
@@ -45,14 +43,14 @@ EXPORT void ios_set_request_header(const char *key, const char *value) {
   [request setValue:nsValue forHTTPHeaderField:nsKey];
 }
 
-EXPORT void ios_close_webview() {
+void ios_close_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
     userAgent = nil;
     [navController dismissViewControllerAnimated:YES completion:nil];
   });
 }
 
-EXPORT void ios_present_webview() {
+void ios_present_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
     if (modalWebVC != nil) {
       NSLog(@"Warning: Previous modal web view controller has not been "
@@ -79,7 +77,7 @@ EXPORT void ios_present_webview() {
   });
 }
 
-EXPORT const char *ios_get_browser_cookies_for_domain(const char *domain) {
+const char *ios_get_browser_cookies_for_domain(const char *domain) {
   if (modalWebVC == nil) {
     return nullptr;
   }
@@ -102,7 +100,7 @@ EXPORT const char *ios_get_browser_cookies_for_domain(const char *domain) {
   return [jsonString UTF8String];
 }
 
-EXPORT const char *ios_get_browser_cookies_for_current_url() {
+const char *ios_get_browser_cookies_for_current_url() {
   if (modalWebVC == nil) {
     return nullptr;
   }
@@ -306,18 +304,5 @@ bool is_wifi_connected() {
 }
 
 bool is_rooted() { return false; }
-
-void force_symbol_registration() {
-  // Force these symbols to be included in the binary by referencing them
-  volatile void *ptrs[] = {(void *)ios_prepare_request,
-                           (void *)ios_set_request_header,
-                           (void *)ios_present_webview,
-                           (void *)ios_close_webview,
-                           (void *)ios_get_browser_cookies_for_current_url,
-                           (void *)ios_get_browser_cookies_for_domain};
-
-  // Prevent compiler from optimizing away the array
-  (void)ptrs;
-}
 
 } // extern "C"
