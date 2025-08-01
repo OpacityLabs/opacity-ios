@@ -17,24 +17,20 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>6</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSContactsUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs access to your contacts to provide better service.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Your location is required to provide accurate information.</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>PurposeString</key>
 		<string>$(PRODUCT_NAME) needs access to your precise location to provide better services.</string>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is required to provide accurate information.</string>
 	<key>NSPhoneNumberUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs access to your phone number to provide better services.</string>
 	<key>UILaunchStoryboardName</key>
