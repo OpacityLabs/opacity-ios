@@ -307,17 +307,80 @@ bool is_wifi_connected() {
 
 bool is_rooted() { return false; }
 
+// Thread-safe wrapper functions
+EXPORT void ios_prepare_request_threadsafe(const char *url) {
+  if ([NSThread isMainThread]) {
+    ios_prepare_request(url);
+  } else {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+      ios_prepare_request(url);
+    });
+  }
+}
+
+EXPORT void ios_set_request_header_threadsafe(const char *key,
+                                              const char *value) {
+  if ([NSThread isMainThread]) {
+    ios_set_request_header(key, value);
+  } else {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+      ios_set_request_header(key, value);
+    });
+  }
+}
+
+EXPORT void ios_present_webview_threadsafe() {
+  if ([NSThread isMainThread]) {
+    ios_present_webview();
+  } else {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+      ios_present_webview();
+    });
+  }
+}
+
+EXPORT void ios_close_webview_threadsafe() {
+  if ([NSThread isMainThread]) {
+    ios_close_webview();
+  } else {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+      ios_close_webview();
+    });
+  }
+}
+
 void force_symbol_registration() {
   // Force these symbols to be included in the binary by referencing them
-  volatile void *ptrs[] = {(void *)ios_prepare_request,
-                           (void *)ios_set_request_header,
-                           (void *)ios_present_webview,
-                           (void *)ios_close_webview,
-                           (void *)ios_get_browser_cookies_for_current_url,
-                           (void *)ios_get_browser_cookies_for_domain};
-
+  volatile void *ptrs[] = {(void *)ios_prepare_request_threadsafe,
+    (void *)ios_set_request_header_threadsafe,
+    (void *)ios_present_webview_threadsafe,
+    (void *)ios_close_webview_threadsafe,
+    (void *)ios_get_browser_cookies_for_current_url,
+    (void *)ios_get_browser_cookies_for_domain};
+  
   // Prevent compiler from optimizing away the array
   (void)ptrs;
 }
+
+static void *__attribute__((used)) symbol_references[] = {
+  (void *)ios_prepare_request_threadsafe,
+  (void *)ios_set_request_header_threadsafe,
+  (void *)ios_present_webview_threadsafe,
+  (void *)ios_close_webview_threadsafe,
+  (void *)ios_get_browser_cookies_for_current_url,
+  (void *)ios_get_browser_cookies_for_domain,
+  nullptr};
+
+EXPORT void ensure_symbols_loaded() {
+  volatile void **ptr = (volatile void **)symbol_references;
+  while (*ptr) {
+    // Just touch the memory to ensure it's loaded
+    ptr++;
+  }
+}
+
+
+// Cookie functions are likely safe as-is since they don't do UI operations
+// But add thread safety if needed
 
 } // extern "C"

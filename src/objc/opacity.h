@@ -12,6 +12,18 @@
 namespace opacity_core {
 #endif  // __cplusplus
 
+typedef void (*IosPrepareRequestFn)(const char*);
+
+typedef void (*IosSetRequestHeaderFn)(const char*, const char*);
+
+typedef void (*IosPresentWebviewFn)(void);
+
+typedef void (*IosCloseWebviewFn)(void);
+
+typedef const char *(*IosGetBrowserCookiesForCurrentUrlFn)(void);
+
+typedef const char *(*IosGetBrowserCookiesForDomainFn)(const char*);
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
@@ -35,6 +47,13 @@ extern const int32_t OPACITY_ENVIRONMENT_SANDBOX;
 extern const int32_t OPACITY_ENVIRONMENT_STAGING;
 
 extern const int32_t OPACITY_ENVIRONMENT_PRODUCTION;
+
+int32_t register_ios_callbacks(IosPrepareRequestFn prepare_request,
+                               IosSetRequestHeaderFn set_request_header,
+                               IosPresentWebviewFn present_webview,
+                               IosCloseWebviewFn close_webview,
+                               IosGetBrowserCookiesForCurrentUrlFn get_browser_cookies_for_current_url,
+                               IosGetBrowserCookiesForDomainFn get_browser_cookies_for_domain);
 
 int32_t init(const char *api_key_str,
              bool dry_run,
@@ -67,18 +86,6 @@ extern void android_close_webview(void);
 extern const char *android_get_browser_cookies_for_current_url(void);
 
 extern const char *android_get_browser_cookies_for_domain(const char *domain);
-
-extern void ios_prepare_request(const char *url);
-
-extern void ios_set_request_header(const char *key, const char *value);
-
-extern void ios_present_webview(void);
-
-extern void ios_close_webview(void);
-
-extern const char *ios_get_browser_cookies_for_current_url(void);
-
-extern const char *ios_get_browser_cookies_for_domain(const char *domain);
 
 #ifdef __cplusplus
 }  // extern "C"

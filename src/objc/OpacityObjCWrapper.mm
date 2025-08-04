@@ -35,38 +35,78 @@ NSError *parseOpacityError(NSString *jsonString) {
                         andError:(NSError *__autoreleasing *)error {
 
   opacity::force_symbol_registration();
-
-  // NSBundle *dylib_bundle =
-  //     [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
-  // NSString *dylib_path = [dylib_bundle pathForResource:@"sdk" ofType:@""];
-
-  // // Load the dynamic library
-  // void *handle = dlopen([dylib_path UTF8String], RTLD_NOW | RTLD_GLOBAL);
-  // if (!handle) {
-  //   NSString *errorMessage = [NSString stringWithUTF8String:dlerror()];
-  //   *error =
-  //       [NSError errorWithDomain:@"OpacitySDKDylibError"
-  //                           code:1002
-  //                       userInfo:@{NSLocalizedDescriptionKey :
-  //                       errorMessage}];
-  //   return -1; // or appropriate error code
-  // }
+  opacity::ensure_symbols_loaded();
 
   // Make sure the main executable's symbols are available
-  // dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
+  dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
 
-  NSBundle *frameworkBundle =
+  NSBundle *dylib_bundle =
       [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
-  if (![frameworkBundle isLoaded]) {
-    BOOL success = [frameworkBundle load];
-    if (!success) {
-      NSString *errorMessage = @"Failed to load framework";
+  NSString *dylib_path = [dylib_bundle pathForResource:@"sdk" ofType:@""];
+
+  // Load the dynamic library
+  void *handle = dlopen([dylib_path UTF8String], RTLD_NOW | RTLD_GLOBAL);
+  if (!handle) {
+    NSString *errorMessage = [NSString stringWithUTF8String:dlerror()];
+    *error =
+        [NSError errorWithDomain:@"OpacitySDKDylibError"
+                            code:1002
+                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    return -1; // or appropriate error code
+  }
+
+  // NSBundle *frameworkBundle =
+  //     [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
+  // if (![frameworkBundle isLoaded]) {
+  //   BOOL success = [frameworkBundle load];
+  //   if (!success) {
+  //     NSString *errorMessage = @"Failed to load framework";
+  //     *error =
+  //         [NSError errorWithDomain:@"OpacitySDKDylibError"
+  //                             code:1002
+  //                         userInfo:@{NSLocalizedDescriptionKey :
+  //                         errorMessage}];
+  //     return -1;
+  //   }
+  // }
+
+  // Validate function pointers before registration
+  void *functions[] = {(void *)opacity::ios_prepare_request,
+                       (void *)opacity::ios_set_request_header,
+                       (void *)opacity::ios_present_webview,
+                       (void *)opacity::ios_close_webview,
+                       (void *)opacity::ios_get_browser_cookies_for_current_url,
+                       (void *)opacity::ios_get_browser_cookies_for_domain};
+
+  for (int i = 0; i < 6; i++) {
+    if (functions[i] == NULL || functions[i] == (void *)0x1) {
+      NSString *errorMessage = [NSString
+          stringWithFormat:@"Invalid function pointer at index %d", i];
       *error =
-          [NSError errorWithDomain:@"OpacitySDKDylibError"
-                              code:1002
+          [NSError errorWithDomain:@"OpacitySDKCallbackError"
+                              code:1004
                           userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
       return -1;
     }
+  }
+
+  __sync_synchronize();
+
+  int callback_status = opacity_core::register_ios_callbacks(
+      opacity::ios_prepare_request_threadsafe,
+      opacity::ios_set_request_header_threadsafe,
+      opacity::ios_present_webview_threadsafe,
+      opacity::ios_close_webview_threadsafe,
+      opacity::ios_get_browser_cookies_for_current_url,
+      opacity::ios_get_browser_cookies_for_domain);
+
+  if (callback_status != opacity_core::OPACITY_OK) {
+    NSString *errorMessage = @"Failed to register iOS callbacks";
+    *error =
+        [NSError errorWithDomain:@"OpacitySDKCallbackError"
+                            code:1003
+                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    return -1;
   }
 
   char *err;
