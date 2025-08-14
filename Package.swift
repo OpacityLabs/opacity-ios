@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
   name: "OpacityCore",
   platforms: [
-    .iOS(.v13)
+    .iOS(.v15)
   ],
   products: [
     .library(
@@ -29,6 +29,8 @@ let package = Package(
         .linkedFramework("CoreTelephony"),
         .linkedFramework("CoreLocation"),
         .linkedFramework("WebKit"),
+        .unsafeFlags(["-Wl,-keep_private_externs"]),  // Prevent symbol stripping
+        .unsafeFlags(["-Wl,-no_deduplicate"]),  // Prevent symbol deduplication
       ]
     ),
     .target(

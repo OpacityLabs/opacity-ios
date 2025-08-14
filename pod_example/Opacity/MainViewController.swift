@@ -54,7 +54,7 @@ class MainViewController: UIViewController {
       button.addTarget(
         self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
       button.frame = CGRect(
-        x: 100, y: 80 + (index * 30), width: 200, height: 50)
+        x: 100, y: 80 + (index * 40), width: 200, height: 50)
       view.addSubview(button)
     }
 

@@ -1,14 +1,13 @@
+#import "OpacityIOSHelper.h"
 #import "ModalWebViewController.h"
 #import "Reachability.h"
-#import "opacity.h"
+#include "opacity.h"
 #import <CoreLocation/CoreLocation.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <arpa/inet.h>
 #import <ifaddrs.h>
 #import <string>
-
-#define EXPORT __attribute__((visibility("default"), used, retain))
 
 ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
@@ -28,7 +27,9 @@ UIViewController *topMostViewController() {
   return topController;
 }
 
-extern "C" {
+#define EXPORT __attribute__((visibility("default"), used, retain)) extern "C"
+
+// extern "C" {
 
 EXPORT void ios_prepare_request(const char *url) {
   NSString *urlString = [NSString stringWithUTF8String:url];
@@ -79,7 +80,7 @@ EXPORT void ios_present_webview() {
   });
 }
 
-EXPORT const char *ios_get_browser_cookies_for_domain(const char *domain) {
+const char *ios_get_browser_cookies_for_domain(const char *domain) {
   if (modalWebVC == nil) {
     return nullptr;
   }
@@ -102,7 +103,7 @@ EXPORT const char *ios_get_browser_cookies_for_domain(const char *domain) {
   return [jsonString UTF8String];
 }
 
-EXPORT const char *ios_get_browser_cookies_for_current_url() {
+const char *ios_get_browser_cookies_for_current_url() {
   if (modalWebVC == nil) {
     return nullptr;
   }
@@ -307,71 +308,79 @@ bool is_wifi_connected() {
 
 bool is_rooted() { return false; }
 
-// Thread-safe wrapper functions
-EXPORT void ios_prepare_request_threadsafe(const char *url) {
-  if ([NSThread isMainThread]) {
-    ios_prepare_request(url);
-  } else {
-    dispatch_sync(dispatch_get_main_queue(), ^{
-      ios_prepare_request(url);
-    });
-  }
-}
-
-EXPORT void ios_set_request_header_threadsafe(const char *key,
-                                              const char *value) {
-  if ([NSThread isMainThread]) {
-    ios_set_request_header(key, value);
-  } else {
-    dispatch_sync(dispatch_get_main_queue(), ^{
-      ios_set_request_header(key, value);
-    });
-  }
-}
-
-EXPORT void ios_present_webview_threadsafe() {
-  if ([NSThread isMainThread]) {
-    ios_present_webview();
-  } else {
-    dispatch_sync(dispatch_get_main_queue(), ^{
-      ios_present_webview();
-    });
-  }
-}
-
-EXPORT void ios_close_webview_threadsafe() {
-  if ([NSThread isMainThread]) {
-    ios_close_webview();
-  } else {
-    dispatch_sync(dispatch_get_main_queue(), ^{
-      ios_close_webview();
-    });
-  }
-}
-
 void force_symbol_registration() {
   // Force these symbols to be included in the binary by referencing them
-  volatile void *ptrs[] = {(void *)ios_prepare_request_threadsafe,
-    (void *)ios_set_request_header_threadsafe,
-    (void *)ios_present_webview_threadsafe,
-    (void *)ios_close_webview_threadsafe,
-    (void *)ios_get_browser_cookies_for_current_url,
-    (void *)ios_get_browser_cookies_for_domain};
-  
-  // Prevent compiler from optimizing away the array
-  (void)ptrs;
+  volatile void *ptrs[] = {(void *)ios_prepare_request,
+                           (void *)ios_set_request_header,
+                           (void *)ios_present_webview,
+                           (void *)ios_close_webview,
+                           (void *)ios_get_browser_cookies_for_current_url,
+                           (void *)ios_get_browser_cookies_for_domain,
+                           (void *)get_ip_address,
+                           (void *)is_rooted,
+                           (void *)is_wifi_connected,
+                           (void *)is_location_services_enabled,
+                           (void *)get_os_name,
+                           (void *)get_os_version,
+                           (void *)is_emulator,
+                           (void *)get_battery_level,
+                           (void *)get_battery_status,
+                           (void *)get_carrier_name,
+                           (void *)get_carrier_mcc,
+                           (void *)get_carrier_mnc,
+                           (void *)get_course,
+                           (void *)get_cpu_abi,
+                           (void *)get_altitude,
+                           (void *)get_latitude,
+                           (void *)get_longitude,
+                           (void *)get_device_model,
+                           (void *)get_horizontal_accuracy,
+                           (void *)get_vertical_accuracy};
+
+  // Actually use the pointers to prevent optimization
+  for (int i = 0; i < sizeof(ptrs); i++) {
+    if (ptrs[i] == NULL) {
+      printf("Symbol %d is NULL\n", i);
+    }
+  }
 }
 
-static void *__attribute__((used)) symbol_references[] = {
-  (void *)ios_prepare_request_threadsafe,
-  (void *)ios_set_request_header_threadsafe,
-  (void *)ios_present_webview_threadsafe,
-  (void *)ios_close_webview_threadsafe,
-  (void *)ios_get_browser_cookies_for_current_url,
-  (void *)ios_get_browser_cookies_for_domain,
-  nullptr};
+// Add this to ensure symbols are not stripped
+__attribute__((constructor)) static void ensure_symbols_retained() {
+  force_symbol_registration();
+}
 
-EXPORT void ensure_symbols_loaded() {
+static void *__attribute__((used, retain,
+                            section("__DATA,__const"))) symbol_references[] = {
+    (void *)ios_prepare_request,
+    (void *)ios_set_request_header,
+    (void *)ios_present_webview,
+    (void *)ios_close_webview,
+    (void *)ios_get_browser_cookies_for_current_url,
+    (void *)ios_get_browser_cookies_for_domain,
+    (void *)get_ip_address,
+    (void *)is_rooted,
+    (void *)is_wifi_connected,
+    (void *)is_location_services_enabled,
+    (void *)get_os_name,
+    (void *)get_os_version,
+    (void *)is_emulator,
+    (void *)get_battery_level,
+    (void *)get_battery_status,
+    (void *)get_carrier_name,
+    (void *)get_carrier_mcc,
+    (void *)get_carrier_mnc,
+    (void *)get_course,
+    (void *)get_cpu_abi,
+    (void *)get_altitude,
+    (void *)get_latitude,
+    (void *)get_longitude,
+    (void *)get_device_model,
+    (void *)get_horizontal_accuracy,
+    (void *)get_vertical_accuracy,
+    nullptr};
+
+void ensure_symbols_loaded() {
   volatile void **ptr = (volatile void **)symbol_references;
   while (*ptr) {
     // Just touch the memory to ensure it's loaded
@@ -379,8 +388,4 @@ EXPORT void ensure_symbols_loaded() {
   }
 }
 
-
-// Cookie functions are likely safe as-is since they don't do UI operations
-// But add thread safety if needed
-
-} // extern "C"
+// } // extern "C"
