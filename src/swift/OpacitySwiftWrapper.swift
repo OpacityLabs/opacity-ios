@@ -4,8 +4,7 @@
 
 public class OpacitySwiftWrapper {
   public enum Environment: Int {
-    case Test = 0
-    case Local
+    case Local = 1
     case Sandbox
     case Staging
     case Production
