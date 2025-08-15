@@ -34,27 +34,24 @@ NSError *parseOpacityError(NSString *jsonString) {
     andShouldShowErrorsInWebview:(BOOL)should_show_errors_in_webview
                         andError:(NSError *__autoreleasing *)error {
 
-   force_symbol_registration();
-  // ensure_symbols_loaded();
+  force_symbol_registration();
 
-//   Make sure the main executable's symbols are available
-   dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
+  dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
 
-   NSBundle *dylib_bundle =
-       [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
-   NSString *dylib_path = [dylib_bundle pathForResource:@"sdk" ofType:@""];
+  NSBundle *dylib_bundle =
+      [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
+  NSString *dylib_path = [dylib_bundle pathForResource:@"sdk" ofType:@""];
 
-   // Load the dynamic library
-   void *handle = dlopen([dylib_path UTF8String], RTLD_NOW | RTLD_GLOBAL);
-   if (!handle) {
-     NSString *errorMessage = [NSString stringWithUTF8String:dlerror()];
-     *error =
-         [NSError errorWithDomain:@"OpacitySDKDylibError"
-                             code:1002
-                         userInfo:@{NSLocalizedDescriptionKey :
-                         errorMessage}];
-     return -1; // or appropriate error code
-   }
+  // Load the dynamic library
+  void *handle = dlopen([dylib_path UTF8String], RTLD_NOW | RTLD_GLOBAL);
+  if (!handle) {
+    NSString *errorMessage = [NSString stringWithUTF8String:dlerror()];
+    *error =
+        [NSError errorWithDomain:@"OpacitySDKDylibError"
+                            code:1002
+                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    return -1; // or appropriate error code
+  }
 
   // NSBundle *frameworkBundle =
   //     [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
