@@ -34,7 +34,7 @@ NSError *parseOpacityError(NSString *jsonString) {
     andShouldShowErrorsInWebview:(BOOL)should_show_errors_in_webview
                         andError:(NSError *__autoreleasing *)error {
 
-  force_symbol_registration();
+//  force_symbol_registration();
 
   dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
 
@@ -52,6 +52,36 @@ NSError *parseOpacityError(NSString *jsonString) {
                         userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
     return -1; // or appropriate error code
   }
+
+  opacity_core::register_ios_callbacks(
+      ios_prepare_request, 
+      ios_set_request_header,
+      ios_present_webview, 
+      ios_close_webview,
+      ios_get_browser_cookies_for_current_url,
+      ios_get_browser_cookies_for_domain, 
+      get_ip_address,
+      get_battery_level,
+      get_battery_status,
+      get_carrier_name,
+      get_carrier_mcc,
+      get_carrier_mnc,
+      get_course,
+      get_cpu_abi,
+      get_altitude,
+      get_latitude,
+      get_longitude,
+      get_device_model,
+      get_os_name,
+      get_os_version,
+      is_emulator,
+      get_horizontal_accuracy,
+      get_vertical_accuracy,
+      is_location_services_enabled,
+      is_wifi_connected,
+      is_rooted
+  );
+
 
   // NSBundle *frameworkBundle =
   //     [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];

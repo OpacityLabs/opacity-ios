@@ -12,6 +12,58 @@
 namespace opacity_core {
 #endif  // __cplusplus
 
+typedef void (*IosPrepareRequestFn)(const char*);
+
+typedef void (*IosSetRequestHeaderFn)(const char*, const char*);
+
+typedef void (*IosPresentWebviewFn)(void);
+
+typedef void (*IosCloseWebviewFn)(void);
+
+typedef const char *(*IosGetBrowserCookiesForCurrentUrlFn)(void);
+
+typedef const char *(*IosGetBrowserCookiesForDomainFn)(const char*);
+
+typedef const char *(*GetIpAddressFn)(void);
+
+typedef double (*GetBatteryLevelFn)(void);
+
+typedef const char *(*GetBatteryStatusFn)(void);
+
+typedef const char *(*GetCarrierNameFn)(void);
+
+typedef const char *(*GetCarrierMccFn)(void);
+
+typedef const char *(*GetCarrierMncFn)(void);
+
+typedef double (*GetCourseFn)(void);
+
+typedef const char *(*GetCpuAbiFn)(void);
+
+typedef double (*GetAltitudeFn)(void);
+
+typedef double (*GetLatitudeFn)(void);
+
+typedef double (*GetLongitudeFn)(void);
+
+typedef const char *(*GetDeviceModelFn)(void);
+
+typedef const char *(*GetOsNameFn)(void);
+
+typedef const char *(*GetOsVersionFn)(void);
+
+typedef bool (*IsEmulatorFn)(void);
+
+typedef double (*GetHorizontalAccuracyFn)(void);
+
+typedef double (*GetVerticalAccuracyFn)(void);
+
+typedef bool (*IsLocationServicesEnabledFn)(void);
+
+typedef bool (*IsWifiConnectedFn)(void);
+
+typedef bool (*IsRootedFn)(void);
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
@@ -34,6 +86,33 @@ extern const int32_t OPACITY_ENVIRONMENT_STAGING;
 
 extern const int32_t OPACITY_ENVIRONMENT_PRODUCTION;
 
+void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
+                            IosSetRequestHeaderFn ios_set_request_header,
+                            IosPresentWebviewFn ios_present_webview,
+                            IosCloseWebviewFn ios_close_webview,
+                            IosGetBrowserCookiesForCurrentUrlFn ios_get_browser_cookies_for_current_url,
+                            IosGetBrowserCookiesForDomainFn ios_get_browser_cookies_for_domain,
+                            GetIpAddressFn get_ip_address,
+                            GetBatteryLevelFn get_battery_level,
+                            GetBatteryStatusFn get_battery_status,
+                            GetCarrierNameFn get_carrier_name,
+                            GetCarrierMccFn get_carrier_mcc,
+                            GetCarrierMncFn get_carrier_mnc,
+                            GetCourseFn get_course,
+                            GetCpuAbiFn get_cpu_abi,
+                            GetAltitudeFn get_altitude,
+                            GetLatitudeFn get_latitude,
+                            GetLongitudeFn get_longitude,
+                            GetDeviceModelFn get_device_model,
+                            GetOsNameFn get_os_name,
+                            GetOsVersionFn get_os_version,
+                            IsEmulatorFn is_emulator,
+                            GetHorizontalAccuracyFn get_horizontal_accuracy,
+                            GetVerticalAccuracyFn get_vertical_accuracy,
+                            IsLocationServicesEnabledFn is_location_services_enabled,
+                            IsWifiConnectedFn is_wifi_connected,
+                            IsRootedFn is_rooted);
+
 int32_t init(const char *api_key_str,
              bool dry_run,
              int32_t backend_environment,
@@ -47,8 +126,6 @@ void free_string(char *ptr);
 void emit_webview_event(const char *payload);
 
 const char *get_sdk_versions(void);
-
-extern const char *get_ip_address(void);
 
 extern void secure_set(const char *key, const char *value);
 
@@ -65,18 +142,6 @@ extern void android_close_webview(void);
 extern const char *android_get_browser_cookies_for_current_url(void);
 
 extern const char *android_get_browser_cookies_for_domain(const char *domain);
-
-extern void ios_prepare_request(const char *url);
-
-extern void ios_set_request_header(const char *key, const char *value);
-
-extern void ios_present_webview(void);
-
-extern void ios_close_webview(void);
-
-extern const char *ios_get_browser_cookies_for_current_url(void);
-
-extern const char *ios_get_browser_cookies_for_domain(const char *domain);
 
 #ifdef __cplusplus
 }  // extern "C"

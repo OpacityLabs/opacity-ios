@@ -10,3 +10,4 @@ spm_example/test_app/.env
 # opacity.xcframework
 opacity-debug.xcframework
 opacity-ios/spm_example/test_app/.env
+pod_example/build

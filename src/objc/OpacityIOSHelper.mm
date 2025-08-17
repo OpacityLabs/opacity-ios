@@ -27,15 +27,13 @@ UIViewController *topMostViewController() {
   return topController;
 }
 
-#define EXPORT __attribute__((visibility("default"), used, retain)) extern "C"
-
-EXPORT void ios_prepare_request(const char *url) {
+void ios_prepare_request(const char *url) {
   NSString *urlString = [NSString stringWithUTF8String:url];
   request =
       [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
 }
 
-EXPORT void ios_set_request_header(const char *key, const char *value) {
+void ios_set_request_header(const char *key, const char *value) {
   NSString *nsKey = [NSString stringWithUTF8String:key];
   if ([nsKey caseInsensitiveCompare:@"User-Agent"] == NSOrderedSame) {
     userAgent = [NSString stringWithUTF8String:value];
@@ -44,14 +42,14 @@ EXPORT void ios_set_request_header(const char *key, const char *value) {
   [request setValue:nsValue forHTTPHeaderField:nsKey];
 }
 
-EXPORT void ios_close_webview() {
+void ios_close_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
     userAgent = nil;
     [navController dismissViewControllerAnimated:YES completion:nil];
   });
 }
 
-EXPORT void ios_present_webview() {
+void ios_present_webview() {
   dispatch_async(dispatch_get_main_queue(), ^{
     if (modalWebVC != nil) {
       NSLog(@"Warning: Previous modal web view controller has not been "
@@ -78,7 +76,7 @@ EXPORT void ios_present_webview() {
   });
 }
 
-EXPORT const char *ios_get_browser_cookies_for_domain(const char *domain) {
+const char *ios_get_browser_cookies_for_domain(const char *domain) {
   if (modalWebVC == nil) {
     return nullptr;
   }
@@ -101,7 +99,7 @@ EXPORT const char *ios_get_browser_cookies_for_domain(const char *domain) {
   return [jsonString UTF8String];
 }
 
-EXPORT const char *ios_get_browser_cookies_for_current_url() {
+const char *ios_get_browser_cookies_for_current_url() {
   if (modalWebVC == nil) {
     return nullptr;
   }
@@ -124,14 +122,14 @@ EXPORT const char *ios_get_browser_cookies_for_current_url() {
   return [jsonString UTF8String];
 }
 
-EXPORT double get_battery_level() {
+double get_battery_level() {
   UIDevice *device = [UIDevice currentDevice];
   device.batteryMonitoringEnabled = YES;
   double batteryLevel = static_cast<double>(device.batteryLevel);
   return batteryLevel;
 }
 
-EXPORT const char *get_battery_status() {
+const char *get_battery_status() {
   UIDevice *device = [UIDevice currentDevice];
   device.batteryMonitoringEnabled = YES;
   UIDeviceBatteryState batteryState = device.batteryState;
@@ -155,7 +153,7 @@ EXPORT const char *get_battery_status() {
   return status;
 }
 
-EXPORT const char *get_carrier_name() {
+const char *get_carrier_name() {
   CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
   NSDictionary<NSString *, CTCarrier *> *carriers =
       [networkInfo serviceSubscriberCellularProviders];
@@ -165,7 +163,7 @@ EXPORT const char *get_carrier_name() {
   return name;
 }
 
-EXPORT const char *get_carrier_mcc() {
+const char *get_carrier_mcc() {
   CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
   NSDictionary<NSString *, CTCarrier *> *carriers =
       [networkInfo serviceSubscriberCellularProviders];
@@ -175,7 +173,7 @@ EXPORT const char *get_carrier_mcc() {
   return mccCString;
 }
 
-EXPORT const char *get_carrier_mnc() {
+const char *get_carrier_mnc() {
   CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
   NSDictionary<NSString *, CTCarrier *> *carriers =
       [networkInfo serviceSubscriberCellularProviders];
@@ -185,18 +183,18 @@ EXPORT const char *get_carrier_mnc() {
   return mncCString;
 }
 
-EXPORT double get_course() {
+double get_course() {
   CLLocationManager *locationManager = [[CLLocationManager alloc] init];
   CLLocationDirection course = locationManager.heading.trueHeading;
   return course;
 }
 
-EXPORT const char *get_cpu_abi() {
+const char *get_cpu_abi() {
   const char *cpuAbi = "arm64-v8a";
   return cpuAbi;
 }
 
-EXPORT double get_altitude() {
+double get_altitude() {
   CLLocationManager *locationManager = [[CLLocationManager alloc] init];
 
   CLLocation *location = locationManager.location;
@@ -204,7 +202,7 @@ EXPORT double get_altitude() {
   return altitude;
 }
 
-EXPORT double get_latitude() {
+double get_latitude() {
   CLLocationManager *locationManager = [[CLLocationManager alloc] init];
 
   CLLocation *location = locationManager.location;
@@ -212,7 +210,7 @@ EXPORT double get_latitude() {
   return latitude;
 }
 
-EXPORT double get_longitude() {
+double get_longitude() {
   CLLocationManager *locationManager = [[CLLocationManager alloc] init];
 
   CLLocation *location = locationManager.location;
@@ -220,25 +218,25 @@ EXPORT double get_longitude() {
   return longitude;
 }
 
-EXPORT const char *get_device_model() {
+const char *get_device_model() {
   NSString *deviceModel = [UIDevice currentDevice].model;
   const char *model = [deviceModel UTF8String];
   return model;
 }
 
-EXPORT const char *get_os_name() {
+const char *get_os_name() {
   NSString *osName = [UIDevice currentDevice].systemName;
   const char *name = [osName UTF8String];
   return name;
 }
 
-EXPORT const char *get_os_version() {
+const char *get_os_version() {
   NSString *osVersion = [UIDevice currentDevice].systemVersion;
   const char *version = [osVersion UTF8String];
   return version;
 }
 
-EXPORT bool is_emulator() {
+bool is_emulator() {
   bool isSimulator = false;
 
 #if TARGET_IPHONE_SIMULATOR
@@ -248,7 +246,7 @@ EXPORT bool is_emulator() {
   return isSimulator;
 }
 
-EXPORT double get_horizontal_accuracy() {
+double get_horizontal_accuracy() {
   CLLocationManager *locationManager = [[CLLocationManager alloc] init];
 
   CLLocation *location = locationManager.location;
@@ -256,7 +254,7 @@ EXPORT double get_horizontal_accuracy() {
   return horizontalAccuracy;
 }
 
-EXPORT double get_vertical_accuracy() {
+double get_vertical_accuracy() {
   CLLocationManager *locationManager = [[CLLocationManager alloc] init];
 
   CLLocation *location = locationManager.location;
@@ -264,7 +262,7 @@ EXPORT double get_vertical_accuracy() {
   return verticalAccuracy;
 }
 
-EXPORT const char *get_ip_address() {
+const char *get_ip_address() {
   struct ifaddrs *interfaces = NULL;
   struct ifaddrs *temp_addr = NULL;
   const char *ipAddress = "Unknown";
@@ -294,97 +292,14 @@ EXPORT const char *get_ip_address() {
   return ipAddress;
 }
 
-EXPORT bool is_location_services_enabled() {
+bool is_location_services_enabled() {
   return CLLocationManager.locationServicesEnabled;
 }
 
-EXPORT bool is_wifi_connected() {
+bool is_wifi_connected() {
   Reachability *reachability = [Reachability reachabilityForInternetConnection];
   NetworkStatus netStatus = [reachability currentReachabilityStatus];
   return netStatus == ReachableViaWiFi;
 }
 
-EXPORT bool is_rooted() { return false; }
-
-void force_symbol_registration() {
-  // Force these symbols to be included in the binary by referencing them
-  volatile void *ptrs[] = {(void *)ios_prepare_request,
-                           (void *)ios_set_request_header,
-                           (void *)ios_present_webview,
-                           (void *)ios_close_webview,
-                           (void *)ios_get_browser_cookies_for_current_url,
-                           (void *)ios_get_browser_cookies_for_domain,
-                           (void *)get_ip_address,
-                           (void *)is_rooted,
-                           (void *)is_wifi_connected,
-                           (void *)is_location_services_enabled,
-                           (void *)get_os_name,
-                           (void *)get_os_version,
-                           (void *)is_emulator,
-                           (void *)get_battery_level,
-                           (void *)get_battery_status,
-                           (void *)get_carrier_name,
-                           (void *)get_carrier_mcc,
-                           (void *)get_carrier_mnc,
-                           (void *)get_course,
-                           (void *)get_cpu_abi,
-                           (void *)get_altitude,
-                           (void *)get_latitude,
-                           (void *)get_longitude,
-                           (void *)get_device_model,
-                           (void *)get_horizontal_accuracy,
-                           (void *)get_vertical_accuracy};
-
-  // Actually use the pointers to prevent optimization
-  for (int i = 0; i < sizeof(ptrs); i++) {
-    if (ptrs[i] == NULL) {
-      printf("Symbol %d is NULL\n", i);
-    }
-  }
-}
-
-// // Add this to ensure symbols are not stripped
-// __attribute__((constructor)) static void ensure_symbols_retained() {
-//   force_symbol_registration();
-// }
-
-// static void *__attribute__((used, retain,
-//                             section("__DATA,__const"))) symbol_references[] =
-//                             {
-//     (void *)ios_prepare_request,
-//     (void *)ios_set_request_header,
-//     (void *)ios_present_webview,
-//     (void *)ios_close_webview,
-//     (void *)ios_get_browser_cookies_for_current_url,
-//     (void *)ios_get_browser_cookies_for_domain,
-//     (void *)get_ip_address,
-//     (void *)is_rooted,
-//     (void *)is_wifi_connected,
-//     (void *)is_location_services_enabled,
-//     (void *)get_os_name,
-//     (void *)get_os_version,
-//     (void *)is_emulator,
-//     (void *)get_battery_level,
-//     (void *)get_battery_status,
-//     (void *)get_carrier_name,
-//     (void *)get_carrier_mcc,
-//     (void *)get_carrier_mnc,
-//     (void *)get_course,
-//     (void *)get_cpu_abi,
-//     (void *)get_altitude,
-//     (void *)get_latitude,
-//     (void *)get_longitude,
-//     (void *)get_device_model,
-//     (void *)get_horizontal_accuracy,
-//     (void *)get_vertical_accuracy,
-//     nullptr};
-
-// void ensure_symbols_loaded() {
-//   volatile void **ptr = (volatile void **)symbol_references;
-//   while (*ptr) {
-//     // Just touch the memory to ensure it's loaded
-//     ptr++;
-//   }
-// }
-
-// } // extern "C"
+bool is_rooted() { return false; }
