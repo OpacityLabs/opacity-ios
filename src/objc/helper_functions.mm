@@ -1,7 +1,6 @@
-#import "OpacityIOSHelper.h"
+#import "helper_functions.h"
 #import "ModalWebViewController.h"
 #import "Reachability.h"
-#include "opacity.h"
 #import <CoreLocation/CoreLocation.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>

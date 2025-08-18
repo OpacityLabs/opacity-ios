@@ -2,9 +2,6 @@
 extern "C" {
 #endif
 
-// Force symbol registration
-void force_symbol_registration();
-
 // Webview functions
 void ios_prepare_request(const char *url);
 void ios_set_request_header(const char *key, const char *value);

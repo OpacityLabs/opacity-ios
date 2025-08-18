@@ -1,6 +1,5 @@
 #import "ModalWebViewController.h"
-#import "OpacityIOSHelper.h"
-#import "opacity.h"
+#import "sdk.h"
 
 @interface ModalWebViewController ()
 

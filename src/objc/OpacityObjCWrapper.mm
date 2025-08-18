@@ -1,7 +1,6 @@
 #import "OpacityObjCWrapper.h"
-#import "OpacityIOSHelper.h"
-#import "opacity.h"
-#import <dlfcn.h>
+#import "helper_functions.h"
+#import "sdk.h"
 
 NSError *parseOpacityError(NSString *jsonString) {
   NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
@@ -34,93 +33,29 @@ NSError *parseOpacityError(NSString *jsonString) {
     andShouldShowErrorsInWebview:(BOOL)should_show_errors_in_webview
                         andError:(NSError *__autoreleasing *)error {
 
-//  force_symbol_registration();
-
-  dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
-
-  NSBundle *dylib_bundle =
+  NSBundle *frameworkBundle =
       [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
-  NSString *dylib_path = [dylib_bundle pathForResource:@"sdk" ofType:@""];
-
-  // Load the dynamic library
-  void *handle = dlopen([dylib_path UTF8String], RTLD_NOW | RTLD_GLOBAL);
-  if (!handle) {
-    NSString *errorMessage = [NSString stringWithUTF8String:dlerror()];
-    *error =
-        [NSError errorWithDomain:@"OpacitySDKDylibError"
-                            code:1002
-                        userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-    return -1; // or appropriate error code
+  if (![frameworkBundle isLoaded]) {
+    BOOL success = [frameworkBundle load];
+    if (!success) {
+      NSString *errorMessage = @"Failed to load framework";
+      *error =
+          [NSError errorWithDomain:@"OpacitySDKDylibError"
+                              code:1002
+                          userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+      return -1;
+    }
   }
 
   opacity_core::register_ios_callbacks(
-      ios_prepare_request, 
-      ios_set_request_header,
-      ios_present_webview, 
-      ios_close_webview,
-      ios_get_browser_cookies_for_current_url,
-      ios_get_browser_cookies_for_domain, 
-      get_ip_address,
-      get_battery_level,
-      get_battery_status,
-      get_carrier_name,
-      get_carrier_mcc,
-      get_carrier_mnc,
-      get_course,
-      get_cpu_abi,
-      get_altitude,
-      get_latitude,
-      get_longitude,
-      get_device_model,
-      get_os_name,
-      get_os_version,
-      is_emulator,
-      get_horizontal_accuracy,
-      get_vertical_accuracy,
-      is_location_services_enabled,
-      is_wifi_connected,
-      is_rooted
-  );
-
-
-  // NSBundle *frameworkBundle =
-  //     [NSBundle bundleWithIdentifier:@"com.opacitylabs.sdk"];
-  // if (![frameworkBundle isLoaded]) {
-  //   BOOL success = [frameworkBundle load];
-  //   if (!success) {
-  //     NSString *errorMessage = @"Failed to load framework";
-  //     *error =
-  //         [NSError errorWithDomain:@"OpacitySDKDylibError"
-  //                             code:1002
-  //                         userInfo:@{NSLocalizedDescriptionKey :
-  //                         errorMessage}];
-  //     return -1;
-  //   }
-  // }
-
-  // Validate function pointers before registration
-  //  void *functions[] = {(void *)ios_prepare_request,
-  //                       (void *)ios_set_request_header,
-  //                       (void *)ios_present_webview,
-  //                       (void *)ios_close_webview,
-  //                       (void *)ios_get_browser_cookies_for_current_url,
-  //                       (void *)ios_get_browser_cookies_for_domain,
-  //                       (void *)get_ip_address};
-  //
-  //  for (int i = 0; i < 6; i++) {
-  //    if (functions[i] == NULL || functions[i] == (void *)0x1) {
-  //      NSString *errorMessage = [NSString
-  //          stringWithFormat:@"Invalid function pointer at index %d", i];
-  //      *error =
-  //          [NSError errorWithDomain:@"OpacitySDKCallbackError"
-  //                              code:1004
-  //                          userInfo:@{NSLocalizedDescriptionKey :
-  //                          errorMessage}];
-  //      return -1;
-  //    }
-  //  }
-
-  //  __sync_synchronize();
+      ios_prepare_request, ios_set_request_header, ios_present_webview,
+      ios_close_webview, ios_get_browser_cookies_for_current_url,
+      ios_get_browser_cookies_for_domain, get_ip_address, get_battery_level,
+      get_battery_status, get_carrier_name, get_carrier_mcc, get_carrier_mnc,
+      get_course, get_cpu_abi, get_altitude, get_latitude, get_longitude,
+      get_device_model, get_os_name, get_os_version, is_emulator,
+      get_horizontal_accuracy, get_vertical_accuracy,
+      is_location_services_enabled, is_wifi_connected, is_rooted);
 
   char *err;
   int status = opacity_core::init([api_key UTF8String], dry_run,
