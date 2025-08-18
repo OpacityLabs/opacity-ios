@@ -1,8 +1,7 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, OpacityEnvironment) {
-  Test,
-  Local,
+  Local = 1,
   Sandbox,
   Staging,
   Production
