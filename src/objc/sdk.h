@@ -86,6 +86,22 @@ extern const int32_t OPACITY_ENVIRONMENT_STAGING;
 
 extern const int32_t OPACITY_ENVIRONMENT_PRODUCTION;
 
+int32_t init(const char *api_key_str,
+             bool dry_run,
+             int32_t backend_environment,
+             bool show_errors_in_webview,
+             char **error_ptr);
+
+int32_t get(const char *name, const char *params, char **res_ptr, char **err_ptr);
+
+void free_string(char *ptr);
+
+void emit_webview_event(const char *payload);
+
+const char *get_sdk_versions(void);
+
+extern const char *get_ip_address(void);
+
 void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
                             IosSetRequestHeaderFn ios_set_request_header,
                             IosPresentWebviewFn ios_present_webview,
@@ -112,20 +128,6 @@ void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
                             IsLocationServicesEnabledFn is_location_services_enabled,
                             IsWifiConnectedFn is_wifi_connected,
                             IsRootedFn is_rooted);
-
-int32_t init(const char *api_key_str,
-             bool dry_run,
-             int32_t backend_environment,
-             bool show_errors_in_webview,
-             char **error_ptr);
-
-int32_t get(const char *name, const char *params, char **res_ptr, char **err_ptr);
-
-void free_string(char *ptr);
-
-void emit_webview_event(const char *payload);
-
-const char *get_sdk_versions(void);
 
 extern void secure_set(const char *key, const char *value);
 
