@@ -76,6 +76,7 @@
         initWithBarButtonSystemItem:UIBarButtonSystemItemStop
                              target:self
                              action:@selector(close)];
+    closeButton.accessibilityIdentifier = @"CloseWebView";
     self.navigationItem.rightBarButtonItem = closeButton;
   }
 }

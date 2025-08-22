@@ -16,10 +16,9 @@ final class OpacityPod_UITests: XCTestCase {
 
     var browser = app.webViews.firstMatch
     XCTAssertTrue(browser.waitForExistence(timeout: 5), "In-app browser did not appear")
-    var navigationBar = app.navigationBars.firstMatch
 
-    var closeButton = navigationBar.buttons["Stop"]
-    XCTAssertTrue(closeButton.exists, "Close button not found")
+    var closeButton = app.buttons["CloseWebView"]
+    XCTAssertTrue(closeButton.waitForExistence(timeout: 2), "Close button not found")
     closeButton.tap()
 
     button = app.buttons["uber_rider:profile"]
@@ -27,11 +26,9 @@ final class OpacityPod_UITests: XCTestCase {
 
     browser = app.webViews.firstMatch
     XCTAssertTrue(browser.waitForExistence(timeout: 5), "In-app browser did not appear")
-    navigationBar = app.navigationBars.firstMatch
-    XCTAssertTrue(navigationBar.exists, "Browser navigation bar not found")
 
-    closeButton = navigationBar.buttons["Stop"]
-    XCTAssertTrue(closeButton.exists, "Close button not found")
+    closeButton = app.buttons["CloseWebView"]
+    XCTAssertTrue(closeButton.waitForExistence(timeout: 2), "Close button not found")
     closeButton.tap()
 
     let toast = app.staticTexts["redToast"]
