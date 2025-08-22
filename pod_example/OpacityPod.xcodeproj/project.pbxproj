@@ -12,11 +12,11 @@
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F598195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F596195388D20070C39A /* InfoPlist.strings */; };
-		6003F59A195388D20070C39A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F599195388D20070C39A /* main.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		7049CBED2C91B05B003CFED4 /* .env in Resources */ = {isa = PBXBuildFile; fileRef = 7049CBEC2C91B05B003CFED4 /* .env */; };
 		708AFD062CF5ADF900BAB6FD /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AFD052CF5ADF900BAB6FD /* MainViewController.swift */; };
-		70D84F212C8FC52A00FC4F56 /* OpacityAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 70D84F1A2C8FC52A00FC4F56 /* OpacityAppDelegate.m */; };
+		70E0C51B2E58668B00C6453D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70E0C51A2E58668800C6453D /* SceneDelegate.swift */; };
+		70E0C51D2E58671900C6453D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70E0C51C2E58671700C6453D /* AppDelegate.swift */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
@@ -38,7 +38,6 @@
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6003F595195388D20070C39A /* OpacityPod-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OpacityPod-Info.plist"; sourceTree = "<group>"; };
 		6003F597195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F599195388D20070C39A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6003F59B195388D20070C39A /* OpacityPod-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OpacityPod-Prefix.pch"; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		700CFFE72E30DEFD004EAFC8 /* sdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = sdk.xcframework; path = ../sdk.xcframework; sourceTree = "<group>"; };
@@ -46,8 +45,8 @@
 		7018CB802D7AF5F100191CAF /* OpacityPod_UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OpacityPod_UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7049CBEC2C91B05B003CFED4 /* .env */ = {isa = PBXFileReference; lastKnownFileType = text; path = .env; sourceTree = "<group>"; };
 		708AFD052CF5ADF900BAB6FD /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		70D84F172C8FC52A00FC4F56 /* OpacityAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpacityAppDelegate.h; sourceTree = "<group>"; };
-		70D84F1A2C8FC52A00FC4F56 /* OpacityAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpacityAppDelegate.m; sourceTree = "<group>"; };
+		70E0C51A2E58668800C6453D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		70E0C51C2E58671700C6453D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8B4BEB5E01DE6050C4AE2046 /* Opacity.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Opacity.podspec; path = ../Opacity.podspec; sourceTree = "<group>"; };
@@ -126,9 +125,9 @@
 		6003F593195388D20070C39A /* Opacity */ = {
 			isa = PBXGroup;
 			children = (
+				70E0C51C2E58671700C6453D /* AppDelegate.swift */,
+				70E0C51A2E58668800C6453D /* SceneDelegate.swift */,
 				708AFD052CF5ADF900BAB6FD /* MainViewController.swift */,
-				70D84F172C8FC52A00FC4F56 /* OpacityAppDelegate.h */,
-				70D84F1A2C8FC52A00FC4F56 /* OpacityAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
@@ -144,7 +143,6 @@
 			children = (
 				6003F595195388D20070C39A /* OpacityPod-Info.plist */,
 				6003F596195388D20070C39A /* InfoPlist.strings */,
-				6003F599195388D20070C39A /* main.m */,
 				6003F59B195388D20070C39A /* OpacityPod-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -321,9 +319,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70E0C51D2E58671900C6453D /* AppDelegate.swift in Sources */,
 				708AFD062CF5ADF900BAB6FD /* MainViewController.swift in Sources */,
-				6003F59A195388D20070C39A /* main.m in Sources */,
-				70D84F212C8FC52A00FC4F56 /* OpacityAppDelegate.m in Sources */,
+				70E0C51B2E58668B00C6453D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
