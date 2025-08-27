@@ -183,7 +183,11 @@ class MainViewController: UIViewController {
         print(res)
         showGreenToast(message: "Success")
       } catch {
-        showRedToast(message: "Unknown Error: \(error.localizedDescription)")
+        if let opacityErr = error as? OpacityError {
+          showRedToast(message: "\(opacityErr.code) - \(opacityErr.message)")
+        } else {
+          showRedToast(message: "Unknown Error: \(error.localizedDescription)")
+        }
       }
     }
   }
