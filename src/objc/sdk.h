@@ -12,6 +12,8 @@
 namespace opacity_core {
 #endif  // __cplusplus
 
+#define DEFAULT_TARGET_PORT 443
+
 typedef void (*IosPrepareRequestFn)(const char*);
 
 typedef void (*IosSetRequestHeaderFn)(const char*, const char*);
