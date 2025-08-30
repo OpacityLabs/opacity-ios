@@ -11,6 +11,9 @@ final class OpacityPod_UITests: XCTestCase {
     let app = XCUIApplication()
     app.launch()
 
+    // Give some time for the collateral provider to fetch the certs
+    sleep(2)
+
     var button = app.buttons["uber_rider:profile"]
     button.tap()
 
@@ -39,6 +42,9 @@ final class OpacityPod_UITests: XCTestCase {
   func testFlowCompletes() {
     let app = XCUIApplication()
     app.launch()
+
+    // Give some time for the collateral provider to fetch the certs
+    sleep(2)
 
     let button = app.buttons["test:open_browser_must_succeed"]
     button.tap()
