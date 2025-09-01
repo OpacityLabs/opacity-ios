@@ -60,6 +60,8 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7018CB812D7AF5F100191CAF /* OpacityPod_UITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = OpacityPod_UITests;
 			sourceTree = "<group>";
 		};
@@ -301,13 +303,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OpacityPod_Example/Pods-OpacityPod_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OpacityPod_Example/Pods-OpacityPod_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
