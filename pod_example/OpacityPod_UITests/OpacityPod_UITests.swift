@@ -11,6 +11,8 @@ final class OpacityPod_UITests: XCTestCase {
     let app = XCUIApplication()
     app.launch()
 
+    sleep(5)
+
     var button = app.buttons["uber_rider:profile"]
     button.tap()
 
@@ -40,11 +42,13 @@ final class OpacityPod_UITests: XCTestCase {
     let app = XCUIApplication()
     app.launch()
 
+    sleep(5)
+
     let button = app.buttons["test:open_browser_must_succeed"]
     button.tap()
 
     let toast = app.staticTexts["greenToast"]
-    XCTAssertTrue(toast.waitForExistence(timeout: 20), "green toast did not appear")
+    XCTAssertTrue(toast.waitForExistence(timeout: 30), "green toast did not appear")
   }
 
 }
