@@ -9,9 +9,8 @@ final class OpacityPod_UITests: XCTestCase {
   @MainActor
   func testFlowCanFailAndBeReopenedButAlsoReturnsError() throws {
     let app = XCUIApplication()
+    app.launchEnvironment = ["OPACITY_AWAIT_COLLATERAL": "1"]
     app.launch()
-
-    sleep(5)
 
     var button = app.buttons["uber_rider:profile"]
     button.tap()
@@ -40,9 +39,8 @@ final class OpacityPod_UITests: XCTestCase {
   @MainActor
   func testFlowCompletes() {
     let app = XCUIApplication()
+    app.launchEnvironment = ["OPACITY_AWAIT_COLLATERAL": "1"]
     app.launch()
-
-    sleep(5)
 
     let button = app.buttons["test:open_browser_must_succeed"]
     button.tap()
