@@ -12,6 +12,8 @@
 namespace opacity_core {
 #endif  // __cplusplus
 
+typedef struct OurExtensionType OurExtensionType;
+
 typedef void (*IosPrepareRequestFn)(const char*);
 
 typedef void (*IosSetRequestHeaderFn)(const char*, const char*);
@@ -63,6 +65,66 @@ typedef bool (*IsLocationServicesEnabledFn)(void);
 typedef bool (*IsWifiConnectedFn)(void);
 
 typedef bool (*IsRootedFn)(void);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifdef __cplusplus
 extern "C" {
