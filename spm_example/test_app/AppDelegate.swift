@@ -11,7 +11,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    OpacitySwiftWrapper.getSecretValue()
 
     BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundTaskIdentifier, using: nil) {
       task in
@@ -38,7 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Perform async work using Swift Concurrency
     Task {
       do {
-        OpacitySwiftWrapper.getSecretValue()
 
         _ = try await OpacitySwiftWrapper
           .get(name: "github:profile", params: nil)
