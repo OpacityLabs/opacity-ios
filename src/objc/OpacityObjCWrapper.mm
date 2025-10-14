@@ -128,4 +128,10 @@ NSError *parseOpacityError(NSString *jsonString) {
   [thread start];
 }
 
++ (NSString *)getApiVersion {
+  const char* res = opacity_core::get_api_version();
+  NSString *final_res = [NSString stringWithUTF8String:res];
+  return final_res;
+}
+
 @end

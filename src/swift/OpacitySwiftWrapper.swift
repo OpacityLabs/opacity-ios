@@ -67,5 +67,9 @@ public class OpacitySwiftWrapper {
       throw OpacityError(code: "UnknownError", message: error.localizedDescription)
     }
   }
+  
+  public static func getApiVersion() -> String {
+    return OpacityObjCWrapper.getApiVersion()
+  }
 
 }
