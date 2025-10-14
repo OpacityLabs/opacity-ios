@@ -1,7 +1,7 @@
 import OpacityCoreSwift
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
 
   var buttons: [(String, () async throws -> Void)]!
 
@@ -63,6 +63,8 @@ class ViewController: UIViewController {
     inputField.autocapitalizationType = .none
     inputField.autocorrectionType = .no
     inputField.spellCheckingType = .no
+    inputField.returnKeyType = .done
+    inputField.delegate = self
     inputField.text = UserDefaults.standard.string(forKey: "savedFlowName")
     inputField.addTarget(self, action: #selector(saveInputValue), for: .editingDidEnd)
     view.addSubview(inputField)
@@ -75,6 +77,8 @@ class ViewController: UIViewController {
     inputFieldParams.autocorrectionType = .no
     inputFieldParams.spellCheckingType = .no
     inputFieldParams.smartQuotesType = .no
+    inputFieldParams.returnKeyType = .done
+    inputFieldParams.delegate = self
     inputFieldParams.text = UserDefaults.standard.string(forKey: "savedParams")
     inputFieldParams.addTarget(self, action: #selector(saveInputParamsValue), for: .editingDidEnd)
     view.addSubview(inputFieldParams)
@@ -115,6 +119,14 @@ class ViewController: UIViewController {
       versionLabel.bottomAnchor.constraint(
         equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
     ])
+
+    // Add tap gesture to dismiss keyboard
+    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+    view.addGestureRecognizer(tapGesture)
+  }
+
+  @objc private func dismissKeyboard() {
+    view.endEditing(true)
   }
 
   @objc private func saveInputValue(_ sender: UITextField) {
@@ -339,5 +351,12 @@ class ViewController: UIViewController {
       errorLabel.lineBreakMode = .byWordWrapping
       view.addSubview(errorLabel)
     }
+  }
+}
+
+extension ViewController {
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    textField.resignFirstResponder()
+    return true
   }
 }
