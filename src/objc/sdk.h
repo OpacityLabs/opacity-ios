@@ -66,6 +66,8 @@ typedef bool (*IsWifiConnectedFn)(void);
 
 typedef bool (*IsRootedFn)(void);
 
+typedef bool (*IsAppForeground)(void);
+
 
 
 
@@ -162,6 +164,8 @@ void emit_webview_event(const char *payload);
 
 const char *get_api_version(void);
 
+extern bool android_is_app_foregrounded(void);
+
 extern const char *get_ip_address(void);
 
 void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
@@ -189,7 +193,8 @@ void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
                             GetVerticalAccuracyFn get_vertical_accuracy,
                             IsLocationServicesEnabledFn is_location_services_enabled,
                             IsWifiConnectedFn is_wifi_connected,
-                            IsRootedFn is_rooted);
+                            IsRootedFn is_rooted,
+                            IsAppForeground is_app_foreground);
 
 extern void secure_set(const char *key, const char *value);
 
