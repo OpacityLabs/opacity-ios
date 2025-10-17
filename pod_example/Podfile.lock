@@ -1,0 +1,16 @@
+PODS:
+  - OpacityCore (6.6.0)
+
+DEPENDENCIES:
+  - OpacityCore (from `../`)
+
+EXTERNAL SOURCES:
+  OpacityCore:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  OpacityCore: fdbd7d87cb326774eb6dcc43c50c5acb0d2d3e3e
+
+PODFILE CHECKSUM: 13404f354c13fb5095aa4a798ef71da45d4bd4f4
+
+COCOAPODS: 1.16.2
