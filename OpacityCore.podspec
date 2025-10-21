@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'OpacityCore'
-  s.version          = '6.6.5'
+  s.version          = '6.6.6'
   s.summary          = 'Core of Opacity'
   s.description      = 'Core library of Opacity Network for iOS'
   s.homepage         = 'https://github.com/OpacityLabs/opacity-ios'
