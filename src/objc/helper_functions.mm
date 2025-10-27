@@ -7,7 +7,6 @@
 #import <arpa/inet.h>
 #import <ifaddrs.h>
 #import <string>
-#import <sys/sysctl.h>
 #import <sys/utsname.h>
 
 ModalWebViewController *modalWebVC;
