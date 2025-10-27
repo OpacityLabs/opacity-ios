@@ -7,6 +7,8 @@
 #import <arpa/inet.h>
 #import <ifaddrs.h>
 #import <string>
+#import <sys/sysctl.h>
+#import <sys/utsname.h>
 
 ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
@@ -218,7 +220,10 @@ double get_longitude() {
 }
 
 const char *get_device_model() {
-  NSString *deviceModel = [UIDevice currentDevice].model;
+  struct utsname systemInfo;
+  uname(&systemInfo);
+  NSString *deviceModel = [NSString stringWithCString:systemInfo.machine
+                                             encoding:NSUTF8StringEncoding];
   const char *model = [deviceModel UTF8String];
   return model;
 }
@@ -233,6 +238,55 @@ const char *get_os_version() {
   NSString *osVersion = [UIDevice currentDevice].systemVersion;
   const char *version = [osVersion UTF8String];
   return version;
+}
+
+const char *get_device_locale() {
+  NSString *localeIdentifier = [[NSLocale currentLocale] localeIdentifier];
+  const char *locale = [localeIdentifier UTF8String];
+  return locale;
+}
+
+int get_screen_width() {
+  CGRect screenBounds = [[UIScreen mainScreen] bounds];
+  CGFloat scale = [[UIScreen mainScreen] scale];
+  return (int)(screenBounds.size.width * scale);
+}
+
+int get_screen_height() {
+  CGRect screenBounds = [[UIScreen mainScreen] bounds];
+  CGFloat scale = [[UIScreen mainScreen] scale];
+  return (int)(screenBounds.size.height * scale);
+}
+
+float get_screen_density() { return [[UIScreen mainScreen] scale]; }
+
+int get_screen_dpi() {
+  CGFloat scale = [[UIScreen mainScreen] scale];
+  return (int)(163 * scale);
+}
+
+const char *get_device_cpu() {
+#if defined(__aarch64__) || defined(__arm64__)
+  static const char *cpu_arch = "arm64";
+#elif defined(__arm__)
+  static const char *cpu_arch = "arm";
+#elif defined(__x86_64__)
+  static const char *cpu_arch = "x86_64";
+#elif defined(__i386__)
+  static const char *cpu_arch = "x86";
+#else
+  static const char *cpu_arch = "unknown";
+#endif
+  return strdup(cpu_arch);
+}
+
+const char *get_device_codename() {
+  struct utsname systemInfo;
+  uname(&systemInfo);
+
+  NSString *codename = [NSString stringWithCString:systemInfo.machine
+                                          encoding:NSUTF8StringEncoding];
+  return strdup([codename UTF8String]);
 }
 
 bool is_emulator() {
@@ -304,6 +358,7 @@ bool is_wifi_connected() {
 bool is_rooted() { return false; }
 
 bool is_app_foregrounded() {
-  UIApplicationState state = [[UIApplication sharedApplication] applicationState];
+  UIApplicationState state =
+      [[UIApplication sharedApplication] applicationState];
   return state == UIApplicationStateActive;
 }
