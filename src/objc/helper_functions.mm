@@ -48,7 +48,7 @@ void ios_close_webview() {
   });
 }
 
-void ios_present_webview() {
+void ios_present_webview(bool intercept_requests) {
   dispatch_async(dispatch_get_main_queue(), ^{
     if (modalWebVC != nil) {
       NSLog(@"Warning: Previous modal web view controller has not been "
@@ -56,7 +56,8 @@ void ios_present_webview() {
     }
 
     modalWebVC = [[ModalWebViewController alloc] initWithRequest:request
-                                                       userAgent:userAgent];
+                                                       userAgent:userAgent
+                                               interceptRequests:intercept_requests];
 
     // Set an on dismiss callback
     modalWebVC.onDismissCallback = ^{
