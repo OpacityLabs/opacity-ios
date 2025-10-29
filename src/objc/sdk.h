@@ -212,8 +212,6 @@ extern const char *android_get_browser_cookies_for_current_url(void);
 
 extern const char *android_get_browser_cookies_for_domain(const char *domain);
 
-extern void android_intercept_requests(void);
-
 #ifdef __cplusplus
 }  // extern "C"
 #endif  // __cplusplus
