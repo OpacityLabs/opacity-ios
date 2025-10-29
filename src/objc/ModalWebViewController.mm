@@ -141,6 +141,9 @@
     
     [self.view addSubview:self.webView];
     
+    // Observe URL changes (for SPAs)
+    [self.webView addObserver:self forKeyPath:@"URL" options:NSKeyValueObservingOptionNew context:nil];
+    
     // Set the custom user agent if provided
     if (self.customUserAgent != nil) {
         self.webView.customUserAgent = self.customUserAgent;
