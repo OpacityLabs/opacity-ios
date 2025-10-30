@@ -501,10 +501,12 @@ decisionHandler:
       didReceiveScriptMessage:(WKScriptMessage *)message {
     if (self.interceptRequests && [message.name isEqualToString:@"interceptedRequestHandler"]) {
         NSDictionary *payload = message.body;
+        NSString *requestType = payload[@"requestType"];
         NSDictionary *data = payload[@"data"];
         
         NSDictionary *event = @{
             @"event" : @"intercepted_request",
+            @"request_type": requestType,
             @"data" : data,
             @"id" : [self nextId]
         };
