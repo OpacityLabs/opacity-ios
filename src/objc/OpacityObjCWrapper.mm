@@ -54,7 +54,10 @@ NSError *parseOpacityError(NSString *jsonString) {
         get_course, get_cpu_abi, get_altitude, get_latitude, get_longitude,
         get_device_model, get_os_name, get_os_version, is_emulator,
         get_horizontal_accuracy, get_vertical_accuracy,
-        is_location_services_enabled, is_wifi_connected, is_rooted, is_app_foregrounded);
+        is_location_services_enabled, is_wifi_connected, is_rooted,
+        is_app_foregrounded, get_device_locale, get_screen_width,
+        get_screen_height, get_screen_density, get_screen_dpi, get_device_cpu,
+        get_device_codename);
   }
 
   char *err;
@@ -129,7 +132,7 @@ NSError *parseOpacityError(NSString *jsonString) {
 }
 
 + (NSString *)getApiVersion {
-  const char* res = opacity_core::get_api_version();
+  const char *res = opacity_core::get_api_version();
   NSString *final_res = [NSString stringWithUTF8String:res];
   return final_res;
 }
