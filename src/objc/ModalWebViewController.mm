@@ -16,22 +16,22 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  
+
   self.cookies = [NSMutableDictionary dictionary];
   self.visitedUrls = [NSMutableArray array];
   self.eventCounter = 0;
-  
+
   // Configure the view's background color
   self.view.backgroundColor = [UIColor blackColor];
-  
+
   WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-  
+
   WKProcessPool *processPool = [[WKProcessPool alloc] init];
   configuration.processPool = processPool;
-  
+
   self.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
   configuration.websiteDataStore = self.websiteDataStore;
-  
+
   
   if (self.interceptRequests) {
     NSString *injectedJS =
@@ -136,16 +136,24 @@
   // --- Now create the web view ---
   self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:configuration];
   self.webView.allowsLinkPreview = true;
-  self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+  self.webView.autoresizingMask =
+      UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   self.webView.navigationDelegate = self;
-  
+
+  // Add the WKWebView to the view hierarchy
   [self.view addSubview:self.webView];
-  
+
+  [self.webView addObserver:self
+                forKeyPath:@"URL"
+                  options:NSKeyValueObservingOptionNew
+                  context:nil];
+
+
   // Set the custom user agent if provided
   if (self.customUserAgent != nil) {
     self.webView.customUserAgent = self.customUserAgent;
   }
-  
+
   // Load the provided URL
   if (self.request) {
     [self.webView loadRequest:self.request];
@@ -159,13 +167,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-  
+
   // Add navigation items after the view hierarchy is fully set up
   if (!self.navigationItem.rightBarButtonItem) {
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc]
-                                    initWithBarButtonSystemItem:UIBarButtonSystemItemStop
-                                    target:self
-                                    action:@selector(close)];
+        initWithBarButtonSystemItem:UIBarButtonSystemItemStop
+                             target:self
+                             action:@selector(close)];
     closeButton.accessibilityIdentifier = @"CloseWebView";
     self.navigationItem.rightBarButtonItem = closeButton;
   }
@@ -183,16 +191,16 @@
     NSString *event_id = [self nextId];
     [dict setObject:@"close" forKey:@"event"];
     [dict setObject:event_id forKey:@"id"];
-    
+
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
                                                        options:0
                                                          error:&error];
     NSString *payload = [[NSString alloc] initWithData:jsonData
                                               encoding:NSUTF8StringEncoding];
-    
+
     opacity_core::emit_webview_event([payload UTF8String]);
-    
+
     if (self.onDismissCallback) {
       self.onDismissCallback();
     }
@@ -207,20 +215,20 @@
   if (![keyPath isEqualToString:@"URL"] || object != self.webView) {
     return;
   }
-  
+
   NSURL *newURL = change[NSKeyValueChangeNewKey];
   if (!newURL) {
     return;
   }
-  
+
   [self addToVisitedUrls:newURL.absoluteString];
-  
+
   NSDictionary *event = @{
     @"event" : @"location_changed",
     @"url" : newURL.absoluteString,
     @"id" : [self nextId]
   };
-  
+
   NSError *error = nil;
   NSData *jsonData = [NSJSONSerialization dataWithJSONObject:event
                                                      options:0
@@ -228,7 +236,7 @@
   if (!jsonData) {
     return;
   }
-  
+
   NSString *payload = [[NSString alloc] initWithData:jsonData
                                             encoding:NSUTF8StringEncoding];
   opacity_core::emit_webview_event([payload UTF8String]);
@@ -240,11 +248,11 @@
 
 - (void)getBrowserCookiesForDomainWithCompletion:(NSString *)domain
                                       completion:
-(void (^)(NSDictionary *))completion {
+                                          (void (^)(NSDictionary *))completion {
   NSMutableDictionary *cookieDict = [NSMutableDictionary dictionary];
   WKHTTPCookieStore *cookieStore =
-  self.webView.configuration.websiteDataStore.httpCookieStore;
-  
+      self.webView.configuration.websiteDataStore.httpCookieStore;
+
   [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
     for (NSHTTPCookie *cookie in cookies) {
       // Check if the cookie's domain matches the target domain
@@ -261,20 +269,20 @@
 - (NSDictionary *)getBrowserCookiesForDomain:(NSString *)domain {
   __block NSDictionary *result = nil;
   dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-  
+
   [self getBrowserCookiesForDomainWithCompletion:domain
                                       completion:^(NSDictionary *cookies) {
-    result = cookies;
-    dispatch_semaphore_signal(semaphore);
-  }];
-  
+                                        result = cookies;
+                                        dispatch_semaphore_signal(semaphore);
+                                      }];
+
   dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
   return result;
 }
 - (NSDictionary *)getBrowserCookiesForCurrentUrl {
   __block NSDictionary *result = nil;
   dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-  
+
   void (^getCookiesBlock)(void) = ^{
     NSURL *url = self.webView.URL;
     if (url == nil) {
@@ -282,28 +290,28 @@
       dispatch_semaphore_signal(semaphore);
       return;
     }
-    
+
     [self getBrowserCookiesForDomainWithCompletion:url.host
                                         completion:^(NSDictionary *cookies) {
-      result = cookies;
-      dispatch_semaphore_signal(semaphore);
-    }];
+                                          result = cookies;
+                                          dispatch_semaphore_signal(semaphore);
+                                        }];
   };
-  
+
   if ([NSThread isMainThread]) {
     getCookiesBlock();
   } else {
     dispatch_async(dispatch_get_main_queue(), getCookiesBlock);
   }
-  
+
   dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
   return result;
 }
 
 - (void)updateCapturedCookiesWithCompletion:(void (^)(void))completion {
   WKHTTPCookieStore *cookieStore =
-  self.webView.configuration.websiteDataStore.httpCookieStore;
-  
+      self.webView.configuration.websiteDataStore.httpCookieStore;
+
   [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
     for (NSHTTPCookie *cookie in cookies) {
       [self.cookies setObject:cookie.value forKey:cookie.name];
@@ -321,13 +329,13 @@
                       userAgent:(NSString *)userAgent
               interceptRequests:(bool)interceptRequests {
   self = [super init];
-  
+
   if (self) {
     _request = request;
     _customUserAgent = userAgent;
     _interceptRequests = interceptRequests;
   }
-  
+
   return self;
 }
 
@@ -349,7 +357,7 @@
 #pragma mark - WKNavigationDelegate Methods
 
 - (void)webView:(WKWebView *)webView
-didStartProvisionalNavigation:(WKNavigation *)navigation {
+    didStartProvisionalNavigation:(WKNavigation *)navigation {
   if (webView.URL) {
     [self addToVisitedUrls:webView.URL.absoluteString];
   }
@@ -357,69 +365,69 @@ didStartProvisionalNavigation:(WKNavigation *)navigation {
 
 - (void)getHtmlBodyWithCompletion:(void (^)(NSString *))completion {
   [self.webView
-   evaluateJavaScript:@"document.documentElement.outerHTML.toString()"
-   completionHandler:^(NSString *html, NSError *error) {
-    completion(html);
-  }];
+      evaluateJavaScript:@"document.documentElement.outerHTML.toString()"
+       completionHandler:^(NSString *html, NSError *error) {
+         completion(html);
+       }];
 }
 
 - (void)webView:(WKWebView *)webView
-didFinishNavigation:(WKNavigation *)navigation {
+    didFinishNavigation:(WKNavigation *)navigation {
   NSURL *url = webView.URL;
-  
+
   if (!url) {
     return;
   }
-  
+
   [self addToVisitedUrls:webView.URL.absoluteString];
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   NSString *event_id = [self nextId];
   [dict setObject:url.absoluteString forKey:@"url"];
   [dict setObject:@"navigation" forKey:@"event"];
   [dict setObject:event_id forKey:@"id"];
-  
+
   [self getHtmlBodyWithCompletion:^(NSString *body) {
     if (body != nil) {
       [dict setObject:body forKey:@"html_body"];
     }
-    
+
     [self updateCapturedCookiesWithCompletion:^{
       [dict setObject:self.cookies forKey:@"cookies"];
       [dict setObject:self.visitedUrls forKey:@"visited_urls"];
-      
+
       NSError *error;
       NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
                                                          options:0
                                                            error:&error];
       NSString *payload = [[NSString alloc] initWithData:jsonData
                                                 encoding:NSUTF8StringEncoding];
-      
+
       opacity_core::emit_webview_event([payload UTF8String]);
-      
+
       [self resetVisitedUrls];
     }];
   }];
 }
 
 - (void)webView:(WKWebView *)webView
-didReceiveServerRedirectForProvisionalNavigation:
-(WKNavigation *)navigation {
+    didReceiveServerRedirectForProvisionalNavigation:
+        (WKNavigation *)navigation {
   NSURL *url = webView.URL;
-  
+
   if (url) {
     [self addToVisitedUrls:url.absoluteString];
   }
 }
 
 - (void)webView:(WKWebView *)webView
-didFailProvisionalNavigation:(WKNavigation *)navigation
-      withError:(NSError *)error {
+    didFailProvisionalNavigation:(WKNavigation *)navigation
+                       withError:(NSError *)error {
   NSString *url = error.userInfo[NSURLErrorFailingURLStringErrorKey];
-  
+
   if (!url) {
     return;
   }
-  
+
   [self addToVisitedUrls:url];
   NSMutableDictionary *dict = [NSMutableDictionary dictionary];
   [dict setObject:url forKey:@"url"];
@@ -427,35 +435,35 @@ didFailProvisionalNavigation:(WKNavigation *)navigation
   [dict setObject:[self nextId] forKey:@"id"];
   [dict setObject:self.cookies forKey:@"cookies"];
   [dict setObject:self.visitedUrls forKey:@"visited_urls"];
-  
+
   NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
                                                      options:0
                                                        error:&error];
-  
+
   NSString *payload = [[NSString alloc] initWithData:jsonData
                                             encoding:NSUTF8StringEncoding];
-  
+
   opacity_core::emit_webview_event([payload UTF8String]);
   [self resetVisitedUrls];
 }
 
 - (void)URLSession:(NSURLSession *)session
-              task:(NSURLSessionTask *)task
-willPerformHTTPRedirection:(NSHTTPURLResponse *)response
-        newRequest:(NSURLRequest *)request
- completionHandler:
-(void (^)(NSURLRequest *_Nullable))completionHandler {
-  
+                          task:(NSURLSessionTask *)task
+    willPerformHTTPRedirection:(NSHTTPURLResponse *)response
+                    newRequest:(NSURLRequest *)request
+             completionHandler:
+                 (void (^)(NSURLRequest *_Nullable))completionHandler {
+
   NSDictionary *headers = [response allHeaderFields];
-  
+
   NSArray *cookies =
-  [NSHTTPCookie cookiesWithResponseHeaderFields:headers
-                                         forURL:[response URL]];
-  
+      [NSHTTPCookie cookiesWithResponseHeaderFields:headers
+                                             forURL:[response URL]];
+
   for (NSHTTPCookie *cookie in cookies) {
     [self.cookies setObject:cookie.value forKey:cookie.name];
   }
-  
+
   if (request.URL) {
     [self addToVisitedUrls:request.URL.absoluteString];
   }
@@ -466,10 +474,10 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
 }
 
 - (void)webView:(WKWebView *)webView
-decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
-decisionHandler:
-(void (^)(WKNavigationActionPolicy))decisionHandler {
-  
+    decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
+                    decisionHandler:
+                        (void (^)(WKNavigationActionPolicy))decisionHandler {
+
   /// We potentially want to intercept navigation requests with deeplinks
   /// A deeplink might take you out of the current app and into the service app
   /// The problem is by canceling the redirection none of the other handlers are
@@ -486,11 +494,11 @@ decisionHandler:
   //    decisionHandler(WKNavigationActionPolicyCancel);
   //    return;
   //  }
-  
+
   if (webView.URL) {
     [self addToVisitedUrls:webView.URL.absoluteString];
   }
-  
+
   decisionHandler(WKNavigationActionPolicyAllow);
 }
 
@@ -503,7 +511,7 @@ decisionHandler:
     
     NSDictionary *event = @{
       @"event" : @"intercepted_request",
-      @"requestType" : requestType,
+      @"request_type" : requestType,
       @"data" : data,
       @"id" : [self nextId]
     };
