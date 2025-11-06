@@ -2,18 +2,18 @@
 #import "sdk.h"
 
 @interface ModalWebViewController ()
-
-@property(nonatomic, strong) WKWebView *webView;
-@property(nonatomic, strong) NSMutableURLRequest *request;
-@property(nonatomic, strong) WKWebsiteDataStore *websiteDataStore;
-@property(nonatomic, strong) NSMutableDictionary *cookies;
-@property(nonatomic, strong) NSMutableArray<NSString *> *visitedUrls;
-@property(nonatomic, strong) NSString *customUserAgent;
-@property(nonatomic, assign) NSInteger eventCounter;
-
+@property (nonatomic, strong) WKWebView *webView;
+@property (nonatomic, strong) NSMutableURLRequest *request;
+@property (nonatomic, copy) NSString *customUserAgent;
+@property (nonatomic, strong) WKWebsiteDataStore *websiteDataStore;
+@property (nonatomic, strong) NSMutableDictionary *cookies;
+@property (nonatomic, strong) NSMutableArray *visitedUrls;
+@property (nonatomic, assign) NSInteger eventCounter;
+@property (nonatomic, assign) bool interceptRequests;
 @end
 
 @implementation ModalWebViewController
+
 - (void)viewDidLoad {
   [super viewDidLoad];
 
@@ -32,17 +32,109 @@
   self.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
   configuration.websiteDataStore = self.websiteDataStore;
 
-  // Initialize and configure the WKWebView
-  self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds
-                                    configuration:configuration];
-
-  // URL listener for SPAs
-  [self.webView addObserver:self
-                 forKeyPath:@"URL"
-                    options:NSKeyValueObservingOptionNew
-                    context:nil];
-
-  // Set the configuration to the WKWebView
+  
+  if (self.interceptRequests) {
+    NSString *injectedJS =
+    @"(function() {\n"
+    "    const log = (requestType, data) => {\n"
+    "        try {\n"
+    "            window.webkit.messageHandlers.interceptedRequestHandler.postMessage({ requestType, data });\n"
+    "        } catch (e) {}\n"
+    "    };\n"
+    "    const originalFetch = window.fetch;\n"
+    "    window.fetch = async function(input, init) {\n"
+    "        try {\n"
+    "            const method = (init && init.method) || (typeof input === \"string\" ? \"GET\" : input.method || \"GET\");\n"
+    "            const url = typeof input === \"string\" ? input : input.url;\n"
+    "            let requestHeaders = init?.headers || {};\n"
+    "            if (requestHeaders instanceof Headers) {\n"
+    "                requestHeaders = Object.fromEntries(requestHeaders.entries());\n"
+    "            }\n"
+    "            log(\"fetch_request\", {\n"
+    "                url,\n"
+    "                method,\n"
+    "                headers: requestHeaders,\n"
+    "                body: init?.body,\n"
+    "            });\n"
+    "            const response = await originalFetch.apply(this, arguments);\n"
+    "            const clonedResponse = response.clone();\n"
+    "            let responseHeaders = clonedResponse.headers || {};\n"
+    "            if (responseHeaders instanceof Headers) {\n"
+    "                responseHeaders = Object.fromEntries(responseHeaders.entries());\n"
+    "            }\n"
+    "            log(\"fetch_response\", {\n"
+    "                url,\n"
+    "                method,\n"
+    "                headers: responseHeaders,\n"
+    "                body: await clonedResponse.text(),\n"
+    "                status: clonedResponse.status,\n"
+    "            });\n"
+    "            return response;\n"
+    "        } catch (err) {\n"
+    "            log(\"fetch_error\", err.toString());\n"
+    "            throw err;\n"
+    "        }\n"
+    "    };\n"
+    "    const OriginalXHR = window.XMLHttpRequest;\n"
+    "\n"
+    "    function PatchedXHR() {\n"
+    "        const xhr = new OriginalXHR();\n"
+    "        let _method = \"\";\n"
+    "        let _url = \"\";\n"
+    "        let headers = {};\n"
+    "        xhr.open = new Proxy(xhr.open, {\n"
+    "            apply(t, thisArg, args) {\n"
+    "                _method = args[0];\n"
+    "                _url = args[1];\n"
+    "                return Reflect.apply(t, thisArg, args);\n"
+    "            },\n"
+    "        });\n"
+    "        const setRequestHeader = xhr.setRequestHeader;\n"
+    "        xhr.setRequestHeader = function(name, value) {\n"
+    "            headers[name] = value;\n"
+    "            return setRequestHeader.apply(xhr, arguments);\n"
+    "        };\n"
+    "        xhr.send = new Proxy(xhr.send, {\n"
+    "            apply(t, thisArg, args) {\n"
+    "                log(\"xhr_request\", {\n"
+    "                    method: _method,\n"
+    "                    url: _url,\n"
+    "                    headers,\n"
+    "                    body: args[0],\n"
+    "                });\n"
+    "                xhr.addEventListener(\"loadend\", function() {\n"
+    "                    log(\"xhr_response\", {\n"
+    "                        method: _method,\n"
+    "                        url: _url,\n"
+    "                        headers,\n"
+    "                        body: xhr.responseText || xhr.response,\n"
+    "                        status: xhr.status,\n"
+    "                    });\n"
+    "                });\n"
+    "                return Reflect.apply(t, thisArg, args);\n"
+    "            },\n"
+    "        });\n"
+    "        return xhr;\n"
+    "    }\n"
+    "    window.XMLHttpRequest = PatchedXHR;\n"
+    "})();\n";
+    
+    
+    WKUserScript *userScript = [[WKUserScript alloc] initWithSource:injectedJS
+                                                      injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                                                   forMainFrameOnly:NO];
+    
+    WKUserContentController *contentController = [[WKUserContentController alloc] init];
+    [contentController addUserScript:userScript];
+    configuration.userContentController = contentController;
+    [contentController addScriptMessageHandler:self name:@"interceptedRequestHandler"];
+  } else {
+    WKUserContentController *contentController = [[WKUserContentController alloc] init];
+    configuration.userContentController = contentController;
+  }
+  
+  // --- Now create the web view ---
+  self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:configuration];
   self.webView.allowsLinkPreview = true;
   self.webView.autoresizingMask =
       UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -50,6 +142,12 @@
 
   // Add the WKWebView to the view hierarchy
   [self.view addSubview:self.webView];
+
+  [self.webView addObserver:self
+                forKeyPath:@"URL"
+                  options:NSKeyValueObservingOptionNew
+                  context:nil];
+
 
   // Set the custom user agent if provided
   if (self.customUserAgent != nil) {
@@ -106,6 +204,7 @@
     if (self.onDismissCallback) {
       self.onDismissCallback();
     }
+    self.interceptRequests = false;
   }
 }
 
@@ -227,12 +326,14 @@
 }
 
 - (instancetype)initWithRequest:(NSMutableURLRequest *)request
-                      userAgent:(NSString *)userAgent {
+                      userAgent:(NSString *)userAgent
+              interceptRequests:(bool)interceptRequests {
   self = [super init];
 
   if (self) {
     _request = request;
     _customUserAgent = userAgent;
+    _interceptRequests = interceptRequests;
   }
 
   return self;
@@ -400,5 +501,30 @@
 
   decisionHandler(WKNavigationActionPolicyAllow);
 }
+
+- (void)userContentController:(WKUserContentController *)userContentController
+      didReceiveScriptMessage:(WKScriptMessage *)message {
+  if (self.interceptRequests && [message.name isEqualToString:@"interceptedRequestHandler"]) {
+    NSDictionary *payload = message.body;
+    NSString *requestType = payload[@"requestType"];
+    NSDictionary *data = payload[@"data"];
+    
+    NSDictionary *event = @{
+      @"event" : @"intercepted_request",
+      @"request_type" : requestType,
+      @"data" : data,
+      @"id" : [self nextId]
+    };
+    
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:event
+                                                       options:0
+                                                         error:&error];
+    NSString *payloadString = [[NSString alloc] initWithData:jsonData
+                                                    encoding:NSUTF8StringEncoding];
+    opacity_core::emit_webview_event([payloadString UTF8String]);
+  }
+}
+
 
 @end

@@ -18,7 +18,7 @@ typedef void (*IosPrepareRequestFn)(const char*);
 
 typedef void (*IosSetRequestHeaderFn)(const char*, const char*);
 
-typedef void (*IosPresentWebviewFn)(void);
+typedef void (*IosPresentWebviewFn)(bool);
 
 typedef void (*IosCloseWebviewFn)(void);
 
