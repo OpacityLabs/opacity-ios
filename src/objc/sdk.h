@@ -247,7 +247,7 @@ extern void android_prepare_request(const char *url);
 
 extern void android_set_request_header(const char *key, const char *value);
 
-extern void android_present_webview(void);
+extern void android_present_webview(bool should_intercept);
 
 extern void android_close_webview(void);
 
