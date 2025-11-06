@@ -68,6 +68,20 @@ typedef bool (*IsRootedFn)(void);
 
 typedef bool (*IsAppForeground)(void);
 
+typedef const char *(*GetDeviceLocaleFn)(void);
+
+typedef int32_t (*GetScreenWidthFn)(void);
+
+typedef int32_t (*GetScreenHeightFn)(void);
+
+typedef float (*GetScreenDensityFn)(void);
+
+typedef int32_t (*GetScreenDpiFn)(void);
+
+typedef const char *(*GetDeviceCpuFn)(void);
+
+typedef const char *(*GetDeviceCodenameFn)(void);
+
 
 
 
@@ -166,6 +180,28 @@ const char *get_api_version(void);
 
 extern bool android_is_app_foregrounded(void);
 
+extern const char *android_get_os_version(void);
+
+extern const char *android_get_device_manufacturer(void);
+
+extern const char *android_get_device_model(void);
+
+extern const char *android_get_device_locale(void);
+
+extern int32_t android_get_screen_width(void);
+
+extern int32_t android_get_screen_height(void);
+
+extern float android_get_screen_density(void);
+
+extern int32_t android_get_screen_dpi(void);
+
+extern int32_t android_get_sdk_version(void);
+
+extern const char *android_get_device_cpu(void);
+
+extern const char *android_get_device_codename(void);
+
 extern const char *get_ip_address(void);
 
 void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
@@ -194,7 +230,14 @@ void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
                             IsLocationServicesEnabledFn is_location_services_enabled,
                             IsWifiConnectedFn is_wifi_connected,
                             IsRootedFn is_rooted,
-                            IsAppForeground is_app_foreground);
+                            IsAppForeground is_app_foreground,
+                            GetDeviceLocaleFn get_device_locale,
+                            GetScreenWidthFn get_screen_width,
+                            GetScreenHeightFn get_screen_height,
+                            GetScreenDensityFn get_screen_density,
+                            GetScreenDpiFn get_screen_dpi,
+                            GetDeviceCpuFn get_device_cpu,
+                            GetDeviceCodenameFn get_device_codename);
 
 extern void secure_set(const char *key, const char *value);
 
