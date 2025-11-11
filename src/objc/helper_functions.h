@@ -10,6 +10,7 @@ extern "C"
     void ios_close_webview();
     const char *ios_get_browser_cookies_for_domain(const char *domain);
     const char *ios_get_browser_cookies_for_current_url();
+    void ios_webview_change_url(const char *url);
 
     // Device information functions
     double get_battery_level();

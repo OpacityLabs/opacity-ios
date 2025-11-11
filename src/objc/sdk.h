@@ -82,6 +82,8 @@ typedef const char *(*GetDeviceCpuFn)(void);
 
 typedef const char *(*GetDeviceCodenameFn)(void);
 
+typedef void (*IosWebviewChangeUrlFn)(const char*);
+
 
 
 
@@ -237,7 +239,8 @@ void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
                             GetScreenDensityFn get_screen_density,
                             GetScreenDpiFn get_screen_dpi,
                             GetDeviceCpuFn get_device_cpu,
-                            GetDeviceCodenameFn get_device_codename);
+                            GetDeviceCodenameFn get_device_codename,
+                            IosWebviewChangeUrlFn ios_webview_change_url);
 
 extern void secure_set(const char *key, const char *value);
 
@@ -254,6 +257,8 @@ extern void android_close_webview(void);
 extern const char *android_get_browser_cookies_for_current_url(void);
 
 extern const char *android_get_browser_cookies_for_domain(const char *domain);
+
+extern void android_webview_change_url(const char *url);
 
 #ifdef __cplusplus
 }  // extern "C"

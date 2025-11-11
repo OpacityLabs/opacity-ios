@@ -57,7 +57,7 @@ NSError *parseOpacityError(NSString *jsonString) {
         is_location_services_enabled, is_wifi_connected, is_rooted,
         is_app_foregrounded, get_device_locale, get_screen_width,
         get_screen_height, get_screen_density, get_screen_dpi, get_device_cpu,
-        get_device_codename);
+        get_device_codename, ios_webview_change_url);
   }
 
   char *err;
