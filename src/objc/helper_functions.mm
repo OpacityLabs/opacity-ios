@@ -78,7 +78,6 @@ void ios_present_webview(bool intercept_requests) {
 }
 
 void ios_webview_change_url(const char *url) {
-  NSLog(@"Changing web view URL to %s", url);
   if (url == nullptr) {
     NSLog(@"URL is nullptr");
     return;
@@ -93,15 +92,12 @@ void ios_webview_change_url(const char *url) {
 
   dispatch_async(dispatch_get_main_queue(), ^{
     if (modalWebVC == nil) {
-      NSLog(@"Browser is not open");
+      NSLog(@"Warning: Browser is not open");
       return;
     }
 
     NSURL *nsUrl = [NSURL URLWithString:capturedUrlString];
-    NSLog(@"URL is %@", nsUrl);
-    NSLog(@"URL string is %@", capturedUrlString);
     if (nsUrl == nil) {
-      NSLog(@"URL is nil");
       return;
     }
 
@@ -114,11 +110,8 @@ void ios_webview_change_url(const char *url) {
     }
     [newRequest setURL:nsUrl];
     if (newRequest == nil) {
-      NSLog(@"New request is nil");
       return;
     }
-
-    NSLog(@"Changing request to %@", newRequest);
 
     request = newRequest;
     [modalWebVC openRequest:newRequest];

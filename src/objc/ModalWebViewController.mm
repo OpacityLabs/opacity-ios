@@ -15,7 +15,7 @@
 @implementation ModalWebViewController
 
 - (void)viewDidLoad {
-  [super viewDidLoad]; 
+  [super viewDidLoad];
 
   self.cookies = [NSMutableDictionary dictionary];
   self.visitedUrls = [NSMutableArray array];
