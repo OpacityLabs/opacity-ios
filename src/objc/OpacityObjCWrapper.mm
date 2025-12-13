@@ -3,16 +3,28 @@
 #import "sdk.h"
 
 NSError *parseOpacityError(NSString *jsonString) {
+  if (jsonString == nil || [jsonString length] == 0) {
+    return [NSError
+        errorWithDomain:@"OpacitySDKUnkownError"
+                   code:1001
+               userInfo:@{NSLocalizedDescriptionKey : @"Empty error message"}];
+  }
+
   NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-  NSError *parsingError;
-  NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
-                                                       options:0
-                                                         error:&parsingError];
-  if (parsingError != nil) {
+  if (data == nil) {
     return [NSError errorWithDomain:@"OpacitySDKUnkownError"
                                code:1001
                            userInfo:@{NSLocalizedDescriptionKey : jsonString}];
-    ;
+  }
+
+  NSError *parsingError = nil;
+  NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
+                                                       options:0
+                                                         error:&parsingError];
+  if (parsingError != nil || json == nil) {
+    return [NSError errorWithDomain:@"OpacitySDKUnkownError"
+                               code:1001
+                           userInfo:@{NSLocalizedDescriptionKey : jsonString}];
   }
 
   NSString *code = json[@"code"];
@@ -78,33 +90,46 @@ NSError *parseOpacityError(NSString *jsonString) {
     completion:(void (^)(NSDictionary *res, NSError *error))completion {
   NSThread *thread = [[NSThread alloc] initWithBlock:^{
     char *res, *err;
-    NSError *error;
-    NSString *jsonString = nil;
-    if (params) {
+    NSError *error = nil;
+    NSString *paramsJSON = nil;
+
+    if (params && [params count] > 0) {
       NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params
                                                          options:0
                                                            error:&error];
       if (!jsonData) {
+        if (!error) {
+          error = [NSError
+              errorWithDomain:@"OpacitySDKError"
+                         code:1003
+                     userInfo:@{
+                       NSLocalizedDescriptionKey : @"Could not parse params"
+                     }];
+        }
+
         dispatch_async(dispatch_get_main_queue(), ^{
           completion(nil, error);
+          return;
         });
-        return;
       }
-      jsonString = [[NSString alloc] initWithData:jsonData
+
+      paramsJSON = [[NSString alloc] initWithData:jsonData
                                          encoding:NSUTF8StringEncoding];
     }
 
     int status = opacity_core::get(
-        [name UTF8String], jsonString ? [jsonString UTF8String] : nullptr, &res,
+        [name UTF8String], paramsJSON ? [paramsJSON UTF8String] : nullptr, &res,
         &err);
 
     if (status != opacity_core::OPACITY_OK) {
       NSString *error_str = [NSString stringWithUTF8String:err];
-      NSError *opacity_error = parseOpacityError(error_str);
       opacity_core::free_string(err);
+
+      NSError *opacity_error = parseOpacityError(error_str);
       dispatch_async(dispatch_get_main_queue(), ^{
         completion(nil, opacity_error);
       });
+
       return;
     }
 
