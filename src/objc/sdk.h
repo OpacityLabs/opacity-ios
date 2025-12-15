@@ -166,13 +166,13 @@ extern const int32_t OPACITY_ENVIRONMENT_STAGING;
 
 extern const int32_t OPACITY_ENVIRONMENT_PRODUCTION;
 
-int32_t init(const char *api_key_str,
-             bool dry_run,
-             int32_t backend_environment,
-             bool show_errors_in_webview,
-             char **error_ptr);
+int32_t opacity_init(const char *api_key_str,
+                     bool dry_run,
+                     int32_t backend_environment,
+                     bool show_errors_in_webview,
+                     char **error_ptr);
 
-int32_t get(const char *name, const char *params, char **res_ptr, char **err_ptr);
+int32_t opacity_get(const char *name, const char *params, char **res_ptr, char **err_ptr);
 
 void free_string(char *ptr);
 

@@ -73,9 +73,9 @@ NSError *parseOpacityError(NSString *jsonString) {
   }
 
   char *err;
-  int status = opacity_core::init([api_key UTF8String], dry_run,
-                                  static_cast<int>(environment),
-                                  should_show_errors_in_webview, &err);
+  int status = opacity_core::opacity_init([api_key UTF8String], dry_run,
+                                          static_cast<int>(environment),
+                                          should_show_errors_in_webview, &err);
   if (status != opacity_core::OPACITY_OK && err != nullptr) {
     NSString *errorMessage = [NSString stringWithUTF8String:err];
     *error = parseOpacityError(errorMessage);
@@ -117,7 +117,7 @@ NSError *parseOpacityError(NSString *jsonString) {
                                          encoding:NSUTF8StringEncoding];
     }
 
-    int status = opacity_core::get(
+    int status = opacity_core::opacity_get(
         [name UTF8String], paramsJSON ? [paramsJSON UTF8String] : nullptr, &res,
         &err);
 
