@@ -12,9 +12,7 @@ Pod::Spec.new do |s|
   s.source_files = 'src/**/*'
   s.frameworks = "WebKit", "CoreTelephony", "CoreLocation", "SystemConfiguration"
   s.vendored_frameworks = 'sdk.xcframework'
-  # We do not actually care about the dynamic lookup but if this is not here
-  # then cocoapods fails with missing implementation for the dylib functions.
-  # s.pod_target_xcconfig = {
-  #   "OTHER_LDFLAGS" => '-undefined dynamic_lookup',
-  # }
+  s.pod_target_xcconfig = {
+    "OTHER_LDFLAGS" => '-framework sdk',
+  }
 end
