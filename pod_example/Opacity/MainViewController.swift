@@ -31,6 +31,7 @@ class MainViewController: UIViewController {
       let errorLabel = UILabel()
       errorLabel.text =
         "🔺 SDK init error: \(error)"
+      errorLabel.textColor = .white
       errorLabel.translatesAutoresizingMaskIntoConstraints = false
       view.addSubview(errorLabel)
       NSLayoutConstraint.activate([
