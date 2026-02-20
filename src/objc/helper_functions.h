@@ -10,6 +10,8 @@ extern "C"
     void ios_close_webview();
     const char *ios_get_browser_cookies_for_domain(const char *domain);
     const char *ios_get_browser_cookies_for_current_url();
+    const char *ios_get_local_storage_for_current_url();
+    const char *ios_get_session_storage_for_current_url();
     void ios_webview_change_url(const char *url);
 
     // Device information functions

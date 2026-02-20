@@ -320,6 +320,101 @@
   }];
 }
 
+- (NSDictionary *)getLocalStorageForCurrentUrl {
+  __block NSDictionary *result = nil;
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+  
+  void (^getStorageBlock)(void) = ^{
+    NSString *jsCode = @"(function() {"
+                       "  try {"
+                       "    //throw new Error('this gotta be erroring out');"
+                       "    var storage = {};"
+                       "    for (var i = 0; i < localStorage.length; i++) {"
+                       "      var key = localStorage.key(i);"
+                       "      storage[key] = localStorage.getItem(key);"
+                       "    }"
+                       "    return JSON.stringify(storage);"
+                       "  } catch (e) {"
+                       "    return JSON.stringify({});"
+                       "  }"
+                       "})()";
+    
+    [self.webView evaluateJavaScript:jsCode completionHandler:^(id jsResult, NSError *error) {
+      if (error || ![jsResult isKindOfClass:[NSString class]]) {
+        result = @{};
+        dispatch_semaphore_signal(semaphore);
+        return;
+      }
+      
+      NSString *jsonString = (NSString *)jsResult;
+      NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+      NSError *jsonError = nil;
+      NSDictionary *storageDict = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                                  options:0
+                                                                    error:&jsonError];
+      
+      result = jsonError ? @{} : (storageDict ?: @{});
+      dispatch_semaphore_signal(semaphore);
+    }];
+  };
+  
+  if ([NSThread isMainThread]) {
+    getStorageBlock();
+  } else {
+    dispatch_async(dispatch_get_main_queue(), getStorageBlock);
+  }
+  
+  dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC));
+  return result;
+}
+
+- (NSDictionary *)getSessionStorageForCurrentUrl {
+  __block NSDictionary *result = nil;
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+  
+  void (^getStorageBlock)(void) = ^{
+    NSString *jsCode = @"(function() {"
+                       "  try {"
+                       "    var storage = {};"
+                       "    for (var i = 0; i < sessionStorage.length; i++) {"
+                       "      var key = sessionStorage.key(i);"
+                       "      storage[key] = sessionStorage.getItem(key);"
+                       "    }"
+                       "    return JSON.stringify(storage);"
+                       "  } catch (e) {"
+                       "    return JSON.stringify({});"
+                       "  }"
+                       "})()";
+    
+    [self.webView evaluateJavaScript:jsCode completionHandler:^(id jsResult, NSError *error) {
+      if (error || ![jsResult isKindOfClass:[NSString class]]) {
+        result = @{};
+        dispatch_semaphore_signal(semaphore);
+        return;
+      }
+      
+      NSString *jsonString = (NSString *)jsResult;
+      NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+      NSError *jsonError = nil;
+      NSDictionary *storageDict = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                                  options:0
+                                                                    error:&jsonError];
+      
+      result = jsonError ? @{} : (storageDict ?: @{});
+      dispatch_semaphore_signal(semaphore);
+    }];
+  };
+  
+  if ([NSThread isMainThread]) {
+    getStorageBlock();
+  } else {
+    dispatch_async(dispatch_get_main_queue(), getStorageBlock);
+  }
+  
+  dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC));
+  return result;
+}
+
 - (void)openRequest:(NSMutableURLRequest *)request {
   _request = request;
   [self.webView loadRequest:_request];

@@ -64,7 +64,8 @@ NSError *parseOpacityError(NSString *jsonString) {
   opacity_core::register_ios_callbacks(
       ios_prepare_request, ios_set_request_header, ios_present_webview,
       ios_close_webview, ios_get_browser_cookies_for_current_url,
-      ios_get_browser_cookies_for_domain, get_ip_address, get_battery_level,
+      ios_get_browser_cookies_for_domain, ios_get_local_storage_for_current_url,
+      ios_get_session_storage_for_current_url, get_ip_address, get_battery_level,
       get_battery_status, get_carrier_name, get_carrier_mcc, get_carrier_mnc,
       get_course, get_cpu_abi, get_altitude, get_latitude, get_longitude,
       get_device_model, get_os_name, get_os_version, is_emulator,

@@ -1,0 +1,6 @@
+module OpacityCore {
+  umbrella header "OpacityCore-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -164,6 +164,52 @@ const char *ios_get_browser_cookies_for_current_url() {
   return [jsonString UTF8String];
 }
 
+const char *ios_get_local_storage_for_current_url() {
+  if (modalWebVC == nil) {
+    return nullptr;
+  }
+
+  NSDictionary *localStorage = [modalWebVC getLocalStorageForCurrentUrl];
+
+  // Convert the dictionary to JSON string
+  NSError *error;
+  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:localStorage
+                                                     options:0
+                                                       error:&error];
+  if (!jsonData) {
+    NSLog(@"Error serializing localStorage to JSON: %@", error);
+    return "";
+  }
+
+  // Convert JSON data to C string and return
+  NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                               encoding:NSUTF8StringEncoding];
+  return [jsonString UTF8String];
+}
+
+const char *ios_get_session_storage_for_current_url() {
+  if (modalWebVC == nil) {
+    return nullptr;
+  }
+
+  NSDictionary *sessionStorage = [modalWebVC getSessionStorageForCurrentUrl];
+
+  // Convert the dictionary to JSON string
+  NSError *error;
+  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sessionStorage
+                                                     options:0
+                                                       error:&error];
+  if (!jsonData) {
+    NSLog(@"Error serializing sessionStorage to JSON: %@", error);
+    return "";
+  }
+
+  // Convert JSON data to C string and return
+  NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                               encoding:NSUTF8StringEncoding];
+  return [jsonString UTF8String];
+}
+
 double get_battery_level() {
   UIDevice *device = [UIDevice currentDevice];
   device.batteryMonitoringEnabled = YES;

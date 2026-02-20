@@ -26,6 +26,10 @@ typedef const char *(*IosGetBrowserCookiesForCurrentUrlFn)(void);
 
 typedef const char *(*IosGetBrowserCookiesForDomainFn)(const char*);
 
+typedef const char *(*IosGetLocalStorageForCurrentUrlFn)(void);
+
+typedef const char *(*IosGetSessionStorageForCurrentUrlFn)(void);
+
 typedef const char *(*GetIpAddressFn)(void);
 
 typedef double (*GetBatteryLevelFn)(void);
@@ -212,6 +216,8 @@ void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
                             IosCloseWebviewFn ios_close_webview,
                             IosGetBrowserCookiesForCurrentUrlFn ios_get_browser_cookies_for_current_url,
                             IosGetBrowserCookiesForDomainFn ios_get_browser_cookies_for_domain,
+                            IosGetLocalStorageForCurrentUrlFn ios_get_local_storage_for_current_url,
+                            IosGetSessionStorageForCurrentUrlFn ios_get_session_storage_for_current_url,
                             GetIpAddressFn get_ip_address,
                             GetBatteryLevelFn get_battery_level,
                             GetBatteryStatusFn get_battery_status,

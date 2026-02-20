@@ -13,4 +13,6 @@
 - (void)openRequest:(NSMutableURLRequest *)request;
 - (NSDictionary *)getBrowserCookiesForCurrentUrl;
 - (NSDictionary *)getBrowserCookiesForDomain:(NSString *)domain;
+- (NSDictionary *)getLocalStorageForCurrentUrl;
+- (NSDictionary *)getSessionStorageForCurrentUrl;
 @end
