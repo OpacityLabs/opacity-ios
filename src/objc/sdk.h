@@ -86,6 +86,8 @@ typedef const char *(*GetDeviceCodenameFn)(void);
 
 typedef void (*IosWebviewChangeUrlFn)(const char*);
 
+typedef const char *(*IosEvalJsFn)(const char*, double);
+
 
 
 
@@ -243,7 +245,8 @@ void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
                             GetScreenDpiFn get_screen_dpi,
                             GetDeviceCpuFn get_device_cpu,
                             GetDeviceCodenameFn get_device_codename,
-                            IosWebviewChangeUrlFn ios_webview_change_url);
+                            IosWebviewChangeUrlFn ios_webview_change_url,
+                            IosEvalJsFn ios_eval_js);
 
 extern void secure_set(const char *key, const char *value);
 

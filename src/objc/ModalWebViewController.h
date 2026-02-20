@@ -14,4 +14,5 @@
 - (void)openRequest:(NSMutableURLRequest *)request;
 - (NSDictionary *)getBrowserCookiesForCurrentUrl;
 - (NSDictionary *)getBrowserCookiesForDomain:(NSString *)domain;
+- (NSString *)evalJs:(NSString *)js timeout:(double)timeoutSeconds;
 @end
