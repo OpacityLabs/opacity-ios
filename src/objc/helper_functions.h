@@ -11,6 +11,7 @@ extern "C"
     const char *ios_get_browser_cookies_for_domain(const char *domain);
     const char *ios_get_browser_cookies_for_current_url();
     void ios_webview_change_url(const char *url);
+    const char *ios_eval_js(const char *js, double timeout_in_seconds);
 
     // Device information functions
     double get_battery_level();
