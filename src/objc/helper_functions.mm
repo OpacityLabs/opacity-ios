@@ -118,6 +118,24 @@ void ios_webview_change_url(const char *url) {
   });
 }
 
+const char *ios_eval_js(const char *js, double timeout_in_seconds) {
+  if (modalWebVC == nil) {
+    return strdup("{\"error\":\"browser not open\"}");
+  }
+
+  NSString *jsString = [NSString stringWithUTF8String:js];
+  if (jsString == nil) {
+    return strdup("{\"error\":\"invalid js string\"}");
+  }
+
+  NSString *result = [modalWebVC evalJs:jsString timeout:timeout_in_seconds];
+  if (result == nil) {
+    return strdup("{\"error\":\"nil result\"}");
+  }
+
+  return strdup([result UTF8String]);
+}
+
 const char *ios_get_browser_cookies_for_domain(const char *domain) {
   if (modalWebVC == nil) {
     return nullptr;
