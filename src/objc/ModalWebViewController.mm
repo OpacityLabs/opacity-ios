@@ -10,6 +10,7 @@
 @property (nonatomic, strong) NSMutableArray *visitedUrls;
 @property (nonatomic, assign) NSInteger eventCounter;
 @property (nonatomic, assign) bool interceptRequests;
+@property (nonatomic, strong) NSArray<NSHTTPCookie *> *initialCookies;
 @end
 
 @implementation ModalWebViewController
@@ -157,9 +158,21 @@
     self.webView.customUserAgent = self.customUserAgent;
   }
 
-  // Load the provided URL
+  // Load the provided URL, injecting any initial cookies first
   if (self.request) {
-    [self.webView loadRequest:self.request];
+    if (self.initialCookies.count > 0) {
+      WKHTTPCookieStore *cookieStore = self.websiteDataStore.httpCookieStore;
+      dispatch_group_t group = dispatch_group_create();
+      for (NSHTTPCookie *cookie in self.initialCookies) {
+        dispatch_group_enter(group);
+        [cookieStore setCookie:cookie completionHandler:^{ dispatch_group_leave(group); }];
+      }
+      dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        [self.webView loadRequest:self.request];
+      });
+    } else {
+      [self.webView loadRequest:self.request];
+    }
   }
 }
 
@@ -330,13 +343,15 @@
 
 - (instancetype)initWithRequest:(NSMutableURLRequest *)request
                       userAgent:(NSString *)userAgent
-              interceptRequests:(bool)interceptRequests {
+              interceptRequests:(bool)interceptRequests
+                 initialCookies:(NSArray<NSHTTPCookie *> *)initialCookies {
   self = [super init];
 
   if (self) {
     _request = request;
     _customUserAgent = userAgent;
     _interceptRequests = interceptRequests;
+    _initialCookies = initialCookies;
   }
 
   return self;

@@ -6,6 +6,7 @@ extern "C"
     // Webview functions
     void ios_prepare_request(const char *url);
     void ios_set_request_header(const char *key, const char *value);
+    void ios_set_cookie(const char *url, const char *value);
     void ios_present_webview(bool interceptRequests);
     void ios_close_webview();
     const char *ios_get_browser_cookies_for_domain(const char *domain);
