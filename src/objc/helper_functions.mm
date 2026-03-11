@@ -13,6 +13,7 @@ ModalWebViewController *modalWebVC;
 NSMutableURLRequest *request;
 UINavigationController *navController;
 NSString *userAgent;
+NSMutableArray<NSHTTPCookie *> *pendingCookies;
 
 UIViewController *topMostViewController() {
   // Fetch the key window's root view controller
@@ -31,6 +32,23 @@ void ios_prepare_request(const char *url) {
   NSString *urlString = [NSString stringWithUTF8String:url];
   request =
       [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+  pendingCookies = [NSMutableArray array];
+}
+
+void ios_set_cookie(const char *url_c, const char *value_c) {
+  NSString *urlString = [NSString stringWithUTF8String:url_c];
+  NSString *cookieString = [NSString stringWithUTF8String:value_c];
+  NSURL *url = [NSURL URLWithString:urlString];
+  if (!url || !cookieString) {
+    return;
+  }
+  NSArray<NSHTTPCookie *> *cookies =
+      [NSHTTPCookie cookiesWithResponseHeaderFields:@{@"Set-Cookie": cookieString}
+                                             forURL:url];
+  if (!pendingCookies) {
+    pendingCookies = [NSMutableArray array];
+  }
+  [pendingCookies addObjectsFromArray:cookies];
 }
 
 void ios_set_request_header(const char *key, const char *value) {
@@ -56,9 +74,13 @@ void ios_present_webview(bool intercept_requests) {
             @"dismissed");
     }
 
+    NSArray<NSHTTPCookie *> *cookiesToInject = [pendingCookies copy];
+    pendingCookies = [NSMutableArray array];
+
     modalWebVC = [[ModalWebViewController alloc] initWithRequest:request
                                                        userAgent:userAgent
-                                               interceptRequests:intercept_requests];
+                                               interceptRequests:intercept_requests
+                                                  initialCookies:cookiesToInject];
 
     // Set an on dismiss callback
     modalWebVC.onDismissCallback = ^{
