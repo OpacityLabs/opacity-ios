@@ -206,6 +206,12 @@ extern const char *android_get_device_cpu(void);
 
 extern const char *android_get_device_codename(void);
 
+extern const char *android_get_bootloader(void);
+
+extern const char *android_get_radio(void);
+
+extern const char *android_get_build_time(void);
+
 extern const char *get_ip_address(void);
 
 void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
