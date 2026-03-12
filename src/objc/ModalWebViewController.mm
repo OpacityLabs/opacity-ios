@@ -10,6 +10,7 @@
 @property (nonatomic, strong) NSMutableArray *visitedUrls;
 @property (nonatomic, assign) NSInteger eventCounter;
 @property (nonatomic, assign) bool interceptRequests;
+@property (nonatomic, strong) NSArray<NSHTTPCookie *> *initialCookies;
 @end
 
 @implementation ModalWebViewController
@@ -33,6 +34,8 @@
   configuration.websiteDataStore = self.websiteDataStore;
 
   
+  WKUserContentController *contentController = [[WKUserContentController alloc] init];
+
   if (self.interceptRequests) {
     NSString *injectedJS =
     @"(function() {\n"
@@ -121,20 +124,15 @@
     "    Error.prototype = OriginalError.prototype;\n"
     "    Object.setPrototypeOf(Error, OriginalError);\n"
     "})();\n";
-    
-    
+
     WKUserScript *userScript = [[WKUserScript alloc] initWithSource:injectedJS
                                                       injectionTime:WKUserScriptInjectionTimeAtDocumentStart
                                                    forMainFrameOnly:NO];
-    
-    WKUserContentController *contentController = [[WKUserContentController alloc] init];
     [contentController addUserScript:userScript];
-    configuration.userContentController = contentController;
     [contentController addScriptMessageHandler:self name:@"interceptedRequestHandler"];
-  } else {
-    WKUserContentController *contentController = [[WKUserContentController alloc] init];
-    configuration.userContentController = contentController;
   }
+
+  configuration.userContentController = contentController;
   
   // --- Now create the web view ---
   self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:configuration];
@@ -157,9 +155,21 @@
     self.webView.customUserAgent = self.customUserAgent;
   }
 
-  // Load the provided URL
+  // Load the provided URL, injecting any initial cookies first
   if (self.request) {
-    [self.webView loadRequest:self.request];
+    if (self.initialCookies.count > 0) {
+      WKHTTPCookieStore *cookieStore = self.websiteDataStore.httpCookieStore;
+      dispatch_group_t group = dispatch_group_create();
+      for (NSHTTPCookie *cookie in self.initialCookies) {
+        dispatch_group_enter(group);
+        [cookieStore setCookie:cookie completionHandler:^{ dispatch_group_leave(group); }];
+      }
+      dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        [self.webView loadRequest:self.request];
+      });
+    } else {
+      [self.webView loadRequest:self.request];
+    }
   }
 }
 
@@ -311,6 +321,52 @@
   return result;
 }
 
+- (NSString *)evalJs:(NSString *)js timeout:(double)timeoutSeconds {
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+  __block NSString *result = nil;
+
+  // callAsyncJavaScript treats `js` as the body of an async function, so
+  // `return`, `await`, and top-level Promises all work without any wrapping.
+  // WebKit natively awaits any returned thenable before calling the completion handler,
+  // so we don't need a message-handler bridge or a custom JS wrapper.
+  WKWebView *webView = self.webView;
+  void (^evalBlock)(void) = ^{
+    [webView callAsyncJavaScript:js
+                       arguments:@{}
+                         inFrame:nil
+                  inContentWorld:WKContentWorld.pageWorld
+               completionHandler:^(id _Nullable jsResult, NSError *_Nullable error) {
+      if (error != nil) {
+        NSDictionary *errorDict = @{@"error" : error.localizedDescription};
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:errorDict options:0 error:nil];
+        result = jsonData ? [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]
+                          : @"{\"error\":\"unknown error\"}";
+      } else {
+        id value = jsResult ?: [NSNull null];
+        NSDictionary *resultDict = @{@"result" : value};
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:resultDict options:0 error:nil];
+        result = jsonData ? [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]
+                          : @"{\"result\":null}";
+      }
+      dispatch_semaphore_signal(semaphore);
+    }];
+  };
+
+  if ([NSThread isMainThread]) {
+    evalBlock();
+  } else {
+    dispatch_async(dispatch_get_main_queue(), evalBlock);
+  }
+
+  // timeout == 0: fire-and-forget (DISPATCH_TIME_NOW = don't wait, script still runs)
+  dispatch_time_t deadline = timeoutSeconds == 0.0
+      ? DISPATCH_TIME_NOW
+      : dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeoutSeconds * NSEC_PER_SEC));
+
+  BOOL timedOut = dispatch_semaphore_wait(semaphore, deadline) != 0;
+  return timedOut ? @"{\"result\":null}" : (result ?: @"{\"result\":null}");
+}
+
 - (void)updateCapturedCookiesWithCompletion:(void (^)(void))completion {
   WKHTTPCookieStore *cookieStore =
       self.webView.configuration.websiteDataStore.httpCookieStore;
@@ -330,13 +386,15 @@
 
 - (instancetype)initWithRequest:(NSMutableURLRequest *)request
                       userAgent:(NSString *)userAgent
-              interceptRequests:(bool)interceptRequests {
+              interceptRequests:(bool)interceptRequests
+                 initialCookies:(NSArray<NSHTTPCookie *> *)initialCookies {
   self = [super init];
 
   if (self) {
     _request = request;
     _customUserAgent = userAgent;
     _interceptRequests = interceptRequests;
+    _initialCookies = initialCookies;
   }
 
   return self;
@@ -511,14 +569,14 @@
     NSDictionary *payload = message.body;
     NSString *requestType = payload[@"requestType"];
     NSDictionary *data = payload[@"data"];
-    
+
     NSDictionary *event = @{
       @"event" : @"intercepted_request",
       @"request_type" : requestType,
       @"data" : data,
       @"id" : [self nextId]
     };
-    
+
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:event
                                                        options:0

@@ -18,6 +18,8 @@ typedef void (*IosPrepareRequestFn)(const char*);
 
 typedef void (*IosSetRequestHeaderFn)(const char*, const char*);
 
+typedef void (*IosSetCookieFn)(const char*, const char*);
+
 typedef void (*IosPresentWebviewFn)(bool);
 
 typedef void (*IosCloseWebviewFn)(void);
@@ -83,6 +85,8 @@ typedef const char *(*GetDeviceCpuFn)(void);
 typedef const char *(*GetDeviceCodenameFn)(void);
 
 typedef void (*IosWebviewChangeUrlFn)(const char*);
+
+typedef const char *(*IosEvalJsFn)(const char*, double);
 
 
 
@@ -208,6 +212,7 @@ extern const char *get_ip_address(void);
 
 void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
                             IosSetRequestHeaderFn ios_set_request_header,
+                            IosSetCookieFn ios_set_cookie,
                             IosPresentWebviewFn ios_present_webview,
                             IosCloseWebviewFn ios_close_webview,
                             IosGetBrowserCookiesForCurrentUrlFn ios_get_browser_cookies_for_current_url,
@@ -240,7 +245,8 @@ void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
                             GetScreenDpiFn get_screen_dpi,
                             GetDeviceCpuFn get_device_cpu,
                             GetDeviceCodenameFn get_device_codename,
-                            IosWebviewChangeUrlFn ios_webview_change_url);
+                            IosWebviewChangeUrlFn ios_webview_change_url,
+                            IosEvalJsFn ios_eval_js);
 
 extern void secure_set(const char *key, const char *value);
 
@@ -250,7 +256,7 @@ extern void android_prepare_request(const char *url);
 
 extern void android_set_request_header(const char *key, const char *value);
 
-extern void android_present_webview(bool should_intercept);
+extern void android_present_webview(bool should_intercept, bool android_use_system_webview);
 
 extern void android_close_webview(void);
 

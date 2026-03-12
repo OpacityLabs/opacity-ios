@@ -8,9 +8,11 @@
 
 - (instancetype)initWithRequest:(NSMutableURLRequest *)request
                       userAgent:(NSString *)userAgent
-              interceptRequests:(bool)interceptRequests;
+              interceptRequests:(bool)interceptRequests
+                 initialCookies:(NSArray<NSHTTPCookie *> *)initialCookies;
 - (void)close;
 - (void)openRequest:(NSMutableURLRequest *)request;
 - (NSDictionary *)getBrowserCookiesForCurrentUrl;
 - (NSDictionary *)getBrowserCookiesForDomain:(NSString *)domain;
+- (NSString *)evalJs:(NSString *)js timeout:(double)timeoutSeconds;
 @end
