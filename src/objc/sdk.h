@@ -208,6 +208,12 @@ extern const char *android_get_device_cpu(void);
 
 extern const char *android_get_device_codename(void);
 
+extern const char *android_get_bootloader(void);
+
+extern const char *android_get_radio(void);
+
+extern const char *android_get_build_time(void);
+
 extern const char *get_ip_address(void);
 
 void register_ios_callbacks(IosPrepareRequestFn ios_prepare_request,
@@ -256,7 +262,9 @@ extern void android_prepare_request(const char *url);
 
 extern void android_set_request_header(const char *key, const char *value);
 
-extern void android_present_webview(bool should_intercept, bool android_use_system_webview);
+extern void android_set_cookie(const char *url, const char *value);
+
+extern void android_present_webview(bool should_intercept);
 
 extern void android_close_webview(void);
 
@@ -265,6 +273,8 @@ extern const char *android_get_browser_cookies_for_current_url(void);
 extern const char *android_get_browser_cookies_for_domain(const char *domain);
 
 extern void android_webview_change_url(const char *url);
+
+extern const char *android_eval_js(const char *js, double timeout_in_seconds);
 
 #ifdef __cplusplus
 }  // extern "C"
