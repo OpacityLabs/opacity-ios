@@ -174,8 +174,6 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
     "        return originalSend.apply(this, arguments);\n"
     "    };\n"
     "    wrappedFns.set(xhrProto.send, 'function send() { [native code] }');\n"
-    "    \n"
-    "    Object.defineProperty(navigator, 'webdriver', { get: () => undefined, configurable: true });\n"
     "})();\n";
 
     WKUserScript *userScript = [[WKUserScript alloc] initWithSource:injectedJS
