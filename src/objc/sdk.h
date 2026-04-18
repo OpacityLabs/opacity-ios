@@ -190,6 +190,8 @@ const char *get_browser_overlay_observer_script(void);
 
 const char *get_browser_overlay_renderer_script(void);
 
+bool is_browser_debug_logs_enabled(void);
+
 const char *get_api_version(void);
 
 extern bool android_is_app_foregrounded(void);
