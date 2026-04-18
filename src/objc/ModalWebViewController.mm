@@ -1,6 +1,32 @@
 #import "ModalWebViewController.h"
 #import "sdk.h"
 
+static NSString *opacityStringFromOwnedCString(const char *raw) {
+  if (!raw) {
+    return @"";
+  }
+
+  NSString *value = [NSString stringWithUTF8String:raw] ?: @"";
+  opacity_core::free_string((char *)raw);
+  return value;
+}
+
+static NSString *opacity_rendered_html_observer_script(void) {
+  return opacityStringFromOwnedCString(opacity_core::get_browser_overlay_observer_script());
+}
+
+static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
+  NSString *pagesJson = opacityStringFromOwnedCString(opacity_core::get_browser_overlay_pages_json());
+  if (!pagesJson.length) {
+    pagesJson = @"[]";
+  }
+
+  return [NSString stringWithFormat:
+      @"(function() {\n"
+      @"  window.__opacityOverlayPages = %@;\n"
+      @"})();", pagesJson];
+}
+
 @interface ModalWebViewController ()
 @property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, strong) NSMutableURLRequest *request;
@@ -15,8 +41,37 @@
 
 @implementation ModalWebViewController
 
+- (void)presentGeneratedOverlayWithMapperJson:(NSString *)mapperJson {
+  NSData *mapperLiteralData =
+      [NSJSONSerialization dataWithJSONObject:@[ mapperJson ] options:0 error:nil];
+  if (!mapperLiteralData) {
+    return;
+  }
+
+  NSString *mapperLiteralArray =
+      [[NSString alloc] initWithData:mapperLiteralData encoding:NSUTF8StringEncoding];
+  if (!mapperLiteralArray.length || mapperLiteralArray.length < 2) {
+    return;
+  }
+  NSString *mapperLiteral =
+      [mapperLiteralArray substringWithRange:NSMakeRange(1, mapperLiteralArray.length - 2)];
+  if (!mapperLiteral) {
+    return;
+  }
+
+  NSString *rendererScriptTemplate =
+      opacityStringFromOwnedCString(opacity_core::get_browser_overlay_renderer_script());
+  if (!rendererScriptTemplate.length) {
+    return;
+  }
+
+  NSString *script = [NSString stringWithFormat:rendererScriptTemplate, mapperLiteral];
+
+  [self evalJs:script timeout:0];
+}
+
 - (void)viewDidLoad {
-  [super viewDidLoad];
+  [super viewDidLoad]; 
 
   self.cookies = [NSMutableDictionary dictionary];
   self.visitedUrls = [NSMutableArray array];
@@ -35,6 +90,20 @@
 
   
   WKUserContentController *contentController = [[WKUserContentController alloc] init];
+
+  if (opacity_core::is_browser_overlay_enabled()) {
+    WKUserScript *overlayPagesScript =
+        [[WKUserScript alloc] initWithSource:opacity_browser_overlay_pages_bootstrap_script()
+                               injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                            forMainFrameOnly:YES];
+    [contentController addUserScript:overlayPagesScript];
+    WKUserScript *renderedHtmlObserverScript =
+        [[WKUserScript alloc] initWithSource:opacity_rendered_html_observer_script()
+                               injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                            forMainFrameOnly:YES];
+    [contentController addUserScript:renderedHtmlObserverScript];
+    [contentController addScriptMessageHandler:self name:@"renderedHtmlReady"];
+  }
 
   if (self.interceptRequests) {
     NSString *injectedJS =
@@ -547,6 +616,16 @@
 
 - (void)userContentController:(WKUserContentController *)userContentController
       didReceiveScriptMessage:(WKScriptMessage *)message {
+  if ([message.name isEqualToString:@"renderedHtmlReady"]) {
+    NSDictionary *payload = [message.body isKindOfClass:[NSDictionary class]] ? message.body : nil;
+    NSString *mapperJson =
+        [payload[@"mapper_json"] isKindOfClass:[NSString class]] ? payload[@"mapper_json"] : @"";
+    if (mapperJson.length > 0) {
+      [self presentGeneratedOverlayWithMapperJson:mapperJson];
+    }
+    return;
+  }
+
   if (self.interceptRequests && [message.name isEqualToString:@"interceptedRequestHandler"]) {
     NSDictionary *payload = message.body;
     NSString *requestType = payload[@"requestType"];
