@@ -191,6 +191,7 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
   self.webView.autoresizingMask =
       UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   self.webView.navigationDelegate = self;
+  self.webView.UIDelegate = self;
 
   // Add the WKWebView to the view hierarchy
   [self.view addSubview:self.webView];
@@ -531,12 +532,8 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
   }
 }
 
-- (void)webView:(WKWebView *)webView
-    didFailProvisionalNavigation:(WKNavigation *)navigation
-                       withError:(NSError *)error {
-  NSString *url = error.userInfo[NSURLErrorFailingURLStringErrorKey];
-
-  if (!url) {
+- (void)emitNavigationEventForURL:(NSString *)url {
+  if (!url.length) {
     return;
   }
 
@@ -548,15 +545,113 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
   [dict setObject:self.cookies forKey:@"cookies"];
   [dict setObject:self.visitedUrls forKey:@"visited_urls"];
 
+  NSError *error = nil;
   NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
                                                      options:0
                                                        error:&error];
+  if (!jsonData) {
+    if (opacity_core::is_browser_debug_logs_enabled()) {
+      NSLog(@"[Opacity] emitNavigationEventForURL: JSON serialization failed: %@", error);
+    }
+    return;
+  }
 
   NSString *payload = [[NSString alloc] initWithData:jsonData
                                             encoding:NSUTF8StringEncoding];
 
   opacity_core::emit_webview_event([payload UTF8String]);
   [self resetVisitedUrls];
+}
+
+- (NSString *)extractFailingURLFromError:(NSError *)error webView:(WKWebView *)webView {
+  NSString *url = error.userInfo[NSURLErrorFailingURLStringErrorKey];
+  if (url.length) {
+    return url;
+  }
+
+  NSURL *failingURL = error.userInfo[NSURLErrorFailingURLErrorKey];
+  if (failingURL.absoluteString.length) {
+    return failingURL.absoluteString;
+  }
+
+  NSString *legacyString = error.userInfo[@"NSErrorFailingURLStringKey"];
+  if (legacyString.length) {
+    return legacyString;
+  }
+
+  NSURL *legacyURL = error.userInfo[@"NSErrorFailingURLKey"];
+  if (legacyURL.absoluteString.length) {
+    return legacyURL.absoluteString;
+  }
+
+  if (webView.URL.absoluteString.length) {
+    return webView.URL.absoluteString;
+  }
+
+  return nil;
+}
+
+- (void)webView:(WKWebView *)webView
+    didFailProvisionalNavigation:(WKNavigation *)navigation
+                       withError:(NSError *)error {
+  NSString *url = [self extractFailingURLFromError:error webView:webView];
+
+  if (opacity_core::is_browser_debug_logs_enabled()) {
+    NSLog(@"[Opacity] didFailProvisionalNavigation: code=%ld domain=%@ url=%@ userInfo=%@",
+          (long)error.code, error.domain, url, error.userInfo);
+  }
+
+  if (!url) {
+    return;
+  }
+
+  [self emitNavigationEventForURL:url];
+}
+
+- (void)webView:(WKWebView *)webView
+    didFailNavigation:(WKNavigation *)navigation
+            withError:(NSError *)error {
+  NSString *url = [self extractFailingURLFromError:error webView:webView];
+
+  if (opacity_core::is_browser_debug_logs_enabled()) {
+    NSLog(@"[Opacity] didFailNavigation: code=%ld domain=%@ url=%@ userInfo=%@",
+          (long)error.code, error.domain, url, error.userInfo);
+  }
+
+  if (!url) {
+    return;
+  }
+
+  [self emitNavigationEventForURL:url];
+}
+
+- (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
+  NSString *url = webView.URL.absoluteString ?: @"";
+  if (opacity_core::is_browser_debug_logs_enabled()) {
+    NSLog(@"[Opacity] webViewWebContentProcessDidTerminate: url=%@", url);
+  }
+
+  NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+  [dict setObject:@"webcontent_terminated" forKey:@"event"];
+  [dict setObject:url forKey:@"url"];
+  [dict setObject:[self nextId] forKey:@"id"];
+  [dict setObject:self.cookies forKey:@"cookies"];
+  [dict setObject:self.visitedUrls forKey:@"visited_urls"];
+
+  NSError *error = nil;
+  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                     options:0
+                                                       error:&error];
+  if (!jsonData) {
+    if (opacity_core::is_browser_debug_logs_enabled()) {
+      NSLog(@"[Opacity] webViewWebContentProcessDidTerminate: JSON serialization failed: %@", error);
+    }
+    return;
+  }
+
+  NSString *payload = [[NSString alloc] initWithData:jsonData
+                                            encoding:NSUTF8StringEncoding];
+  opacity_core::emit_webview_event([payload UTF8String]);
 }
 
 - (void)URLSession:(NSURLSession *)session
@@ -590,28 +685,87 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
                     decisionHandler:
                         (void (^)(WKNavigationActionPolicy))decisionHandler {
 
-  /// We potentially want to intercept navigation requests with deeplinks
-  /// A deeplink might take you out of the current app and into the service app
-  /// The problem is by canceling the redirection none of the other handlers are
-  /// triggered. Which means the cookies at the moment of the redirection are
-  /// not sent to Rust. We could potentially move the code of
-  /// didFailProvisionalNavigation here and it might work... I don't know, this
-  /// needs testing. For now allowing all redirections causes the deeplinks we
-  /// need to fail which then triggeres didFailProvisionalNavigation and
-  /// extracts and sends the requests to Rust and then to Lua
-  //  NSURLRequest *request = navigationAction.request;
-  //  NSURL *url = request.URL;
-  //  if (![url.scheme isEqualToString:@"http"] &&
-  //      ![url.scheme isEqualToString:@"https"]) {
-  //    decisionHandler(WKNavigationActionPolicyCancel);
-  //    return;
-  //  }
+  /// Non-http(s) navigations (X://, Y://, Z://, etc.) are intercepted here,
+  /// BEFORE iOS attempts a LaunchServices handoff to the target app. The
+  /// handoff is blocked on iOS 17+ for apps without the alt-browser-engine
+  /// entitlement, and the resulting NSError often strips the failing URL from
+  /// userInfo. Relying on didFailProvisionalNavigation alone is fragile across
+  /// iOS versions, devices, and "is the target app installed" state. This would
+  /// have failed even if one didn't have the apps installed
+  ///
+  /// Old comment warned: "by canceling the redirection none of the other
+  /// handlers are triggered, so cookies at the moment of the redirection are
+  /// not sent to Rust." That concern is addressed below: we explicitly call
+  /// emitNavigationEventForURL: before cancelling. That helper builds the same
+  /// "navigation" event payload (url + cookies + visited_urls) that the old
+  /// didFailProvisionalNavigation path emitted, so luau/rust receive the
+  /// deeplink URL and the accumulated self.cookies dict exactly as before
+  ///
+  /// Caveat preserved from the original behavior: self.cookies is populated by
+  /// the NSURLSession redirect delegate (willPerformHTTPRedirection) from
+  /// prior HTTP hops in the chain. WKHTTPCookieStore cookies set by the final
+  /// page's JS immediately before the click are NOT captured here — same as
+  /// the old fail-path code, which also only emitted self.cookies
+
+  NSURL *targetURL = navigationAction.request.URL;
+  NSString *scheme = targetURL.scheme.lowercaseString;
+  BOOL isHTTPLike = [scheme isEqualToString:@"http"] ||
+                    [scheme isEqualToString:@"https"] ||
+                    [scheme isEqualToString:@"about"] ||
+                    [scheme isEqualToString:@"data"] ||
+                    [scheme isEqualToString:@"blob"] ||
+                    [scheme isEqualToString:@"file"];
+
+  if (targetURL && scheme.length && !isHTTPLike) {
+    if (opacity_core::is_browser_debug_logs_enabled()) {
+      NSLog(@"[Opacity] decidePolicyForNavigationAction: cancelling non-http scheme=%@ url=%@",
+            scheme, targetURL.absoluteString);
+    }
+    [self emitNavigationEventForURL:targetURL.absoluteString];
+    decisionHandler(WKNavigationActionPolicyCancel);
+    return;
+  }
 
   if (webView.URL) {
     [self addToVisitedUrls:webView.URL.absoluteString];
   }
 
   decisionHandler(WKNavigationActionPolicyAllow);
+}
+
+/// WKUIDelegate entry point for new-window navigations:
+///   <a target="_blank">, window.open(...), <form target="_blank">.
+/// WebKit routes these here instead of decidePolicyForNavigationAction:,
+/// so without this method WKWebView silently drops the request
+/// Requires WKUIDelegate conformance in the header and
+/// self.webView.UIDelegate = self in viewDidLoad - both wired above
+/// Logic mirrors the policy decider: non-http(s) deeplink -> emit
+/// navigation event + drop; http(s) popup -> load in the same web view
+/// so the user stays inside the modal
+- (WKWebView *)webView:(WKWebView *)webView
+    createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
+               forNavigationAction:(WKNavigationAction *)navigationAction
+                    windowFeatures:(WKWindowFeatures *)windowFeatures {
+  NSURL *targetURL = navigationAction.request.URL;
+  NSString *scheme = targetURL.scheme.lowercaseString;
+  BOOL isHTTPLike = [scheme isEqualToString:@"http"] ||
+                    [scheme isEqualToString:@"https"];
+
+  if (opacity_core::is_browser_debug_logs_enabled()) {
+    NSLog(@"[Opacity] createWebViewWithConfiguration: scheme=%@ url=%@",
+          scheme, targetURL.absoluteString);
+  }
+
+  if (targetURL && scheme.length && !isHTTPLike) {
+    [self emitNavigationEventForURL:targetURL.absoluteString];
+    return nil;
+  }
+
+  if (targetURL && isHTTPLike) {
+    [webView loadRequest:navigationAction.request];
+  }
+
+  return nil;
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController
