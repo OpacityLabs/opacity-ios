@@ -2,7 +2,7 @@
 #import <WebKit/WebKit.h>
 
 @interface ModalWebViewController
-    : UIViewController <WKNavigationDelegate, NSURLSessionTaskDelegate, WKScriptMessageHandler>
+    : UIViewController <WKNavigationDelegate, WKUIDelegate, NSURLSessionTaskDelegate, WKScriptMessageHandler>
 
 @property(nonatomic, copy) void (^onDismissCallback)(void);
 
