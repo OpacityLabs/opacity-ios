@@ -1,6 +1,8 @@
 #import "ModalWebViewController.h"
 #import "sdk.h"
 
+#import <dlfcn.h>
+
 static NSString *opacityStringFromOwnedCString(const char *raw) {
   if (!raw) {
     return @"";
@@ -11,20 +13,23 @@ static NSString *opacityStringFromOwnedCString(const char *raw) {
   return value;
 }
 
+typedef const char *(*OpacityCStringGetter)(void);
+
+static NSString *opacityOptionalStringFromCoreSymbol(const char *symbol) {
+  auto getter = reinterpret_cast<OpacityCStringGetter>(dlsym(RTLD_DEFAULT, symbol));
+  if (!getter) {
+    return @"";
+  }
+
+  return opacityStringFromOwnedCString(getter());
+}
+
 static NSString *opacity_rendered_html_observer_script(void) {
   return opacityStringFromOwnedCString(opacity_core::get_browser_overlay_observer_script());
 }
 
-static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
-  NSString *pagesJson = opacityStringFromOwnedCString(opacity_core::get_browser_overlay_pages_json());
-  if (!pagesJson.length) {
-    pagesJson = @"[]";
-  }
-
-  return [NSString stringWithFormat:
-      @"(function() {\n"
-      @"  window.__opacityOverlayPages = %@;\n"
-      @"})();", pagesJson];
+static NSString *opacity_browser_overlay_bootstrap_script(void) {
+  return opacityOptionalStringFromCoreSymbol("get_browser_overlay_bootstrap_script");
 }
 
 @interface ModalWebViewController ()
@@ -93,8 +98,9 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
   WKUserContentController *contentController = [[WKUserContentController alloc] init];
 
   if (opacity_core::is_browser_overlay_enabled()) {
+    NSString *bootstrapScript = opacity_browser_overlay_bootstrap_script();
     WKUserScript *overlayPagesScript =
-        [[WKUserScript alloc] initWithSource:opacity_browser_overlay_pages_bootstrap_script()
+        [[WKUserScript alloc] initWithSource:bootstrapScript
                                injectionTime:WKUserScriptInjectionTimeAtDocumentStart
                             forMainFrameOnly:NO];
     [contentController addUserScript:overlayPagesScript];
