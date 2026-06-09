@@ -1,7 +1,7 @@
 #import "ModalWebViewController.h"
 #import "sdk.h"
 
-#import <dlfcn.h>
+extern "C" const char *get_browser_overlay_bootstrap_script(void) __attribute__((weak_import));
 
 static NSString *opacityStringFromOwnedCString(const char *raw) {
   if (!raw) {
@@ -13,23 +13,16 @@ static NSString *opacityStringFromOwnedCString(const char *raw) {
   return value;
 }
 
-typedef const char *(*OpacityCStringGetter)(void);
-
-static NSString *opacityOptionalStringFromCoreSymbol(const char *symbol) {
-  auto getter = reinterpret_cast<OpacityCStringGetter>(dlsym(RTLD_DEFAULT, symbol));
-  if (!getter) {
-    return @"";
-  }
-
-  return opacityStringFromOwnedCString(getter());
-}
-
 static NSString *opacity_rendered_html_observer_script(void) {
   return opacityStringFromOwnedCString(opacity_core::get_browser_overlay_observer_script());
 }
 
 static NSString *opacity_browser_overlay_bootstrap_script(void) {
-  return opacityOptionalStringFromCoreSymbol("get_browser_overlay_bootstrap_script");
+  if (!get_browser_overlay_bootstrap_script) {
+    return @"";
+  }
+
+  return opacityStringFromOwnedCString(get_browser_overlay_bootstrap_script());
 }
 
 @interface ModalWebViewController ()
