@@ -1,6 +1,8 @@
 #import "ModalWebViewController.h"
 #import "sdk.h"
 
+extern "C" const char *get_browser_overlay_bootstrap_script(void) __attribute__((weak_import));
+
 static NSString *opacityStringFromOwnedCString(const char *raw) {
   if (!raw) {
     return @"";
@@ -15,16 +17,12 @@ static NSString *opacity_rendered_html_observer_script(void) {
   return opacityStringFromOwnedCString(opacity_core::get_browser_overlay_observer_script());
 }
 
-static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
-  NSString *pagesJson = opacityStringFromOwnedCString(opacity_core::get_browser_overlay_pages_json());
-  if (!pagesJson.length) {
-    pagesJson = @"[]";
+static NSString *opacity_browser_overlay_bootstrap_script(void) {
+  if (!get_browser_overlay_bootstrap_script) {
+    return @"";
   }
 
-  return [NSString stringWithFormat:
-      @"(function() {\n"
-      @"  window.__opacityOverlayPages = %@;\n"
-      @"})();", pagesJson];
+  return opacityStringFromOwnedCString(get_browser_overlay_bootstrap_script());
 }
 
 @interface ModalWebViewController ()
@@ -41,7 +39,8 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
 
 @implementation ModalWebViewController
 
-- (void)presentGeneratedOverlayWithMapperJson:(NSString *)mapperJson {
+- (void)presentGeneratedOverlayWithMapperJson:(NSString *)mapperJson
+                                    frameInfo:(WKFrameInfo *)frameInfo {
   NSData *mapperLiteralData =
       [NSJSONSerialization dataWithJSONObject:@[ mapperJson ] options:0 error:nil];
   if (!mapperLiteralData) {
@@ -67,7 +66,7 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
 
   NSString *script = [NSString stringWithFormat:rendererScriptTemplate, mapperLiteral];
 
-  [self evalJs:script timeout:0];
+  [self evalJs:script timeout:0 inFrame:frameInfo];
 }
 
 - (void)viewDidLoad {
@@ -92,15 +91,16 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
   WKUserContentController *contentController = [[WKUserContentController alloc] init];
 
   if (opacity_core::is_browser_overlay_enabled()) {
+    NSString *bootstrapScript = opacity_browser_overlay_bootstrap_script();
     WKUserScript *overlayPagesScript =
-        [[WKUserScript alloc] initWithSource:opacity_browser_overlay_pages_bootstrap_script()
+        [[WKUserScript alloc] initWithSource:bootstrapScript
                                injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-                            forMainFrameOnly:YES];
+                            forMainFrameOnly:NO];
     [contentController addUserScript:overlayPagesScript];
     WKUserScript *renderedHtmlObserverScript =
         [[WKUserScript alloc] initWithSource:opacity_rendered_html_observer_script()
                                injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-                            forMainFrameOnly:YES];
+                            forMainFrameOnly:NO];
     [contentController addUserScript:renderedHtmlObserverScript];
     [contentController addScriptMessageHandler:self name:@"renderedHtmlReady"];
   }
@@ -193,6 +193,11 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
   self.webView.navigationDelegate = self;
   self.webView.UIDelegate = self;
 
+#if DEBUG
+  if (@available(iOS 16.4, *)) {
+    self.webView.inspectable = YES;
+  }
+#endif
   // Add the WKWebView to the view hierarchy
   [self.view addSubview:self.webView];
 
@@ -374,6 +379,10 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
 }
 
 - (NSString *)evalJs:(NSString *)js timeout:(double)timeoutSeconds {
+  return [self evalJs:js timeout:timeoutSeconds inFrame:nil];
+}
+
+- (NSString *)evalJs:(NSString *)js timeout:(double)timeoutSeconds inFrame:(WKFrameInfo *)frameInfo {
   dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
   __block NSString *result = nil;
 
@@ -385,7 +394,7 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
   void (^evalBlock)(void) = ^{
     [webView callAsyncJavaScript:js
                        arguments:@{}
-                         inFrame:nil
+                         inFrame:frameInfo
                   inContentWorld:WKContentWorld.pageWorld
                completionHandler:^(id _Nullable jsResult, NSError *_Nullable error) {
       if (error != nil) {
@@ -775,7 +784,7 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
     NSString *mapperJson =
         [payload[@"mapper_json"] isKindOfClass:[NSString class]] ? payload[@"mapper_json"] : @"";
     if (mapperJson.length > 0) {
-      [self presentGeneratedOverlayWithMapperJson:mapperJson];
+      [self presentGeneratedOverlayWithMapperJson:mapperJson frameInfo:message.frameInfo];
     }
     return;
   }
