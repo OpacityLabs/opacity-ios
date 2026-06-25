@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.author           = { 'ospfranco' => 'ospfranco@gmail.com' }
   s.source           = { :git => 'https://github.com/OpacityLabs/opacity-ios.git', :tag => s.version.to_s }
   s.swift_version = '5.9'
-  s.ios.deployment_target = '14.0'
+  s.ios.deployment_target = '15.0'
   s.source_files = 'src/**/*'
   s.frameworks = "WebKit", "CoreTelephony", "CoreLocation", "SystemConfiguration"
   s.vendored_frameworks = 'sdk.xcframework'
