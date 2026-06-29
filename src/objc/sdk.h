@@ -188,8 +188,6 @@ const char *get_browser_overlay_pages_json(void);
 
 const char *get_browser_overlay_observer_script(void);
 
-const char *get_browser_overlay_bootstrap_script(void);
-
 const char *get_browser_overlay_renderer_script(void);
 
 bool is_browser_debug_logs_enabled(void);
