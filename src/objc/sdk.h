@@ -178,7 +178,7 @@ int32_t opacity_init(const char *api_key_str,
 
 int32_t opacity_get(const char *name, const char *params, char **res_ptr, char **err_ptr);
 
-void free_string(char *ptr);
+void opacity_free_string(char *ptr);
 
 void emit_webview_event(const char *payload);
 
@@ -187,6 +187,8 @@ bool is_browser_overlay_enabled(void);
 const char *get_browser_overlay_pages_json(void);
 
 const char *get_browser_overlay_observer_script(void);
+
+const char *get_browser_overlay_bootstrap_script(void);
 
 const char *get_browser_overlay_renderer_script(void);
 

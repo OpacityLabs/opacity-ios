@@ -7,7 +7,7 @@ static NSString *opacityStringFromOwnedCString(const char *raw) {
   }
 
   NSString *value = [NSString stringWithUTF8String:raw] ?: @"";
-  opacity_core::free_string((char *)raw);
+  opacity_core::opacity_free_string((char *)raw);
   return value;
 }
 
@@ -71,7 +71,7 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
 }
 
 - (void)viewDidLoad {
-  [super viewDidLoad]; 
+  [super viewDidLoad];
 
   self.cookies = [NSMutableDictionary dictionary];
   self.visitedUrls = [NSMutableArray array];
@@ -88,7 +88,7 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
   self.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
   configuration.websiteDataStore = self.websiteDataStore;
 
-  
+
   WKUserContentController *contentController = [[WKUserContentController alloc] init];
 
   if (opacity_core::is_browser_overlay_enabled()) {
@@ -184,7 +184,7 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
   }
 
   configuration.userContentController = contentController;
-  
+
   // --- Now create the web view ---
   self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:configuration];
   self.webView.allowsLinkPreview = true;

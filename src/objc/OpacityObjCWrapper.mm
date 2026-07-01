@@ -82,7 +82,7 @@ NSError *parseOpacityError(NSString *jsonString) {
   if (status != opacity_core::OPACITY_OK && err != nullptr) {
     NSString *errorMessage = [NSString stringWithUTF8String:err];
     *error = parseOpacityError(errorMessage);
-    opacity_core::free_string(err);
+    opacity_core::opacity_free_string(err);
   }
 
   return status;
@@ -126,7 +126,7 @@ NSError *parseOpacityError(NSString *jsonString) {
 
     if (status != opacity_core::OPACITY_OK) {
       NSString *error_str = [NSString stringWithUTF8String:err];
-      opacity_core::free_string(err);
+      opacity_core::opacity_free_string(err);
 
       NSError *opacity_error = parseOpacityError(error_str);
       dispatch_async(dispatch_get_main_queue(), ^{
@@ -137,7 +137,7 @@ NSError *parseOpacityError(NSString *jsonString) {
     }
 
     NSString *final_res = [NSString stringWithUTF8String:res];
-    opacity_core::free_string(res);
+    opacity_core::opacity_free_string(res);
     NSData *data = [final_res dataUsingEncoding:NSUTF8StringEncoding];
     NSError *jsonError;
     NSDictionary *jsonDict =
