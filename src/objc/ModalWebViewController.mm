@@ -82,9 +82,6 @@ static NSString *opacity_browser_overlay_pages_bootstrap_script(void) {
 
   WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
 
-  WKProcessPool *processPool = [[WKProcessPool alloc] init];
-  configuration.processPool = processPool;
-
   self.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
   configuration.websiteDataStore = self.websiteDataStore;
 

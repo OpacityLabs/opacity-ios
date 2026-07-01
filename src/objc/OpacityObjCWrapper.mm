@@ -45,9 +45,8 @@ NSError *parseOpacityError(NSString *jsonString) {
     andShouldShowErrorsInWebview:(BOOL)should_show_errors_in_webview
                         andError:(NSError *__autoreleasing *)error {
 
-  NSString *path =
-      [[[NSBundle mainBundle] privateFrameworksPath]
-          stringByAppendingPathComponent:@"sdk.framework"];
+  NSString *path = [[[NSBundle mainBundle] privateFrameworksPath]
+      stringByAppendingPathComponent:@"sdk.framework"];
   NSBundle *bundle = [NSBundle bundleWithPath:path];
   if (![bundle isLoaded]) {
     BOOL success = [bundle load];
@@ -62,8 +61,9 @@ NSError *parseOpacityError(NSString *jsonString) {
   }
 
   opacity_core::register_ios_callbacks(
-      ios_prepare_request, ios_set_request_header, ios_set_cookie, ios_present_webview,
-      ios_close_webview, ios_get_browser_cookies_for_current_url,
+      ios_prepare_request, ios_set_request_header, ios_set_cookie,
+      ios_present_webview, ios_close_webview,
+      ios_get_browser_cookies_for_current_url,
       ios_get_browser_cookies_for_domain, get_ip_address, get_battery_level,
       get_battery_status, get_carrier_name, get_carrier_mcc, get_carrier_mnc,
       get_course, get_cpu_abi, get_altitude, get_latitude, get_longitude,
@@ -73,7 +73,6 @@ NSError *parseOpacityError(NSString *jsonString) {
       is_app_foregrounded, get_device_locale, get_screen_width,
       get_screen_height, get_screen_density, get_screen_dpi, get_device_cpu,
       get_device_codename, ios_webview_change_url, ios_eval_js);
-
 
   char *err;
   int status = opacity_core::opacity_init([api_key UTF8String], dry_run,
@@ -85,6 +84,22 @@ NSError *parseOpacityError(NSString *jsonString) {
     opacity_core::opacity_free_string(err);
   }
 
+  return status;
+}
+
++ (int)initializeOpenTelemetry:(NSString *)openTelemetryEndpoint andGrafanaInstanceId:(NSString *)grafanaInstanceId andGrafanaApiToken:(NSString *)grafanaApiToken andError:(NSError *__autoreleasing *)error {
+  char *err;
+  int status = opacity_core::opacity_initialize_open_telemetry([openTelemetryEndpoint UTF8String],
+                                                  [grafanaInstanceId UTF8String],
+                                                  [grafanaApiToken UTF8String],
+                                                  &err);
+  
+  if (status != opacity_core::OPACITY_OK && err != nullptr) {
+    NSString *errorMessage = [NSString stringWithUTF8String:err];
+    *error = parseOpacityError(errorMessage);
+    opacity_core::opacity_free_string(err);
+  }
+  
   return status;
 }
 
