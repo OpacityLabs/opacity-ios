@@ -38,7 +38,32 @@ public class OpacitySwiftWrapper {
 
     if status != 0 {
       throw error
-        ?? OpacityError(code: "UnkownError", message: "Unknown Error Initializing Opacity SDK")
+        ?? OpacityError(
+          code: "UnkownError",
+          message: "Unknown Error initializing Opacity SDK"
+        )
+    }
+  }
+
+  public static func initializeOpenTelemetry(
+    openTelemetryEndpoint: String,
+    grafanaInstanceId: String,
+    grafanaApiToken: String
+  ) throws {
+    var error: NSError?
+    let status = OpacityObjCWrapper.initializeOpenTelemetry(
+      openTelemetryEndpoint,
+      andGrafanaInstanceId: grafanaInstanceId,
+      andGrafanaApiToken: grafanaApiToken,
+      andError: &error
+    )
+
+    if status != 0 {
+      throw error
+        ?? OpacityError(
+          code: "UnknownError",
+          message: "Unknown Error initializing Open Telemetry"
+        )
     }
   }
 
@@ -62,12 +87,18 @@ public class OpacitySwiftWrapper {
       }
       return res
     } catch let error as NSError {
-      throw OpacityError(code: error.domain, message: error.localizedDescription)
+      throw OpacityError(
+        code: error.domain,
+        message: error.localizedDescription
+      )
     } catch {
-      throw OpacityError(code: "UnknownError", message: error.localizedDescription)
+      throw OpacityError(
+        code: "UnknownError",
+        message: error.localizedDescription
+      )
     }
   }
-  
+
   public static func getApiVersion() -> String {
     return OpacityObjCWrapper.getApiVersion()
   }

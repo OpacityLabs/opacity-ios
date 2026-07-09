@@ -196,6 +196,11 @@ bool is_browser_debug_logs_enabled(void);
 
 const char *get_api_version(void);
 
+int32_t opacity_initialize_open_telemetry(const char *open_telemetry_endpoint,
+                                          const char *grafana_instance_id,
+                                          const char *grafana_api_token,
+                                          char **err_ptr);
+
 extern bool android_is_app_foregrounded(void);
 
 extern const char *android_get_os_version(void);

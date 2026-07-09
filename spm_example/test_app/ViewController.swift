@@ -25,6 +25,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
     do {
       try OpacitySwiftWrapper.initialize(
         apiKey: apiKey, dryRun: false, environment: .Production, shouldShowErrorsInWebView: false)
+      
+      // Example on how to initialize open telemetry
+//      try OpacitySwiftWrapper
+//        .initializeOpenTelemetry(
+//          openTelemetryEndpoint: "balh",
+//          grafanaInstanceId: "123",
+//          grafanaApiToken: "123"
+//        )
     } catch {
       let errorLabel = UILabel()
       errorLabel.text =

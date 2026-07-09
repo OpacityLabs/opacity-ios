@@ -15,6 +15,11 @@ typedef NS_ENUM(NSInteger, OpacityEnvironment) {
     andShouldShowErrorsInWebview:(BOOL)shouldShowErrorsInWebview
                         andError:(NSError **)error;
 
++ (int)initializeOpenTelemetry:(NSString *)openTelemetryEndpoint
+          andGrafanaInstanceId:(NSString *)grafanaInstanceId
+            andGrafanaApiToken:(NSString *)grafanaApiToken
+                      andError:(NSError **)error;
+
 + (void)get:(NSString *)name
      andParams:(NSDictionary *)params
     completion:(void (^)(NSDictionary *res, NSError *error))completion;
