@@ -1,3 +1,4 @@
+import Darwin
 import OpacityCoreSwift
 import UIKit
 
@@ -11,6 +12,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
       ("uber_rider:profile", getRiderProfile),
       ("test:open_browser_must_succeed", testFlowAlwaysResolves),
       ("404 flow", run404Flow),
+      ("run local: otel_demo", runOtelDemoFlow),
       ("re-initialize SDK", reinitializeSdk),
     ]
 
@@ -22,16 +24,20 @@ class ViewController: UIViewController, UITextFieldDelegate {
       return
     }
 
+    // The .Local environment defaults to http://localhost:8080; point it at
+    // `mise dev-server` instead, which serves flows on 8666.
+    setenv("OPACITY_BACKEND_URL", "http://localhost:8666", 1)
+
     do {
       try OpacitySwiftWrapper.initialize(
-        apiKey: apiKey, dryRun: false, environment: .Production, shouldShowErrorsInWebView: false)
-      
-      // Example on how to initialize open telemetry
+        apiKey: apiKey, dryRun: false, environment: .Local, shouldShowErrorsInWebView: false)
+
 //      try OpacitySwiftWrapper
 //        .initializeOpenTelemetry(
-//          openTelemetryEndpoint: "balh",
-//          grafanaInstanceId: "123",
-//          grafanaApiToken: "123"
+//          openTelemetryEndpoint: "",
+//          grafanaInstanceId: "",
+//          grafanaApiToken:
+//            ""
 //        )
     } catch {
       let errorLabel = UILabel()
@@ -329,6 +335,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
     print(res)
   }
 
+  func runOtelDemoFlow() async throws {
+    let res = try await OpacitySwiftWrapper.get(
+      name: "otel_demo", params: nil)
+    print("otel_demo result: \(res)")
+  }
+
   func reinitializeSdk() {
     do {
       guard let env = loadEnvFile(), let apiKey = env["OPACITY_API_KEY"]
@@ -338,7 +350,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
       }
 
       try OpacitySwiftWrapper.initialize(
-        apiKey: apiKey, dryRun: false, environment: .Production,
+        apiKey: apiKey, dryRun: false, environment: .Local,
         shouldShowErrorsInWebView: true)
     } catch {
       let errorLabel = UILabel()
