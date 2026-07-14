@@ -104,8 +104,10 @@ NSError *parseOpacityError(NSString *jsonString) {
 }
 
 + (void)get:(NSString *)name
-     andParams:(NSDictionary *)params
-    completion:(void (^)(NSDictionary *res, NSError *error))completion {
+        andParams:(NSDictionary *)params
+    andTraceparent:(NSString *)traceparent
+     andTracestate:(NSString *)tracestate
+       completion:(void (^)(NSDictionary *res, NSError *error))completion {
   NSThread *thread = [[NSThread alloc] initWithBlock:^{
     char *res, *err;
     NSError *error = nil;
@@ -136,8 +138,9 @@ NSError *parseOpacityError(NSString *jsonString) {
     }
 
     int status = opacity_core::opacity_get(
-        [name UTF8String], paramsJSON ? [paramsJSON UTF8String] : nullptr, &res,
-        &err);
+        [name UTF8String], paramsJSON ? [paramsJSON UTF8String] : nullptr,
+        traceparent ? [traceparent UTF8String] : nullptr,
+        tracestate ? [tracestate UTF8String] : nullptr, &res, &err);
 
     if (status != opacity_core::OPACITY_OK) {
       NSString *error_str = [NSString stringWithUTF8String:err];

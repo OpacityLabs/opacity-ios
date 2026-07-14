@@ -176,7 +176,12 @@ int32_t opacity_init(const char *api_key_str,
                      bool show_errors_in_webview,
                      char **error_ptr);
 
-int32_t opacity_get(const char *name, const char *params, char **res_ptr, char **err_ptr);
+int32_t opacity_get(const char *name,
+                    const char *params,
+                    const char *traceparent,
+                    const char *tracestate,
+                    char **res_ptr,
+                    char **err_ptr);
 
 void opacity_free_string(char *ptr);
 

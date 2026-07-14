@@ -21,8 +21,10 @@ typedef NS_ENUM(NSInteger, OpacityEnvironment) {
                       andError:(NSError **)error;
 
 + (void)get:(NSString *)name
-     andParams:(NSDictionary *)params
-    completion:(void (^)(NSDictionary *res, NSError *error))completion;
+        andParams:(NSDictionary *)params
+    andTraceparent:(NSString *)traceparent
+     andTracestate:(NSString *)tracestate
+       completion:(void (^)(NSDictionary *res, NSError *error))completion;
 
 + (NSString *)getApiVersion;
 

@@ -67,13 +67,21 @@ public class OpacitySwiftWrapper {
     }
   }
 
-  public static func get(name: String, params: [String: Any]?) async throws
+  public static func get(
+    name: String,
+    params: [String: Any]?,
+    traceparent: String? = nil,
+    tracestate: String? = nil
+  ) async throws
     -> [String: Any]
   {
     do {
       let res: [String: Any] = try await withCheckedThrowingContinuation {
         continuation in
-        OpacityObjCWrapper.get(name, andParams: params) { (res, error) in
+        OpacityObjCWrapper.get(
+          name, andParams: params, andTraceparent: traceparent,
+          andTracestate: tracestate
+        ) { (res, error) in
           if let error {
             continuation.resume(throwing: error)
           } else if let res {
