@@ -69,19 +69,39 @@ public class OpacitySwiftWrapper {
 
   public static func get(
     name: String,
+    params: [String: Any]?
+  ) async throws
+    -> [String: Any]
+  {
+    return try await runGet(name: name, params: params, traceparent: nil, tracestate: nil)
+  }
+
+  /// Runs the flow joined to the caller's W3C trace. `traceparent` is required;
+  /// `tracestate` is optional (W3C allows it to be absent).
+  public static func getWithContext(
+    name: String,
     params: [String: Any]?,
-    traceparent: String? = nil,
+    traceparent: String,
     tracestate: String? = nil
+  ) async throws
+    -> [String: Any]
+  {
+    return try await runGet(
+      name: name, params: params, traceparent: traceparent, tracestate: tracestate)
+  }
+
+  private static func runGet(
+    name: String,
+    params: [String: Any]?,
+    traceparent: String?,
+    tracestate: String?
   ) async throws
     -> [String: Any]
   {
     do {
       let res: [String: Any] = try await withCheckedThrowingContinuation {
-        continuation in
-        OpacityObjCWrapper.get(
-          name, andParams: params, andTraceparent: traceparent,
-          andTracestate: tracestate
-        ) { (res, error) in
+        (continuation: CheckedContinuation<[String: Any], Error>) in
+        func resume(_ res: [AnyHashable: Any]?, _ error: Error?) {
           if let error {
             continuation.resume(throwing: error)
           } else if let res {
@@ -91,6 +111,14 @@ public class OpacitySwiftWrapper {
               "Unreachable branch: Neither result nor error returned from OpacityObjCWrapper.get"
             )
           }
+        }
+        if let traceparent {
+          OpacityObjCWrapper.getWithContext(
+            name, andParams: params, andTraceparent: traceparent,
+            andTracestate: tracestate
+          ) { res, error in resume(res, error) }
+        } else {
+          OpacityObjCWrapper.get(name, andParams: params) { res, error in resume(res, error) }
         }
       }
       return res
